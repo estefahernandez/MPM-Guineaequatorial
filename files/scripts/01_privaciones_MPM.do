@@ -96,7 +96,7 @@
     // gen asistencia_escolar = (q3_08_asistio=="Sí")
     // label var asistencia_escolar "Asistió a institución educativa 2021/2022"
 
-    * Definiendo el universo primero, ninios en "edad escolar" (entre $lbage y $ubage años)
+    * Definiendo los niños en "edad escolar" (entre $lbage y $ubage años)
     gen edad_escolar = (q1_03_edad>=$lbage & q1_03_edad<=$ubage)
     bys hhid: egen cant_edadescolar = sum(edad_escolar)
 
@@ -168,7 +168,7 @@
         1 = Sí   // Junto con q2_28_aseo==1 -> Mejorado
         2 = No   // Pasa a mirar 2.28C
 
-    (2.28C) El WC/inodoro ¿está conectado a…? (q2_28C_conectado)   [solo si 2.28B=No]
+    (2.28C) El WC/inodoro ¿está conectado a…? (q2_28C_conectado)   [solo si 2.28B = No]
         1 = Sistema de alcantarillado             // -> Mejorado
         2 = Conectado a tubería que va al río/mar // -> Mejorado
         3 = Conectado a pozo ciego                // -> Mejorado
@@ -194,14 +194,14 @@
 
     **  Tipo de baño en 14 categorías (2.28 + 2.28B/2.28C -> toilet14)
         gen toilet14 = .
-            replace toilet14 = 1  if q2_28_aseo==1 & q2_28B_fuente==1                               // WC conectado a agua
-            replace toilet14 = 2  if q2_28_aseo==1 & q2_28B_fuente==2 & inlist(q2_28C_conectado,1,2) // WC sin agua -> alcantarillado o río/mar
-            replace toilet14 = 3  if q2_28_aseo==1 & q2_28B_fuente==2 & q2_28C_conectado==3          // WC sin agua -> pozo ciego
-            replace toilet14 = 5  if q2_28_aseo==2   // Letrina (cualquiera, no se mira 2.28D/2.28E)
-            replace toilet14 = 10 if q2_28_aseo==3   // Hoyo áspero
-            replace toilet14 = 8  if q2_28_aseo==4   // Baño público
-            replace toilet14 = 13 if q2_28_aseo==5   // Sin baño
-            replace toilet14 = 14 if q2_28_aseo==6   // Otro
+            replace toilet14 = 1  if q2_28_aseo==1 & q2_28B_fuente==1                                   // WC conectado a agua
+            replace toilet14 = 2  if q2_28_aseo==1 & q2_28B_fuente==2 & inlist(q2_28C_conectado,1,2)    // WC sin agua -> alcantarillado o río/mar
+            replace toilet14 = 3  if q2_28_aseo==1 & q2_28B_fuente==2 & q2_28C_conectado==3             // WC sin agua -> pozo ciego
+            replace toilet14 = 5  if q2_28_aseo==2                                                      // Letrina (cualquiera, no se mira 2.28D/2.28E)
+            replace toilet14 = 10 if q2_28_aseo==3                                                      // Hoyo áspero
+            replace toilet14 = 8  if q2_28_aseo==4                                                      // Baño público
+            replace toilet14 = 13 if q2_28_aseo==5                                                      // Sin baño
+            replace toilet14 = 14 if q2_28_aseo==6                                                      // Otro
         label var toilet14 "Tipo de baño, 14 categorías (recodificado de 2.28/2.28B/2.28C)"
 
     **  Colapso a 6 categorías (toilet14 -> toilet6)
@@ -224,7 +224,7 @@
   * Comentario: imp_wat_rec Variable  que resume "acceso a fuente de agua mejorada" (tubería, pozo protegido, agua embotellada,etc., excluyendo fuentes no protegidas)
   /*
     (2.25) ¿De dónde obtienen principalmente el agua para todo uso, las personas
-       de este hogar? (q2_25_aguaTomar)
+             de este hogar? (q2_25_aguaTomar)
     1  = Grifo dentro de la vivienda        // Mejorado
     2  = Grifo fuera de la vivienda         // Mejorado
     3  = Grifo público                      // Mejorado
@@ -242,12 +242,12 @@
 
     (2.27) En su casa ¿Qué tratamiento le dan principalmente al agua para beber?
           (q2_27_tratamientoAgua)
-    1 = Ninguno                  // Mantiene el resultado de 2.25 (no degrada el pozo)
-    2 = La hierven                // Degrada el pozo (4 o 5) a No mejorado
-    3 = La filtran                // Degrada el pozo a No mejorado
-    4 = Le ponen lejía o cloro     // Degrada el pozo a No mejorado
-    5 = Beben agua embotellada     // Degrada el pozo a No mejorado
-    6 = Otro                       // Degrada el pozo a No mejorado
+    1 = Ninguno                     // Mantiene el resultado de 2.25 (no degrada el pozo)
+    2 = La hierven                  // Degrada el pozo (4 o 5) a No mejorado
+    3 = La filtran                  // Degrada el pozo a No mejorado
+    4 = Le ponen lejía o cloro      // Degrada el pozo a No mejorado
+    5 = Beben agua embotellada      // Degrada el pozo a No mejorado
+    6 = Otro                        // Degrada el pozo a No mejorado
 
     (rural) Zona del hogar, ya construida en la limpieza (cod_CV_CP: 1=Urbano, 2=Rural)
     rural = 1 si es zona Rural, 0 si es Urbano
@@ -255,13 +255,13 @@
     // sin importar el tratamiento del agua.
 
     Resumen para pozo (los únicos casos con lógica condicional):
-      Tipo de pozo    | Zona    | ¿Trata el agua? | imp_wat_rec
+      Tipo de pozo    | Zona         | ¿Trata el agua?  | imp_wat_rec
       --------------------------------------------------------------
-      Pozo público (4)| Urbano  | No (Ninguno)     | 1 Mejorado
-      Pozo público (4)| Urbano  | Sí               | 0 No mejorado
-      Pozo público (4)| Rural   | No o Sí          | 0 No mejorado
-      Pozo privado (5)| Urbano/Rural | No (Ninguno)| 1 Mejorado
-      Pozo privado (5)| Urbano/Rural | Sí          | 0 No mejorado
+      Pozo público (4)| Urbano       | No (Ninguno)     | 1 Mejorado
+      Pozo público (4)| Urbano       | Sí               | 0 No mejorado
+      Pozo público (4)| Rural        | No o Sí          | 0 No mejorado
+      Pozo privado (5)| Urbano/Rural | No (Ninguno)     | 1 Mejorado
+      Pozo privado (5)| Urbano/Rural | Sí               | 0 No mejorado
 
     Nota: "rural" y "q2_27_tratamientoAgua" ya vienen definidas de la limpieza
     de la base (no se construyen en este script).
@@ -269,11 +269,20 @@
     ** Fuente de agua en 14 categorías (2.25 -> water14)
         recode q2_25_aguaTomar (1=1) (2=2) (3=3) (4=4) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), gen(water14)
         label var water14 "Fuente de agua, 14 categorías (recodificado de 2.25)"
-        label define water14 1 "Agua entubada dentro de la vivienda" 2 "Agua entubada al patio/parcela" ///
-            3 "Grifo o pilón público" 4 "Pozo entubado o perforado (público)" 5 "Pozo protegido (privado)" ///
-            6 "Manantial protegido" 7 "Agua embotellada" 8 "Agua de lluvia" 9 "Manantial no protegido" ///
-            10 "Pozo no protegido" 11 "Carro con tanque/tambor pequeño" 12 "Camión cisterna" ///
-            13 "Agua superficial" 14 "Otro", replace
+        label define water14    1 "Agua entubada dentro de la vivienda" ///
+                                2 "Agua entubada al patio/parcela" ///
+                                3 "Grifo o pilón público" ///
+                                4 "Pozo entubado o perforado (público)" ////
+                                5 "Pozo protegido (privado)" ///
+                                6 "Manantial protegido" ///
+                                7 "Agua embotellada" ///
+                                8 "Agua de lluvia" ///
+                                9 "Manantial no protegido" ///
+                                10 "Pozo no protegido" ///
+                                11 "Carro con tanque/tambor pequeño" ///
+                                12 "Camión cisterna" ///
+                                13 "Agua superficial" ///
+                                14 "Otro", replace
         label val water14 water14
 
     ** Excepción rural para pozo público (rural + water14==4 -> degradar)

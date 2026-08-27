@@ -3,10 +3,12 @@ project:
   output-dir: _site
   resources:
     - "files/"
+    - "CNAME"
 
 website:
   title: "Curso IPM · Guinea Ecuatorial"
   description: "Medición de la pobreza multidimensional con el método Alkire-Foster (OPHI)"
+  site-url: "https://mpmguineaecuatorial.com"
   reader-mode: false
   page-navigation: true
   navbar:

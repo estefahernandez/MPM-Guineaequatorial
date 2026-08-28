@@ -1167,15 +1167,14 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <p>Compara el gasto per cápita en PPA contra la línea internacional de la variante MPM (3,00 USD PPA 2021).</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ipc = 1.070633</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ppp = 287.6907</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> welfare_ppp = pcexp / ipc / ppp / 365</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> welfare_ppp = pcexp_ppp</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_poor1 = welfare_ppp &lt; 3 <span class="kw">if</span> welfare_ppp ~= .</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> dep_poor1 <span class="st">"Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>* `apoverty` también permite obtener indicadores <span class="kw">de</span> pobreza directamente</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>* a partir del agregado <span class="kw">de</span> bienestar (pcexp_ppp) <span class="fu">y</span> la línea <span class="kw">de</span> referencia (zref)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>apoverty pcexp_ppp [aw = weight_hh], varpl(zref) <span class="kw">gen</span>(monetary)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> welfare_ppp = pcexp / ipc / ppp / 365</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_poor1 = welfare_ppp &lt; 3 <span class="kw">if</span> welfare_ppp ~= .</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> dep_poor1 <span class="st">"Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>* `apoverty` también permite obtener indicadores <span class="kw">de</span> pobreza directamente</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>* a partir del agregado <span class="kw">de</span> bienestar (pcexp_ppp) <span class="fu">y</span> la línea <span class="kw">de</span> referencia (zref)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>apoverty pcexp_ppp [aw = weight_hh], varpl(zref) <span class="kw">gen</span>(monetary)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>

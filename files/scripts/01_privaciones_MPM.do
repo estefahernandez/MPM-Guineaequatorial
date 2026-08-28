@@ -315,9 +315,9 @@
   /*
     gen ipc = 1.070633
     gen ppp = 287.6907
-    gen welfare_ppp = pcexp/ipc/ppp/365
+    
   */
-        gen double welfare_ppp= pcexp_ppp
+        gen welfare_ppp = pcexp/ipc/ppp/365
         gen dep_poor1 = welfare_ppp< 3 if welfare_ppp~=.
         label var dep_poor1 "Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"
 

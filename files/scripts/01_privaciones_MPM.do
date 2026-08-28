@@ -174,18 +174,20 @@
         3 = Conectado a pozo ciego                // -> Mejorado
         (sin responder / fuera de estos códigos -> queda Missing)
 
+    ** Existen en el cuestionario pero NO se usan para clasificar la Letrina como mejorada o no (ver PASO 2 más abajo: toda Letrina entra igual).
     (2.28D) La Letrina ¿está conectada a fuente de agua para descarga? (q2_28D_fuente)
     (2.28E) La Letrina ¿está conectada a…? (q2_28E_conectado)
-        Existen en el cuestionario pero NO se usan para clasificar la Letrina
-        como mejorada o no (ver PASO 2 más abajo: toda Letrina entra igual).
+
 
     (2.29) ¿El baño es de uso exclusivo del hogar o compartido? (q2_29_aseoExclusivo)
         1 = Exclusivo del hogar            // Mantiene el resultado de 2.28
         2 = Compartido con otro hogar      // Fuerza a No mejorado, sin importar 2.28
         3 = Compartido con varios hogares  // Fuerza a No mejorado
         4 = Otro                           // Fuerza a No mejorado
+  */
 
-
+  ** Construycción del indicador
+  /*
     **  Exclusividad del baño (2.29 -> toiletshared)
         recode q2_29_aseoExclusivo (2/4 = 1) (nonmissing = 0), gen(toiletshared)
         label define toilet_exclusivo 1 "Toilet shared" 0 "Toilet exclusive"

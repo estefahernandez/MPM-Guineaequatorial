@@ -46,8 +46,8 @@ foreach c of local commands_edited {
     esperada, y el README.md para el diagrama completo.
 ------------------------------------------------------------------*/
 * -- EDITA AQUÍ (y solo aquí): ruta raíz de tu proyecto --
-*    global gdRaiz "C:\Users\wb419055\OneDrive\Estefania\04-Other\Curso_MPM"
-     global gdRaiz "/Users/estefania/Library/CloudStorage/OneDrive-Personal/Estefania/04-Other/Curso_MPM"
+
+     global gdRaiz "EDITA AQUÍ"
 
 if ("$gdRaiz" == "") {
     di as error "Configura el global gdRaiz en 00_maestro.do (línea con -- EDITA AQUÍ --) antes de correr este script."

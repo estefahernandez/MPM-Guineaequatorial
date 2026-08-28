@@ -1,7 +1,6 @@
 ---
 title: "Curso: Medición de la Pobreza Multidimensional"
 subtitle: "Para Guinea Ecuatorial"
-author: "Estefanía Hernández Arroyave"
 date: last-modified
 lang: es
 bibliography: referencias.bib
@@ -116,7 +115,7 @@ sino en qué lo son [@sen1999development].
 
 ## Sesión 1
 
-### Dimensiones, variables, indicadores, umbrales y ponderaciones {.unnumbered}
+### Dimensiones, variables e indicadores {.unnumbered}
 
 ::: {.course-materials}
 **Materiales · Sesión 1**  
@@ -126,9 +125,8 @@ sino en qué lo son [@sen1999development].
 :::
 
 **Objetivo:** sentar las bases conceptuales del MPM: qué es una dimensión, cómo se traduce en
-indicadores medibles a partir de las variables de la encuesta, qué es un umbral de privación y cómo
-se asignan ponderaciones. 
-Material complementario: presentación de esta sesión y ejecicio practico para Guinea Ecuatorial.
+indicadores medibles a partir de las variables de la encuesta. 
+Material complementario: presentación y actividad de esta sesión.
 
 #### De la pobreza monetaria a la multidimensional
 
@@ -143,7 +141,8 @@ Material complementario: presentación de esta sesión y ejecicio practico para 
 
 ::: {.callout-tip collapse="true" title="Dimensión"}
 Un aspecto del bienestar considerado intrínsecamente importante (educación, vivienda, ingreso). El
-MPM de Guinea Ecuatorial trabaja con **tres dimensiones**: 
+MPM de Guinea Ecuatorial trabaja con **tres dimensiones**:
+
 1. Educación
 2. Acceso a infraestructura básica
 3. Pobreza monetaria
@@ -152,12 +151,12 @@ MPM de Guinea Ecuatorial trabaja con **tres dimensiones**:
 ::: {.callout-tip collapse="true" title="Indicador"}
 La medida concreta y observable dentro de una dimensión. Una dimensión puede tener uno o varios
 indicadores. Aquí, **educación** tiene dos (logro y matrícula) e **infraestructura** tiene tres (electricidad,
-saneamiento y agua).
+saneamiento y agua); por lo tanto, entre las dos dimensión de educación e infraestructura se tienen 5 indicadores en total.
 :::
 
 ::: {.callout-tip collapse="true" title="Variable"}
-La columna de la encuesta a partir de la cual se construye el indicador (por ejemplo, `q3_05_grado`
-para el grado educativo, `q1_03_edad` para la edad).
+Las preguntas de la encuesta son las variables a partir de las cuales se construyen los indicadores (por ejemplo,
+`q3_05_grado` para el grado educativo, `q1_03_edad` para la edad).
 :::
 
 
@@ -202,70 +201,80 @@ de medición explícita y reproducible.
 Un hogar está privado si **ningún adulto** (en edad de haber alcanzado el grado 9) ha completado al
 menos la educación primaria.
 
-En Guinea Ecuatorial, comenzando desde los 7 años la primaria, implica que a los 15 años completo 9 grado
-1. Adulto >= $eduage años
-2. Nivel educativo requerido = primaria completa, Grade 9 = ESBA 3 (educat7>=3)
+En Guinea Ecuatorial la primaria comienza a los 7 años, por lo que a los 15 años debería estar
+completo el 9º grado:
 
-EL CUESTIONARIO: pregunta, respuestas y efecto sobre el logro educativo
+1. **Adulto**: persona con edad ≥ `$eduage` años.
+2. **Nivel educativo requerido**: primaria completa (Grado 9 = ESBA 3, es decir `educat7 >= 3`).
 
-(3.04) ¿[Nombre] ha asistido alguna vez a la escuela? (q3_04_escuela)
-    1 = Sí                                     // Pasa a mirar el grado alcanzado (3.05)
-    2 = No y tiene 20 años o menos de edad     // Nunca estudió -> educat7=1 "Ninguno"
-    3 = No y es mayor de 20 años               // Nunca estudió -> educat7=1 "Ninguno"
+**El cuestionario:** pregunta, respuestas y efecto sobre el logro educativo.
 
-(3.05) ¿Cuál es el grado educativo más alto que alcanzó? (q3_05_grado, 0-19)
-    0 Ninguno, 1 Preescolar                                           -> educat7=1 "Ninguno"
-    2 Grado1, 3 Grado2, 4 Grado3, 5 Grado4, 6 Grado5                  -> educat7=2 "Primaria incompleta"
-    7 Grado6                                                          -> educat7=3 "Primaria completa"
-    8 ESBA1, 9 ESBA2, 10 ESBA3, 11 ESBA4, 12 Bach1, 14 FormTecBásica  -> educat7=4 "Secundaria incompleta"
-    13 Bach2, 15 FormTecAvanzada                                      -> educat7=5 "Secundaria completa"
-    17 Diplomado No universitario                                     -> educat7=6 "Post-secundaria no universidad"
-    16 FormUniv(no egresado), 18 Graduado Universitario, 19 Postgrado -> educat7=7 "Universidad (finalizada o no)"
+**(3.04)** ¿[Nombre] ha asistido alguna vez a la escuela? (`q3_04_escuela`)
+
+| Respuesta | Efecto |
+|---|---|
+| 1 = Sí | Pasa a mirar el grado alcanzado (3.05) |
+| 2 = No, tiene 20 años o menos | Nunca estudió → `educat7 = 1` "Ninguno" |
+| 3 = No, es mayor de 20 años | Nunca estudió → `educat7 = 1` "Ninguno" |
+
+**(3.05)** ¿Cuál es el grado educativo más alto que alcanzó? (`q3_05_grado`, 0–19)
+
+| Grado alcanzado | `educat7` resultante |
+|---|---|
+| 0 Ninguno, 1 Preescolar | 1 — Ninguno |
+| 2 Grado1, 3 Grado2, 4 Grado3, 5 Grado4, 6 Grado5 | 2 — Primaria incompleta |
+| 7 Grado6 | 3 — Primaria completa |
+| 8 ESBA1, 9 ESBA2, 10 ESBA3, 11 ESBA4, 12 Bach1, 14 FormTecBásica | 4 — Secundaria incompleta |
+| 13 Bach2, 15 FormTecAvanzada | 5 — Secundaria completa |
+| 17 Diplomado No universitario | 6 — Post-secundaria no universitaria |
+| 16 FormUniv (no egresado), 18 Graduado Universitario, 19 Postgrado | 7 — Universidad (finalizada o no) |
 
 ```stata
-  * Umbral de edad para "adulto" a efectos de logro educativo
-  global lbage 7       // Edad de inicio de primaria
-  global eduage 15     // Edad mínima para considerar "adulto" en educación
+* Umbral de edad para "adulto" a efectos de logro educativo
+global lbage  7    // Edad de inicio de primaria
+global eduage 15   // Edad mínima para considerar "adulto" en educación
 
-  ** PASO 1 — Nivel educativo alcanzado, 7 categorías (3.04 + 3.05 -> educat7)
-  * Nivel Educativo alcanzado 7 categorias
-      gen educat7=.
-      * Casos que nunca han estudiado
-      replace educat7 = 1 if (inlist(q3_04_escuela,"No y tiene 20 años o menos de edad","No y es mayor de 20 años") | q3_04_escuela=="") 
-      * Casos según último grado cursado
-      replace educat7 = 1 if inlist(q3_05_grado,0,1)
-      replace educat7 = 2 if inlist(q3_05_grado,2,3,4,5,6)
-      replace educat7 = 3 if inlist(q3_05_grado,7)
-      replace educat7 = 4 if inlist(q3_05_grado,8,9,10,11,12,14)
-      replace educat7 = 5 if inlist(q3_05_grado,13,15)
-      replace educat7 = 6 if inlist(q3_05_grado,17)
-      replace educat7 = 7 if inlist(q3_05_grado,16,18,19)
-        
-    label define educat7  1 "Ninguno" 
-                          2 "Primaria incompleta" 
-                          3 "Primaria completa" 
-                          4 "Secundaria incompleta" 
-                          5 "Secundaria completa" 
-                          6 "Post-secundaria pero no universidad" 
-                          7 "Universidad (finalizada o no)"
-    label val educat7 educat7 
-    label var educat7 "Mayor nivel educación alcanzado (7 categorias)"
+** PASO 1 — Nivel educativo alcanzado, 7 categorías (3.04 + 3.05 -> educat7)
+* Nivel educativo alcanzado, 7 categorías
+gen educat7 = .
 
-  ** PASO 2 — Indicador de privación, variante MPM (educat7 -> dep_educ_com)
-  * Individuo con nivel básico de educación (primaria completa o más)
-  gen temp2 = 1 if q1_03_edad>=$eduage & q1_03_edad~=. & educat7>=3 & educat7~=.
+* Casos que nunca han estudiado
+replace educat7 = 1 if (inlist(q3_04_escuela, "No y tiene 20 años o menos de edad", "No y es mayor de 20 años") | q3_04_escuela == "")
 
-  * Cantidad de adultos con nivel apropiado por hogar
-    * Comentario: no hay missings en temp3: todo hogar tiene al menos 1 persona >= $eduage.
-                  Es decir, temp3==0 significa que nadie completó primaria, NO que falten adultos en el hogar.
-  bys hhid: egen temp3 = sum(temp2)
+* Casos según último grado cursado
+replace educat7 = 1 if inlist(q3_05_grado, 0, 1)
+replace educat7 = 2 if inlist(q3_05_grado, 2, 3, 4, 5, 6)
+replace educat7 = 3 if inlist(q3_05_grado, 7)
+replace educat7 = 4 if inlist(q3_05_grado, 8, 9, 10, 11, 12, 14)
+replace educat7 = 5 if inlist(q3_05_grado, 13, 15)
+replace educat7 = 6 if inlist(q3_05_grado, 17)
+replace educat7 = 7 if inlist(q3_05_grado, 16, 18, 19)
 
-  * El hogar está privado si NINGÚN adulto alcanza el nivel
-  gen dep_educ_com = 0
-  replace dep_educ_com = 1 if temp3==0
+label define educat7                          ///
+    1 "Ninguno"                                ///
+    2 "Primaria incompleta"                    ///
+    3 "Primaria completa"                      ///
+    4 "Secundaria incompleta"                  ///
+    5 "Secundaria completa"                    ///
+    6 "Post-secundaria pero no universidad"    ///
+    7 "Universidad (finalizada o no)"
+label val educat7 educat7
+label var educat7 "Mayor nivel educación alcanzado (7 categorias)"
 
-  la var dep_educ_com "MPM: Privado si el hogar NO tiene adultos $eduage+ con primaria completa"
+** PASO 2 — Indicador de privación, variante MPM (educat7 -> dep_educ_com)
+* Individuo con nivel básico de educación (primaria completa o más)
+gen temp2 = 1 if q1_03_edad >= $eduage & q1_03_edad ~= . & educat7 >= 3 & educat7 ~= .
 
+* Cantidad de adultos con nivel apropiado por hogar
+* Nota: no hay missings en temp3: todo hogar tiene al menos 1 persona >= $eduage.
+*       Es decir, temp3==0 significa que nadie completó primaria, NO que falten adultos en el hogar.
+bys hhid: egen temp3 = sum(temp2)
+
+* El hogar está privado si NINGÚN adulto alcanza el nivel
+gen dep_educ_com = 0
+replace dep_educ_com = 1 if temp3 == 0
+
+la var dep_educ_com "MPM: Privado si el hogar NO tiene adultos $eduage+ con primaria completa"
 ```
 :::
 
@@ -273,79 +282,85 @@ EL CUESTIONARIO: pregunta, respuestas y efecto sobre el logro educativo
 Un hogar está privado si tiene **al menos un niño en edad escolar (7 a 14 años) que no asiste** a la
 escuela.
 
-EL CUESTIONARIO: pregunta, respuestas y efecto sobre la matrícula escolar
+**El cuestionario:** pregunta, respuestas y efecto sobre la matrícula escolar.
 
-(3.08) ¿Asiste o asistió [Nombre] a una escuela o institución educativa
-       durante el año escolar 2021-2022? (q3_08_asistio)
-    Sí   -> matriculado
-    No   -> no matriculado
+**(3.08)** ¿Asiste o asistió [Nombre] a una escuela o institución educativa durante el año escolar
+2021-2022? (`q3_08_asistio`)
+
+| Respuesta | Efecto |
+|---|---|
+| Sí | Matriculado |
+| No | No matriculado |
 
 ```stata
-  * Edades de corte usadas en los indicadores de educación
-    global lbage 7       // Edad de inicio de primaria
-    global ubage 14      // Se considera hasta 8vo grado (ESBA 2) como edad escolar
+* Edades de corte usadas en los indicadores de educación
+global lbage 7    // Edad de inicio de primaria
+global ubage 14   // Se considera hasta 8vo grado (ESBA 2) como edad escolar
 
 ** PASO 1 — Asistencia escolar 2021/2022 (3.08 -> asistencia_escolar)
-    gen asistencia_escolar = (q3_08_asistio=="Sí")
-    label var asistencia_escolar "Asistió a institución educativa 2021/2022"
+gen asistencia_escolar = (q3_08_asistio == "Sí")
+label var asistencia_escolar "Asistió a institución educativa 2021/2022"
 
 ** PASO 2 — Indicador de privación (asistencia_escolar -> dep_educ_enr)
 
-  * Definiendo el universo primero, niños en "edad escolar" (entre $lbage y $ubage años)
-  gen edad_escolar = (q1_03_edad>=$lbage & q1_03_edad<=$ubage)
-  bys hhid: egen cant_edadescolar = sum(edad_escolar)
+* Definiendo el universo primero: niños en "edad escolar" (entre $lbage y $ubage años)
+gen edad_escolar = (q1_03_edad >= $lbage & q1_03_edad <= $ubage)
+bys hhid: egen cant_edadescolar = sum(edad_escolar)
 
-  * No matriculado: está en edad escolar pero no asiste
-  * Comentario: Nos aseguramos que si no esta en edad escolar no se le considere privado ni no privado, sino missing
-  gen no_matriculado = (q1_03_edad>=$lbage & q1_03_edad<=$ubage & asistencia_escolar!=1)
-      replace no_matriculado=. if q1_03_edad<$lbage | q1_03_edad>$ubage 
+* No matriculado: está en edad escolar pero no asiste
+* Nota: nos aseguramos de que si no está en edad escolar no se le considere
+*       privado ni no privado, sino missing.
+gen no_matriculado = (q1_03_edad >= $lbage & q1_03_edad <= $ubage & asistencia_escolar != 1)
+replace no_matriculado = . if q1_03_edad < $lbage | q1_03_edad > $ubage
 
-  * Cantidad de niños no matriculados por hogar
-  bys hhid: egen cant_no_matriculados = sum(no_matriculado)
+* Cantidad de niños no matriculados por hogar
+bys hhid: egen cant_no_matriculados = sum(no_matriculado)
 
-  * El hogar está privado si tiene AL MENOS un niño/adolescente en edad escolar que no está matriculado 
-  * (por esto se calcula la suma, para detectar al menos uno).
-  gen dep_educ_enr = 0
-    * cant_no_matriculados~=. nunca es missing por como se crea en el bysort 
-    replace dep_educ_enr = 1 if cant_no_matriculados>0 
-    * hogares sin niños en edad escolar (universo de la privacion no estan en todos los hogares) 
-    * no estan privados 
-    replace dep_educ_enr = 0 if cant_edadescolar==0
+* El hogar está privado si tiene AL MENOS un niño/adolescente en edad escolar
+* que no está matriculado (por esto se calcula la suma, para detectar al menos uno).
+gen dep_educ_enr = 0
 
-  drop edad_escolar no_matriculado cant_no_matriculados cant_edadescolar
-  la var dep_educ_enr "MPM: Privado si el hogar tiene al menos un niño/a en edad escolar no matriculado"
+* cant_no_matriculados ~= . nunca es missing por cómo se crea en el bysort
+replace dep_educ_enr = 1 if cant_no_matriculados > 0
 
+* Hogares sin niños en edad escolar (universo de la privación no está en todos
+* los hogares) no están privados
+replace dep_educ_enr = 0 if cant_edadescolar == 0
+
+drop edad_escolar no_matriculado cant_no_matriculados cant_edadescolar
+la var dep_educ_enr "MPM: Privado si el hogar tiene al menos un niño/a en edad escolar no matriculado"
 ```
 :::
 
 ::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Electricidad"}
-El hogar está privado si carece del acceso a electricidad
+El hogar está privado si carece del acceso a electricidad.
 
-EL CUESTIONARIO: pregunta, respuestas y efecto sobre "el acceso a electricidad"
+**El cuestionario:** pregunta, respuestas y efecto sobre el acceso a electricidad.
 
-(2.31) ¿Cuál es la principal fuente de energía que se utiliza en este hogar
-       para el alumbrado? (q2_31_energiaLuz)
-    1  = Electricidad de la red pública   // Mejorado
-    2  = Placa solar                      // Mejorado
-    3  = Generador (GASOLINA)             // Mejorado
-    4  = Generador (GASOIL)               // Mejorado
-    5  = Petróleo/Keroseno                // No mejorado
-    6  = Gas (lámpara)                    // No mejorado
-    7  = Batería/Pila                     // No mejorado
-    8  = Vela                             // No mejorado
-    9  = Leña                             // No mejorado
-    10 = Otro                             // No mejorado
+**(2.31)** ¿Cuál es la principal fuente de energía que se utiliza en este hogar para el alumbrado?
+(`q2_31_energiaLuz`)
+
+| Fuente de energía | Clasificación |
+|---|---|
+| 1 = Electricidad de la red pública | Mejorado |
+| 2 = Placa solar | Mejorado |
+| 3 = Generador (gasolina) | Mejorado |
+| 4 = Generador (gasoil) | Mejorado |
+| 5 = Petróleo/Keroseno | No mejorado |
+| 6 = Gas (lámpara) | No mejorado |
+| 7 = Batería/Pila | No mejorado |
+| 8 = Vela | No mejorado |
+| 9 = Leña | No mejorado |
+| 10 = Otro | No mejorado |
 
 ```stata
-
 ** PASO 1 — Acceso a electricidad mejorado (2.31 -> electricity)
-  recode q2_31_energiaLuz (1/4=1 "Improved electricity") (nonmissing=0 "Not improved electricity"), gen(electricity)
-  label var electricity "Hogar con acceso a electricidad (mejorado). Recodificado de 2.31 (q2_31_energiaLuz)"
+recode q2_31_energiaLuz (1/4=1 "Improved electricity") (nonmissing=0 "Not improved electricity"), gen(electricity)
+label var electricity "Hogar con acceso a electricidad (mejorado). Recodificado de 2.31 (q2_31_energiaLuz)"
 
 ** PASO 2 — Indicador de privación, variante MPM (electricity -> dep_infra_elec)
-  gen dep_infra_elec = (electricity==0) if electricity~=.
-  la var dep_infra_elec "MPM: Privado si el hogar no tiene acceso a electricidad"
-
+gen dep_infra_elec = (electricity == 0) if electricity ~= .
+la var dep_infra_elec "MPM: Privado si el hogar no tiene acceso a electricidad"
 ```
 :::
 
@@ -356,156 +371,175 @@ El hogar está privado si carece de acceso a saneamiento mejorado. A diferencia 
 
 Las preguntas que permiten reconstruir esa definición:
 
-EL CUESTIONARIO: pregunta, respuestas y efecto sobre el saneamiento mejorado:
+**El cuestionario:** pregunta, respuestas y efecto sobre el saneamiento mejorado.
 
-(2.28) ¿Qué tipo de aseo/baño utiliza principalmente este hogar? (q2_28_aseo)
-    1 = W.C. / inodoro                  // Candidato a Mejorado -> depende de 2.28B/2.28C
-    2 = Letrina                         // SIEMPRE Mejorado, no depende de 2.28D/2.28E
-    3 = Hoyo áspero / agujero abierto   // No mejorado
-    4 = Baño público                    // No mejorado
-    5 = Sin baño (en la naturaleza)     // No mejorado
-    6 = Otro                            // No mejorado
+**(2.28)** ¿Qué tipo de aseo/baño utiliza principalmente este hogar? (`q2_28_aseo`)
 
-(2.28A) ¿El WC/inodoro está dentro o fuera de la vivienda? (q2_28A_intext)
-    1 = Interior  |  2 = Exterior       // Solo descriptiva, NO decide Mejorado/No mejorado
-    (se pregunta solo a quienes respondieron 1=W.C. en 2.28)
+| Respuesta | Efecto |
+|---|---|
+| 1 = W.C. / inodoro | Candidato a mejorado → depende de 2.28B/2.28C |
+| 2 = Letrina | Siempre mejorado, no depende de 2.28D/2.28E |
+| 3 = Hoyo áspero / agujero abierto | No mejorado |
+| 4 = Baño público | No mejorado |
+| 5 = Sin baño (en la naturaleza) | No mejorado |
+| 6 = Otro | No mejorado |
 
-(2.28B) El WC/inodoro ¿está conectado a fuente de agua para descarga? (q2_28B_fuente)
-    1 = Sí   // Junto con q2_28_aseo==1 -> Mejorado
-    2 = No   // Pasa a mirar 2.28C
+**(2.28A)** ¿El WC/inodoro está dentro o fuera de la vivienda? (`q2_28A_intext`) — solo descriptiva,
+no decide mejorado/no mejorado. Se pregunta solo a quienes respondieron 1 = W.C. en 2.28.
 
-(2.28C) El WC/inodoro ¿está conectado a…? (q2_28C_conectado)   [solo si 2.28B=No]
-    1 = Sistema de alcantarillado             // -> Mejorado
-    2 = Conectado a tubería que va al río/mar // -> Mejorado
-    3 = Conectado a pozo ciego                // -> Mejorado
-    (sin responder / fuera de estos códigos -> queda Missing)
+| Respuesta |
+|---|
+| 1 = Interior |
+| 2 = Exterior |
 
-(2.28D) La Letrina ¿está conectada a fuente de agua para descarga? (q2_28D_fuente)
-(2.28E) La Letrina ¿está conectada a…? (q2_28E_conectado)
-    Existen en el cuestionario pero NO se usan para clasificar la Letrina
-    como mejorada o no (ver PASO 2 más abajo: toda Letrina entra igual).
+**(2.28B)** El WC/inodoro ¿está conectado a fuente de agua para descarga? (`q2_28B_fuente`)
 
-(2.29) ¿El baño es de uso exclusivo del hogar o compartido? (q2_29_aseoExclusivo)
-    1 = Exclusivo del hogar            // Mantiene el resultado de 2.28
-    2 = Compartido con otro hogar      // Fuerza a No mejorado, sin importar 2.28
-    3 = Compartido con varios hogares  // Fuerza a No mejorado
-    4 = Otro                           // Fuerza a No mejorado
+| Respuesta | Efecto |
+|---|---|
+| 1 = Sí | Junto con `q2_28_aseo == 1` → Mejorado |
+| 2 = No | Pasa a mirar 2.28C |
+
+**(2.28C)** El WC/inodoro ¿está conectado a…? (`q2_28C_conectado`) — solo si 2.28B = No
+
+| Respuesta | Efecto |
+|---|---|
+| 1 = Sistema de alcantarillado | Mejorado |
+| 2 = Conectado a tubería que va al río/mar | Mejorado |
+| 3 = Conectado a pozo ciego | Mejorado |
+
+Sin responder o fuera de estos códigos, queda missing.
+
+**(2.28D)** La Letrina ¿está conectada a fuente de agua para descarga? (`q2_28D_fuente`)
+**(2.28E)** La Letrina ¿está conectada a…? (`q2_28E_conectado`)
+
+Existen en el cuestionario pero **no** se usan para clasificar la Letrina como mejorada o no
+(ver PASO 2 más abajo: toda Letrina entra igual).
+
+**(2.29)** ¿El baño es de uso exclusivo del hogar o compartido? (`q2_29_aseoExclusivo`)
+
+| Respuesta | Efecto |
+|---|---|
+| 1 = Exclusivo del hogar | Mantiene el resultado de 2.28 |
+| 2 = Compartido con otro hogar | Fuerza a no mejorado, sin importar 2.28 |
+| 3 = Compartido con varios hogares | Fuerza a no mejorado |
+| 4 = Otro | Fuerza a no mejorado |
 
 ```stata
+** PASO 1 — Exclusividad del baño (2.29 -> toiletshared)
+recode q2_29_aseoExclusivo (2/4 = 1) (nonmissing = 0), gen(toiletshared)
+label define toilet_exclusivo 1 "Toilet shared" 0 "Toilet exclusive"
+label val toiletshared toilet_exclusivo
+label var toiletshared "Baño compartido (1) vs exclusivo (0), recodificado de 2.29"
 
-  ** PASO 1 — Exclusividad del baño (2.29 -> toiletshared)
-    recode q2_29_aseoExclusivo (2/4 = 1) (nonmissing = 0), gen(toiletshared)
-    label define toilet_exclusivo 1 "Toilet shared" 0 "Toilet exclusive"
-    label val toiletshared toilet_exclusivo
-    label var toiletshared "Baño compartido (1) vs exclusivo (0), recodificado de 2.29"
+** PASO 2 — Tipo de baño en 14 categorías (2.28 + 2.28B/2.28C -> toilet14)
+gen toilet14 = .
+replace toilet14 = 1  if q2_28_aseo == 1 & q2_28B_fuente == 1                                 // WC conectado a agua
+replace toilet14 = 2  if q2_28_aseo == 1 & q2_28B_fuente == 2 & inlist(q2_28C_conectado, 1, 2) // WC sin agua -> alcantarillado o río/mar
+replace toilet14 = 3  if q2_28_aseo == 1 & q2_28B_fuente == 2 & q2_28C_conectado == 3          // WC sin agua -> pozo ciego
+replace toilet14 = 5  if q2_28_aseo == 2   // Letrina (cualquiera, no se mira 2.28D/2.28E)
+replace toilet14 = 10 if q2_28_aseo == 3   // Hoyo áspero
+replace toilet14 = 8  if q2_28_aseo == 4   // Baño público
+replace toilet14 = 13 if q2_28_aseo == 5   // Sin baño
+replace toilet14 = 14 if q2_28_aseo == 6   // Otro
+label var toilet14 "Tipo de baño, 14 categorías (recodificado de 2.28/2.28B/2.28C)"
 
-  ** PASO 2 — Tipo de baño en 14 categorías (2.28 + 2.28B/2.28C -> toilet14)
-    gen toilet14 = .
-        replace toilet14 = 1  if q2_28_aseo==1 & q2_28B_fuente==1                               // WC conectado a agua
-        replace toilet14 = 2  if q2_28_aseo==1 & q2_28B_fuente==2 & inlist(q2_28C_conectado,1,2) // WC sin agua -> alcantarillado o río/mar
-        replace toilet14 = 3  if q2_28_aseo==1 & q2_28B_fuente==2 & q2_28C_conectado==3          // WC sin agua -> pozo ciego
-        replace toilet14 = 5  if q2_28_aseo==2   // Letrina (cualquiera, no se mira 2.28D/2.28E)
-        replace toilet14 = 10 if q2_28_aseo==3   // Hoyo áspero
-        replace toilet14 = 8  if q2_28_aseo==4   // Baño público
-        replace toilet14 = 13 if q2_28_aseo==5   // Sin baño
-        replace toilet14 = 14 if q2_28_aseo==6   // Otro
-    label var toilet14 "Tipo de baño, 14 categorías (recodificado de 2.28/2.28B/2.28C)"
+** PASO 3 — Colapso a 6 categorías (toilet14 -> toilet6)
+recode toilet14 (1/3=1) (5=2) (7=3) (6=4) (13=5) (else=9), gen(toilet6)
+replace toilet6 = . if toilet14 == .
+label var toilet6 "Tipo de baño, 6 categorías (recodificado de toilet14, siguiendo GMD)"
 
-  ** PASO 3 — Colapso a 6 categorías (toilet14 -> toilet6)
-    recode toilet14 (1/3=1) (5=2) (7=3) (6=4) (13=5) (else=9), gen(toilet6)
-        replace toilet6=. if toilet14==.
-    label var toilet6 "Tipo de baño, 6 categorías (recodificado de toilet14, siguiendo GMD)"
+** PASO 4 — Saneamiento mejorado (toilet6 + toiletshared -> imp_san_rec)
+recode toilet6 (1/4=1 "Improved sanitation") (nonmissing=0 "Not improved sanitation"), gen(imp_san_rec)
+replace imp_san_rec = 0 if toiletshared == 1   // aunque la tecnología sea buena, si se comparte -> No mejorado
+label var imp_san_rec "Hogar con acceso a saneamiento mejorado (tecnología adecuada Y uso exclusivo)"
 
-  ** PASO 4 — Saneamiento mejorado (toilet6 + toiletshared -> imp_san_rec)
-    recode toilet6 (1/4=1 "Improved sanitation") (nonmissing=0 "Not improved sanitation"), gen(imp_san_rec)
-        replace imp_san_rec = 0 if toiletshared==1   // aunque la tecnología sea buena, si se comparte -> No mejorado
-    label var imp_san_rec "Hogar con acceso a saneamiento mejorado (tecnología adecuada Y uso exclusivo)"
-
-  ** PASO 5 — Indicador de privación del MPM (imp_san_rec -> dep_infra_imps)
-  * Saneamiento: privado si no tiene acceso a saneamiento mejorado (imp_san_rec, según GMD)
-    gen dep_infra_imps = (imp_san_rec==0) if imp_san_rec~=.
-    la var dep_infra_imps "MPM: Privado si el hogar no tiene acceso a saneamiento mejorado"
-  
+** PASO 5 — Indicador de privación del MPM (imp_san_rec -> dep_infra_imps)
+* Saneamiento: privado si no tiene acceso a saneamiento mejorado (imp_san_rec, según GMD)
+gen dep_infra_imps = (imp_san_rec == 0) if imp_san_rec ~= .
+la var dep_infra_imps "MPM: Privado si el hogar no tiene acceso a saneamiento mejorado"
 ```
 :::
 
 ::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Agua mejorada"}
 El hogar está privado si carece del acceso a agua mejorada.
 
-EL CUESTIONARIO: pregunta, respuestas y efecto sobre "mejorado"
+**El cuestionario:** pregunta, respuestas y efecto sobre "mejorado".
 
-(2.25) ¿De dónde obtienen principalmente el agua para todo uso, las personas
-       de este hogar? (q2_25_aguaTomar)
-    1  = Grifo dentro de la vivienda        // Mejorado
-    2  = Grifo fuera de la vivienda         // Mejorado
-    3  = Grifo público                      // Mejorado
-    4  = Pozo público                       // Mejorado, PERO ver PASO 2 y 3 (puede bajar a No mejorado)
-    5  = Pozo privado                       // Mejorado, PERO ver PASO 3 (puede bajar a No mejorado)
-    6  = Río o lago                         // No mejorado (agua superficial)
-    7  = Manantial                          // No mejorado (el cuestionario no distingue protegido/no protegido)
-    8  = Camión cisterna o tonel            // No mejorado
-    9  = Agua embotellada                   // No mejorado
-    10 = Otra vivienda/empresa/institución  // No mejorado
-    11 = Otro                               // No mejorado
+**(2.25)** ¿De dónde obtienen principalmente el agua para todo uso, las personas de este hogar?
+(`q2_25_aguaTomar`)
 
-(2.26) ¿A qué distancia... y cuánto tiempo tarda para traerlo a casa?
-    Distancia (km) / Tiempo (horas)   // Solo descriptiva, NO decide Mejorado/No mejorado
+| Fuente de agua | Clasificación |
+|---|---|
+| 1 = Grifo dentro de la vivienda | Mejorado |
+| 2 = Grifo fuera de la vivienda | Mejorado |
+| 3 = Grifo público | Mejorado |
+| 4 = Pozo público | Mejorado, pero ver PASO 2 y 3 (puede bajar a no mejorado) |
+| 5 = Pozo privado | Mejorado, pero ver PASO 3 (puede bajar a no mejorado) |
+| 6 = Río o lago | No mejorado (agua superficial) |
+| 7 = Manantial | No mejorado (el cuestionario no distingue protegido/no protegido) |
+| 8 = Camión cisterna o tonel | No mejorado |
+| 9 = Agua embotellada | No mejorado |
+| 10 = Otra vivienda/empresa/institución | No mejorado |
+| 11 = Otro | No mejorado |
 
-(2.27) En su casa ¿Qué tratamiento le dan principalmente al agua para beber?
-       (q2_27_tratamientoAgua)
-    1 = Ninguno                  // Mantiene el resultado de 2.25 (no degrada el pozo)
-    2 = La hierven                // Degrada el pozo (4 o 5) a No mejorado
-    3 = La filtran                // Degrada el pozo a No mejorado
-    4 = Le ponen lejía o cloro     // Degrada el pozo a No mejorado
-    5 = Beben agua embotellada     // Degrada el pozo a No mejorado
-    6 = Otro                       // Degrada el pozo a No mejorado
+**(2.26)** ¿A qué distancia... y cuánto tiempo tarda para traerlo a casa? Distancia (km) / Tiempo
+(horas) — solo descriptiva, no decide mejorado/no mejorado.
 
-(rural) Zona del hogar, ya construida en la limpieza (cod_CV_CP: 1=Urbano, 2=Rural)
-    rural = 1 si es zona Rural, 0 si es Urbano
-    // Solo afecta al Pozo público (2.25==4): en zona rural SIEMPRE es No mejorado,
-    // sin importar el tratamiento del agua.
+**(2.27)** En su casa ¿qué tratamiento le dan principalmente al agua para beber?
+(`q2_27_tratamientoAgua`)
+
+| Respuesta | Efecto |
+|---|---|
+| 1 = Ninguno | Mantiene el resultado de 2.25 (no degrada el pozo) |
+| 2 = La hierven | Degrada el pozo (4 o 5) a no mejorado |
+| 3 = La filtran | Degrada el pozo a no mejorado |
+| 4 = Le ponen lejía o cloro | Degrada el pozo a no mejorado |
+| 5 = Beben agua embotellada | Degrada el pozo a no mejorado |
+| 6 = Otro | Degrada el pozo a no mejorado |
+
+**(rural)** Zona del hogar, ya construida en la limpieza (`cod_CV_CP`: 1 = Urbano, 2 = Rural).
+`rural = 1` si es zona rural, `0` si es urbano. Solo afecta al pozo público (`2.25 == 4`): en zona
+rural **siempre** es no mejorado, sin importar el tratamiento del agua.
 
 ```stata
-
 ** PASO 1 — Fuente de agua en 14 categorías (2.25 -> water14)
-  recode q2_25_aguaTomar (1=1) (2=2) (3=3) (4=4) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), gen(water14)
-  label var water14 "Fuente de agua, 14 categorías (recodificado de 2.25)"
-  label define water14 1 "Agua entubada dentro de la vivienda" ///
-                        2 "Agua entubada al patio/parcela" ///
-                        3 "Grifo o pilón público" ///
-                        4 "Pozo entubado o perforado (público)" ///
-                        5 "Pozo protegido (privado)" ///
-                        6 "Manantial protegido" ///
-                        7 "Agua embotellada" ///
-                        8 "Agua de lluvia" ///
-                        9 "Manantial no protegido" ///
-                        10 "Pozo no protegido" ///
-                        11 "Carro con tanque/tambor pequeño" ///
-                        12 "Camión cisterna" ///
-                        13 "Agua superficial" ///
-                        14 "Otro", replace
-  label val water14 water14
+recode q2_25_aguaTomar (1=1) (2=2) (3=3) (4=4) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), gen(water14)
+label var water14 "Fuente de agua, 14 categorías (recodificado de 2.25)"
+label define water14 1 "Agua entubada dentro de la vivienda"  ///
+                      2 "Agua entubada al patio/parcela"      ///
+                      3 "Grifo o pilón público"                ///
+                      4 "Pozo entubado o perforado (público)"  ///
+                      5 "Pozo protegido (privado)"              ///
+                      6 "Manantial protegido"                   ///
+                      7 "Agua embotellada"                      ///
+                      8 "Agua de lluvia"                        ///
+                      9 "Manantial no protegido"                ///
+                      10 "Pozo no protegido"                    ///
+                      11 "Carro con tanque/tambor pequeño"      ///
+                      12 "Camión cisterna"                      ///
+                      13 "Agua superficial"                     ///
+                      14 "Otro", replace
+label val water14 water14
 
 ** PASO 2 — Excepción rural para pozo público (rural + water14==4 -> degradar)
-  replace water14 = 10 if water14==4 & rural==1
-  // agua de pozo público se considera mejorada en zona urbana pero no mejorada en zona rural
+* Agua de pozo público se considera mejorada en zona urbana pero no mejorada en zona rural
+replace water14 = 10 if water14 == 4 & rural == 1
 
 ** PASO 3 — Excepción por tratamiento del agua (pozo público o privado -> degradar)
-  replace water14 = 10 if inlist(q2_25_aguaTomar, 4,5) & q2_27_tratamientoAgua!= "Ninguno"
-  // si el hogar SÍ trata el agua del pozo (la hierve, filtra, le pone cloro, etc.),
-  // se reclasifica como No mejorada, sin importar zona urbana o rural
+* Si el hogar SÍ trata el agua del pozo (la hierve, filtra, le pone cloro, etc.),
+* se reclasifica como no mejorada, sin importar zona urbana o rural
+replace water14 = 10 if inlist(q2_25_aguaTomar, 4, 5) & q2_27_tratamientoAgua != "Ninguno"
 
 ** PASO 4 — Agua mejorada (water14 -> imp_wat_rec)
-  recode water14 (1/6 8=1 "Access to improve water source") (nonmissing=0 "No access to improve water source"), gen(imp_wat_rec)
-  label var imp_wat_rec "Hogar con acceso a fuente de agua mejorada. Recodificada desde water14 siguiendo GMD"
+recode water14 (1/6 8=1 "Access to improve water source") (nonmissing=0 "No access to improve water source"), gen(imp_wat_rec)
+label var imp_wat_rec "Hogar con acceso a fuente de agua mejorada. Recodificada desde water14 siguiendo GMD"
 
-  clonevar drinking_water = imp_wat_rec
-  label var drinking_water "Hogar con acceso a fuente de agua mejorada. Igual a imp_wat_rec"
+clonevar drinking_water = imp_wat_rec
+label var drinking_water "Hogar con acceso a fuente de agua mejorada. Igual a imp_wat_rec"
 
 ** PASO 5 — Indicador de privación del MPM (imp_wat_rec -> dep_infra_impw)
-  gen dep_infra_impw = (imp_wat_rec==0) if imp_wat_rec~=.
-  la var dep_infra_impw "MPM: Privado si el hogar no tiene acceso a agua potable mejorada"
-
+gen dep_infra_impw = (imp_wat_rec == 0) if imp_wat_rec ~= .
+la var dep_infra_impw "MPM: Privado si el hogar no tiene acceso a agua potable mejorada"
 ```
 :::
 
@@ -513,19 +547,17 @@ EL CUESTIONARIO: pregunta, respuestas y efecto sobre "mejorado"
 Compara el gasto per cápita en PPA contra la línea internacional de la variante MPM (3,00 USD PPA 2021).
 
 ```stata
+gen ipc = 1.070633
+gen ppp = 287.6907
+gen welfare_ppp = pcexp / ipc / ppp / 365
 
-  gen ipc = 1.070633
-  gen ppp = 287.6907
-  gen welfare_ppp = pcexp/ipc/ppp/365
+gen double welfare_ppp = pcexp_ppp
+gen dep_poor1 = welfare_ppp < 3 if welfare_ppp ~= .
+label var dep_poor1 "Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"
 
-  gen double welfare_ppp = pcexp_ppp
-  gen dep_poor1 = welfare_ppp < 3 if welfare_ppp~=.
-  label var dep_poor1 "Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"
-
-  * `apoverty` también permite obtener indicadores de pobreza directamente
-  * a partir del agregado de bienestar (pcexp_ppp) y la línea de referencia (zref)
-  apoverty pcexp_ppp [aw = weight_hh], varpl(zref) gen(monetary)
-
+* `apoverty` también permite obtener indicadores de pobreza directamente
+* a partir del agregado de bienestar (pcexp_ppp) y la línea de referencia (zref)
+apoverty pcexp_ppp [aw = weight_hh], varpl(zref) gen(monetary)
 ```
 :::
 
@@ -565,6 +597,9 @@ en la ENH2.
 #### Ejercicios de la Sesión 1
 
 1. ¿Por qué la privación se define a nivel de hogar y no de individuo?
+2. ¿Cuántas dimensiones tiene el MPM de Guinea Ecuatorial y cuáles son?
+3. ¿Qué diferencia hay entre un indicador y una variable?
+
 
 ## Sesión 2
 

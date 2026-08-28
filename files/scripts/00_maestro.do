@@ -1,5 +1,5 @@
 /*==================================================================
- PROYECTO:      Índice de Pobreza Multidimensional (IPM / MPM)
+ PROYECTO:      Medida de Pobreza Multidimensional (IPM / MPM)
                 Guinea Ecuatorial (ENH2-2023)
  SCRIPT:        00_maestro.do
  AUTOR ORIGINAL: Banco Mundial, proyecto GNQ-PA
@@ -16,7 +16,7 @@
    01_limpieza.do            -> construye indicadores base
    02_privaciones.do         -> construye variables binarias 0/1
                                  de privación por indicador
-   03_mpitb.do                -> calcula el IPM con `mpitb` (OFICIAL)
+   03_mpitb.do                -> calcula el MPM con `mpitb`
    04_exportar_figuras.do    -> TODAS las figuras/cuadros: Parte 1
                                  (Excel) y Parte 2 (gráficos Stata)
 ==================================================================*/
@@ -26,7 +26,7 @@ clear all
 set more off
 
 *Install packages used in the process
-local commands = "ineqdeco grstyle mpitb apoverty vselect missings" //diff outreg2 spider geodist vincenty fastgini tabout logout shp2dta coefplot spmap distinct clonevar splitvallabels indeplist confirmdir wbopendata mdesc heatplot" //palettes  graphfunctions colrspace moremata (this code should be added in this list if you are running maps for the first time or other elaborated graphs)
+local commands = "ineqdeco grstyle mpitb apoverty vselect missings" 
 local commands_added = "elasticregress"
 local commands_edited = "`commands' `commands_added'"
 foreach c of local commands_edited {
@@ -57,7 +57,7 @@ if ("$gdRaiz" == "") {
 /*------------------------------------------------------------------
  2) RUTAS DERIVADAS DE $gdRaiz (no deberías necesitar tocar esto)
     Estructura de subcarpetas esperada debajo de $gdRaiz:
-      $gdRaiz/
+        
         Do-files/                         -> $gdDo   (esta misma carpeta,
                                               los 5 do-files del pipeline)
         1-Data/                           -> $gdData (microdatos de la
@@ -66,16 +66,11 @@ if ("$gdRaiz" == "") {
         2-Resultados/                     -> $gdOutput (todo lo que el
                                               pipeline genera: .dta,
                                               Excel, figuras)
-        3-Productos/                      -> $ldAnalysis (copia opcional
-                                              de figuras/cuadros para el
-                                              equipo editorial; si no la
-                                              usas, esas líneas del
-                                              pipeline simplemente crean
-                                              la carpeta y escriben ahí)
-    Si tu proyecto ya usa otros nombres de subcarpeta, ajusta las 4
-    líneas de abajo (y solo estas 4).
+
+    Si tu proyecto ya usa otros nombres de subcarpeta, ajusta las 3
+    líneas de abajo (y solo estas 3).
 ------------------------------------------------------------------*/
-global gdDo        "$gdRaiz/Web_site/`c(username)'/files/scripts" //  (Aca el path es mas largo porque aseguramos que se actualize el website mas se recomienda para los demas usuarios un path sencillo "$gdRaiz/Do-files")
+global gdDo        "$gdRaiz/Web_site/`c(username)'/files/scripts" //  ("$gdRaiz/Do-files")
 global gdData      "$gdRaiz/1-Data"
 global gdOutput    "$gdRaiz/2-Resultados"
     global gdExcel    "${gdOutput}/Excel"
@@ -85,13 +80,13 @@ global gdOutput    "$gdRaiz/2-Resultados"
 /*------------------------------------------------------------------
  3) Parametros para la ejecucion 
 ------------------------------------------------------------------*/
-global language "SPA" // Idioma de las etiquetas/salidas: "SPA" o "ENG"
-global database "CleanDB_Individual_POV.dta" //  Base training: Individuals_data.dta Base PEA: CleanDB_Individual_POV.dta
-global MPM "MPM" // MPM o MPMplus
-global methodology "manual" // mpitb syntax vs manual
+global language "SPA"                           // Idioma de las etiquetas/salidas: "SPA" o "ENG"
+global database "CleanDB_Individual_POV.dta"    //  Base training: Individuals_data.dta - Base PEA completa: CleanDB_Individual_POV.dta
+global MPM "MPM"                                // MPM o MPMplus
+global methodology "manual"                     // mpitb syntax vs manual
+
 * Fuente de las figuras (consistencia visual entre gráficos)
 graph set window fontface "Arial Narrow"
-
 
 /*------------------------------------------------------------------
  4) Crear carpetas de salida si no existen
@@ -142,7 +137,6 @@ else if ("$methodology" == "manual") {
 if ("$methodology" == "mpitb") { // Construido para el conjunto amplio de indicadores 
   include "$gdDo/04_exportar_figuras.do"
 }
-
 
 /*------------------------------------------------------------------
  4) Mensaje final con las rutas de salida (útil para ubicar productos)

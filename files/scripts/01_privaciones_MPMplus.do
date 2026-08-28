@@ -165,36 +165,48 @@
 **# Electricidad  
   ****************************************************
   /*
-    dep_infra_elec = 1 (Privado) si el hogar NO tiene acceso a electricidad
-    O si tuvo al menos un corte de luz el último mes. A diferencia del MPM
-    estándar (solo importa el acceso; ver 01_privaciones_MPM.do), aquí se
-    suma el corte de luz. Para replicarlo paso a paso:
+    (2.31) ¿Cuál es la principal fuente de energía que se utiliza en este hogar
+          para el alumbrado? (q2_31_energiaLuz)
+        1  = Electricidad de la red pública   // Mejorado
+        2  = Placa solar                      // Mejorado
+        3  = Generador (GASOLINA)             // Mejorado
+        4  = Generador (GASOIL)               // Mejorado
+        5  = Petróleo/Keroseno                // No mejorado
+        6  = Gas (lámpara)                    // No mejorado
+        7  = Batería/Pila                     // No mejorado
+        8  = Vela                             // No mejorado
+        9  = Leña                             // No mejorado
+        10 = Otro                             // No mejorado
 
-    PASO A — Acceso a electricidad: electricity (construida a partir de
-      q2_31_energiaLuz, pregunta 2.31 "¿Cuál es la principal fuente de
-      energía... para el alumbrado?"): electricity=1 si la fuente principal
-      es 1 (red pública), 2 (placa solar), 3 (generador gasolina) o 4
-      (generador gasoil); electricity=0 en cualquier otro caso (petróleo,
-      gas/lámpara, batería, vela, leña, otro).
-      Si electricity==0 -> dep_infra_elec=1 (privado), sin mirar 2.33.
+    (2.32) ¿A quién le pagan por el servicio de electricidad?
+        1 Empresa Pública SEGESA / 2 Al vecino / 3 Autoconsumo (generador) -> 2.33
+        4 No paga -> 2.33 / 5 Al propietario de la vivienda / 6 Otro
+        // Solo define el ENRUTAMIENTO de la encuesta (a quién se le pregunta 2.32A
+        // vs. quién pasa directo a 2.33). NO se usa para decidir Mejorado/No mejorado.
 
-    PASO B — Corte de luz el último mes: q2_33_SinElect (pregunta 2.33
-      "En el último mes ¿cuántos días se quedó el hogar sin energía
-      eléctrica por más de 30 min?", numérico)
-      Si electricity==1 & q2_33_SinElect!=. -> dep_infra_elec se fuerza a 1
-      (privado), aunque sí tenga acceso.
+    (2.32A) En el último mes que pagó ¿cuánto fue el pago mensual por electricidad?
+        // Solo descriptiva (monto en FCFA) -- NO se usa para el indicador de privación.
 
-    A verificar: la condición usa "!=." (no falta el dato), no "> 0". Si a
-    TODO hogar con electricidad se le pregunta 2.33 (incluidos los que
-    tuvieron 0 días sin luz, y ese 0 se guarda como 0 y no como missing),
-    entonces casi cualquier hogar con electricidad quedaría marcado como
-    "privado" por corte de luz. Conviene confirmar con:
-      tab q2_33_SinElect if electricity==1, mis
-    para ver si aparecen respuestas ==0 (deberían existir si el 0 se
-    registra tal cual) o si "missing" realmente equivale a "no tuvo cortes".
+    (2.33) En el último mes ¿cuántos días se quedó el hogar sin energía eléctrica
+          por más de 30 min? (q2_33_SinElect, numérico)
+        // Se pregunta a TODO hogar que declaró tener electricidad en 2.31 (llega
+        // aquí ya sea desde el pago en 2.32A o directo desde 2.32 si es
+        // autoconsumo/no paga). Se usa SOLO en la variante MPM+ para penalizar
+        // los cortes de luz del último mes, aunque el hogar sí tenga acceso.
   */
+
+** PASO 1 — Acceso a electricidad mejorado (2.31 -> electricity)
+    // recode q2_31_energiaLuz (1/4=1 "Improved electricity") (nonmissing=0 "Not improved electricity"), gen(electricity)
+    // label var electricity "Hogar con acceso a electricidad (mejorado). Recodificado de 2.31 (q2_31_energiaLuz)"
+
+** PASO 2 — Indicador de privación, variante MPM (electricity -> dep_infra_elec)
     gen dep_infra_elec = (electricity==0) if electricity~=.
-    replace dep_infra_elec = 1 if electricity==1 & q2_33_SinElect!=. // también privado si tuvo corte de luz el último mes
+    la var dep_infra_elec "MPM: Privado si el hogar no tiene acceso a electricidad"
+
+** PASO 3 — SOLO variante MPM+: penalizar corte de luz (2.33 -> dep_infra_elec)
+    replace dep_infra_elec = 1 if electricity==1 & q2_33_SinElect!=.
+    // aunque el hogar SÍ tenga electricidad, si reportó algún día sin luz
+    // >30 min en el último mes, se reclasifica como Privado
     la var dep_infra_elec "MPM+: Privado si el hogar no tiene acceso a electricidad o tuvo corte de luz el último mes"
 
 **# Saneamiento (saneamiento mejorado)

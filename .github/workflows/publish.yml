@@ -5,6 +5,10 @@ on:
   push:
     branches: main
 
+concurrency:
+  group: pages-publish
+  cancel-in-progress: true
+
 permissions:
   contents: write
 

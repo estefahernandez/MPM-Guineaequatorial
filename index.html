@@ -555,52 +555,19 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Un hogar está privado si <strong>ningún adulto</strong> (en edad de haber alcanzado el grado 9) ha completado al menos la educación primaria.</p>
-<p>En Guinea Ecuatorial, comenzando desde los 7 años la primaria, implica que a los 15 años completo 9 grado 1. Adulto &gt;= $eduage años 2. Nivel educativo requerido = primaria completa, Grade 9 = ESBA 3 (educat7&gt;=3)</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre el logro educativo</p>
-<p>(3.04) ¿[Nombre] ha asistido alguna vez a la escuela? (q3_04_escuela) 1 = Sí // Pasa a mirar el grado alcanzado (3.05) 2 = No y tiene 20 años o menos de edad // Nunca estudió -&gt; educat7=1 “Ninguno” 3 = No y es mayor de 20 años // Nunca estudió -&gt; educat7=1 “Ninguno”</p>
-<p>(3.05) ¿Cuál es el grado educativo más alto que alcanzó? (q3_05_grado, 0-19) 0 Ninguno, 1 Preescolar -&gt; educat7=1 “Ninguno” 2 Grado1, 3 Grado2, 4 Grado3, 5 Grado4, 6 Grado5 -&gt; educat7=2 “Primaria incompleta” 7 Grado6 -&gt; educat7=3 “Primaria completa” 8 ESBA1, 9 ESBA2, 10 ESBA3, 11 ESBA4, 12 Bach1, 14 FormTecBásica -&gt; educat7=4 “Secundaria incompleta” 13 Bach2, 15 FormTecAvanzada -&gt; educat7=5 “Secundaria completa” 17 Diplomado No universitario -&gt; educat7=6 “Post-secundaria no universidad” 16 FormUniv(no egresado), 18 Graduado Universitario, 19 Postgrado -&gt; educat7=7 “Universidad (finalizada o no)”</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  * Umbral <span class="kw">de</span> edad para <span class="st">"adulto"</span> a efectos <span class="kw">de</span> logro educativo</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">global</span> lbage 7       <span class="co">// Edad de inicio de primaria</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">global</span> eduage 15     <span class="co">// Edad mínima para considerar "adulto" en educación</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  ** PASO 1 — Nivel educativo alcanzado, 7 categorías (3.04 + 3.05 -&gt; educat7)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  * Nivel Educativo alcanzado 7 categorias</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">gen</span> educat7=.</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      * Casos que nunca han estudiado</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 1 <span class="kw">if</span> (<span class="fu">inlist</span>(q3_04_escuela,<span class="st">"No y tiene 20 años o menos de edad"</span>,<span class="st">"No y es mayor de 20 años"</span>) | q3_04_escuela==<span class="st">""</span>) </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      * Casos según último grado cursado</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 1 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,0,1)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 2 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,2,3,4,5,6)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 3 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,7)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 4 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,8,9,10,11,12,14)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 5 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,13,15)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 6 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,17)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 7 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,16,18,19)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">define</span> educat7  1 <span class="st">"Ninguno"</span> </span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                          2 <span class="st">"Primaria incompleta"</span> </span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                          3 <span class="st">"Primaria completa"</span> </span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                          4 <span class="st">"Secundaria incompleta"</span> </span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                          5 <span class="st">"Secundaria completa"</span> </span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                          6 <span class="st">"Post-secundaria pero no universidad"</span> </span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                          7 <span class="st">"Universidad (finalizada o no)"</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> val educat7 educat7 </span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> educat7 <span class="st">"Mayor nivel educación alcanzado (7 categorias)"</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  ** PASO 2 — Indicador <span class="kw">de</span> privación, variante MPM (educat7 -&gt; dep_educ_com)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  * Individuo con nivel básico <span class="kw">de</span> educación (primaria completa o más)</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> temp2 = 1 <span class="kw">if</span> q1_03_edad&gt;=<span class="ot">$eduage</span> &amp; q1_03_edad~=. &amp; educat7&gt;=3 &amp; educat7~=.</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  * Cantidad <span class="kw">de</span> adultos con nivel apropiado por hogar</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    * Comentario: no hay missings en temp3: todo hogar tiene al menos 1 persona &gt;= <span class="ot">$eduage</span>.</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                  Es decir, temp3==0 significa que nadie completó primaria, NO que falten adultos en <span class="fu">el</span> hogar.</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="kw">bys</span> hhid: <span class="kw">egen</span> temp3 = <span class="kw">sum</span>(temp2)</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  * El hogar está privado si NINGÚN adulto alcanza <span class="fu">el</span> nivel</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_educ_com = 0</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="kw">replace</span> dep_educ_com = 1 <span class="kw">if</span> temp3==0</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  la <span class="kw">var</span> dep_educ_com <span class="st">"MPM: Privado si el hogar NO tiene adultos $eduage+ con primaria completa"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>* Umbral <span class="kw">de</span> edad para <span class="st">"adulto"</span> a efectos <span class="kw">de</span> logro educativo</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> eduage 15   <span class="co">// primaria inicia a los 7 años; edad mínima para considerar "adulto"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>* Individuo con nivel básico <span class="kw">de</span> educación (primaria completa o más)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> temp2 = 1 <span class="kw">if</span> q1_03_edad&gt;=<span class="ot">$eduage</span> &amp; q1_03_edad~=. &amp; educat7&gt;=3 &amp; educat7~=.</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>* Cantidad <span class="kw">de</span> adultos con nivel apropiado por hogar</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> hhid: <span class="kw">egen</span> temp3 = <span class="kw">sum</span>(temp2)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>* El hogar está privado si NINGÚN adulto alcanza <span class="fu">el</span> nivel</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_educ_com = 0</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> dep_educ_com = 1 <span class="kw">if</span> temp3==0</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>la <span class="kw">var</span> dep_educ_com <span class="st">"MPM: Privado si el hogar NO tiene adultos $eduage+ con primaria completa"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -617,190 +584,51 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Un hogar está privado si tiene <strong>al menos un niño en edad escolar (7 a 14 años) que no asiste</strong> a la escuela.</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre la matrícula escolar</p>
-<p>(3.08) ¿Asiste o asistió [Nombre] a una escuela o institución educativa durante el año escolar 2021-2022? (q3_08_asistio) Sí -&gt; matriculado No -&gt; no matriculado</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  * Edades <span class="kw">de</span> corte usadas en los indicadores <span class="kw">de</span> educación</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> lbage 7       <span class="co">// Edad de inicio de primaria</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> ubage 14      <span class="co">// Se considera hasta 8vo grado (ESBA 2) como edad escolar</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Asistencia escolar 2021/2022 (3.08 -&gt; asistencia_escolar)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> asistencia_escolar = (q3_08_asistio==<span class="st">"Sí"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> asistencia_escolar <span class="st">"Asistió a institución educativa 2021/2022"</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Indicador <span class="kw">de</span> privación (asistencia_escolar -&gt; dep_educ_enr)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  * Definiendo <span class="fu">el</span> universo primero, niños en <span class="st">"edad escolar"</span> (entre <span class="ot">$lbage</span> <span class="fu">y</span> <span class="ot">$ubage</span> años)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> edad_escolar = (q1_03_edad&gt;=<span class="ot">$lbage</span> &amp; q1_03_edad&lt;=<span class="ot">$ubage</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">bys</span> hhid: <span class="kw">egen</span> cant_edadescolar = <span class="kw">sum</span>(edad_escolar)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  * No matriculado: está en edad escolar pero no asiste</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  * Comentario: Nos aseguramos que si no esta en edad escolar no se le considere privado ni no privado, sino <span class="fu">missing</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> no_matriculado = (q1_03_edad&gt;=<span class="ot">$lbage</span> &amp; q1_03_edad&lt;=<span class="ot">$ubage</span> &amp; asistencia_escolar!=1)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> no_matriculado=. <span class="kw">if</span> q1_03_edad&lt;<span class="ot">$lbage</span> | q1_03_edad&gt;<span class="ot">$ubage</span> </span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  * Cantidad <span class="kw">de</span> niños no matriculados por hogar</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">bys</span> hhid: <span class="kw">egen</span> cant_no_matriculados = <span class="kw">sum</span>(no_matriculado)</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  * El hogar está privado si tiene AL MENOS un niño/adolescente en edad escolar que no está matriculado </span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  * (por esto se calcula la suma, para detectar al menos uno).</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_educ_enr = 0</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    * cant_no_matriculados~=. nunca es <span class="fu">missing</span> por como se crea en <span class="fu">el</span> <span class="kw">bysort</span> </span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> dep_educ_enr = 1 <span class="kw">if</span> cant_no_matriculados&gt;0 </span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    * hogares <span class="fu">sin</span> niños en edad escolar (universo <span class="kw">de</span> la privacion no estan en todos los hogares) </span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    * no estan privados </span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> dep_educ_enr = 0 <span class="kw">if</span> cant_edadescolar==0</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">drop</span> edad_escolar no_matriculado cant_no_matriculados cant_edadescolar</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  la <span class="kw">var</span> dep_educ_enr <span class="st">"MPM: Privado si el hogar tiene al menos un niño/a en edad escolar no matriculado"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> lbage 7    <span class="co">// edad mínima escolar</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> ubage 14   <span class="co">// edad máxima considerada (8.º grado / ESBA 2)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>* Niños en <span class="st">"edad escolar"</span> (universo del indicador)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> edad_escolar = (q1_03_edad&gt;=<span class="ot">$lbage</span> &amp; q1_03_edad&lt;=<span class="ot">$ubage</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> hhid: <span class="kw">egen</span> cant_edadescolar = <span class="kw">sum</span>(edad_escolar)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>* Niños en edad escolar que NO están matriculados</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> no_matriculado = (q1_03_edad&gt;=<span class="ot">$lbage</span> &amp; q1_03_edad&lt;=<span class="ot">$ubage</span> &amp; asistencia_escolar!=1)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> no_matriculado=. <span class="kw">if</span> q1_03_edad&lt;<span class="ot">$lbage</span> | q1_03_edad&gt;<span class="ot">$ubage</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> hhid: <span class="kw">egen</span> cant_no_matriculados = <span class="kw">sum</span>(no_matriculado)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>* El hogar está privado si hay al menos un niño <span class="fu">sin</span> matricular</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_educ_enr = 0</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> dep_educ_enr = 1 <span class="kw">if</span> cant_no_matriculados&gt;0</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> dep_educ_enr = 0 <span class="kw">if</span> cant_edadescolar==0   <span class="co">// sin niños en edad escolar: no privado</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="<i class='bi bi-alt'></i> Electricidad">
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="<i class='bi bi-alt'></i> Electricidad, saneamiento y agua">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span><i class="bi bi-alt"></i> Electricidad
+<span class="screen-reader-only">Nota</span><i class="bi bi-alt"></i> Electricidad, saneamiento y agua
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>El hogar está privado si carece del acceso a electricidad</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre “el acceso a electricidad”</p>
-<p>(2.31) ¿Cuál es la principal fuente de energía que se utiliza en este hogar para el alumbrado? (q2_31_energiaLuz) 1 = Electricidad de la red pública // Mejorado 2 = Placa solar // Mejorado 3 = Generador (GASOLINA) // Mejorado 4 = Generador (GASOIL) // Mejorado 5 = Petróleo/Keroseno // No mejorado 6 = Gas (lámpara) // No mejorado 7 = Batería/Pila // No mejorado 8 = Vela // No mejorado 9 = Leña // No mejorado 10 = Otro // No mejorado</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Acceso a electricidad mejorado (2.31 -&gt; electricity)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">recode</span> q2_31_energiaLuz (1/4=1 <span class="st">"Improved electricity"</span>) (nonmissing=0 <span class="st">"Not improved electricity"</span>), <span class="kw">gen</span>(electricity)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> electricity <span class="st">"Hogar con acceso a electricidad (mejorado). Recodificado de 2.31 (q2_31_energiaLuz)"</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Indicador <span class="kw">de</span> privación, variante MPM (electricity -&gt; dep_infra_elec)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_infra_elec = (electricity==0) <span class="kw">if</span> electricity~=.</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  la <span class="kw">var</span> dep_infra_elec <span class="st">"MPM: Privado si el hogar no tiene acceso a electricidad"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="<i class='bi bi-alt'></i> Saneamiento mejorado">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span><i class="bi bi-alt"></i> Saneamiento mejorado
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>El hogar está privado si carece de acceso a saneamiento mejorado. A diferencia de electricidad, aquí la ENH2 encadena varias preguntas —sobre el tipo de instalación, su conexión y si es de uso exclusivo— que hay que combinar siguiendo la definición estándar internacional (JMP/OMS-UNICEF, la misma que usa el GMD del Banco Mundial): el hogar accede a saneamiento mejorado si su instalación separa higiénicamente las excretas Y es de uso exclusivo del hogar; basta con fallar una de las dos condiciones para quedar clasificado como “no mejorado”.</p>
-<p>Las preguntas que permiten reconstruir esa definición:</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre el saneamiento mejorado:</p>
-<p>(2.28) ¿Qué tipo de aseo/baño utiliza principalmente este hogar? (q2_28_aseo) 1 = W.C. / inodoro // Candidato a Mejorado -&gt; depende de 2.28B/2.28C 2 = Letrina // SIEMPRE Mejorado, no depende de 2.28D/2.28E 3 = Hoyo áspero / agujero abierto // No mejorado 4 = Baño público // No mejorado 5 = Sin baño (en la naturaleza) // No mejorado 6 = Otro // No mejorado</p>
-<p>(2.28A) ¿El WC/inodoro está dentro o fuera de la vivienda? (q2_28A_intext) 1 = Interior | 2 = Exterior // Solo descriptiva, NO decide Mejorado/No mejorado (se pregunta solo a quienes respondieron 1=W.C. en 2.28)</p>
-<p>(2.28B) El WC/inodoro ¿está conectado a fuente de agua para descarga? (q2_28B_fuente) 1 = Sí // Junto con q2_28_aseo==1 -&gt; Mejorado 2 = No // Pasa a mirar 2.28C</p>
-<p>(2.28C) El WC/inodoro ¿está conectado a…? (q2_28C_conectado) [solo si 2.28B=No] 1 = Sistema de alcantarillado // -&gt; Mejorado 2 = Conectado a tubería que va al río/mar // -&gt; Mejorado 3 = Conectado a pozo ciego // -&gt; Mejorado (sin responder / fuera de estos códigos -&gt; queda Missing)</p>
-<p>(2.28D) La Letrina ¿está conectada a fuente de agua para descarga? (q2_28D_fuente) (2.28E) La Letrina ¿está conectada a…? (q2_28E_conectado) Existen en el cuestionario pero NO se usan para clasificar la Letrina como mejorada o no (ver PASO 2 más abajo: toda Letrina entra igual).</p>
-<p>(2.29) ¿El baño es de uso exclusivo del hogar o compartido? (q2_29_aseoExclusivo) 1 = Exclusivo del hogar // Mantiene el resultado de 2.28 2 = Compartido con otro hogar // Fuerza a No mejorado, sin importar 2.28 3 = Compartido con varios hogares // Fuerza a No mejorado 4 = Otro // Fuerza a No mejorado</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  ** PASO 1 — Exclusividad del baño (2.29 -&gt; toiletshared)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">recode</span> q2_29_aseoExclusivo (2/4 = 1) (nonmissing = 0), <span class="kw">gen</span>(toiletshared)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">define</span> toilet_exclusivo 1 <span class="st">"Toilet shared"</span> 0 <span class="st">"Toilet exclusive"</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> val toiletshared toilet_exclusivo</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> toiletshared <span class="st">"Baño compartido (1) vs exclusivo (0), recodificado de 2.29"</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  ** PASO 2 — Tipo <span class="kw">de</span> baño en 14 categorías (2.28 + 2.28B/2.28C -&gt; toilet14)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> toilet14 = .</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 1  <span class="kw">if</span> q2_28_aseo==1 &amp; q2_28B_fuente==1                               <span class="co">// WC conectado a agua</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 2  <span class="kw">if</span> q2_28_aseo==1 &amp; q2_28B_fuente==2 &amp; <span class="fu">inlist</span>(q2_28C_conectado,1,2) <span class="co">// WC sin agua -&gt; alcantarillado o río/mar</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 3  <span class="kw">if</span> q2_28_aseo==1 &amp; q2_28B_fuente==2 &amp; q2_28C_conectado==3          <span class="co">// WC sin agua -&gt; pozo ciego</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 5  <span class="kw">if</span> q2_28_aseo==2   <span class="co">// Letrina (cualquiera, no se mira 2.28D/2.28E)</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 10 <span class="kw">if</span> q2_28_aseo==3   <span class="co">// Hoyo áspero</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 8  <span class="kw">if</span> q2_28_aseo==4   <span class="co">// Baño público</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 13 <span class="kw">if</span> q2_28_aseo==5   <span class="co">// Sin baño</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 14 <span class="kw">if</span> q2_28_aseo==6   <span class="co">// Otro</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> toilet14 <span class="st">"Tipo de baño, 14 categorías (recodificado de 2.28/2.28B/2.28C)"</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  ** PASO 3 — Colapso a 6 categorías (toilet14 -&gt; toilet6)</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">recode</span> toilet14 (1/3=1) (5=2) (7=3) (6=4) (13=5) (<span class="kw">else</span>=9), <span class="kw">gen</span>(toilet6)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet6=. <span class="kw">if</span> toilet14==.</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> toilet6 <span class="st">"Tipo de baño, 6 categorías (recodificado de toilet14, siguiendo GMD)"</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  ** PASO 4 — Saneamiento mejorado (toilet6 + toiletshared -&gt; imp_san_rec)</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">recode</span> toilet6 (1/4=1 <span class="st">"Improved sanitation"</span>) (nonmissing=0 <span class="st">"Not improved sanitation"</span>), <span class="kw">gen</span>(imp_san_rec)</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> imp_san_rec = 0 <span class="kw">if</span> toiletshared==1   <span class="co">// aunque la tecnología sea buena, si se comparte -&gt; No mejorado</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> imp_san_rec <span class="st">"Hogar con acceso a saneamiento mejorado (tecnología adecuada Y uso exclusivo)"</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  ** PASO 5 — Indicador <span class="kw">de</span> privación del MPM (imp_san_rec -&gt; dep_infra_imps)</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  * Saneamiento: privado si no tiene acceso a saneamiento mejorado (imp_san_rec, según GMD)</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> dep_infra_imps = (imp_san_rec==0) <span class="kw">if</span> imp_san_rec~=.</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    la <span class="kw">var</span> dep_infra_imps <span class="st">"MPM: Privado si el hogar no tiene acceso a saneamiento mejorado"</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="<i class='bi bi-alt'></i> Agua mejorada">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span><i class="bi bi-alt"></i> Agua mejorada
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>El hogar está privado si carece del acceso a agua mejorada.</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre “mejorado”</p>
-<p>(2.25) ¿De dónde obtienen principalmente el agua para todo uso, las personas de este hogar? (q2_25_aguaTomar) 1 = Grifo dentro de la vivienda // Mejorado 2 = Grifo fuera de la vivienda // Mejorado 3 = Grifo público // Mejorado 4 = Pozo público // Mejorado, PERO ver PASO 2 y 3 (puede bajar a No mejorado) 5 = Pozo privado // Mejorado, PERO ver PASO 3 (puede bajar a No mejorado) 6 = Río o lago // No mejorado (agua superficial) 7 = Manantial // No mejorado (el cuestionario no distingue protegido/no protegido) 8 = Camión cisterna o tonel // No mejorado 9 = Agua embotellada // No mejorado 10 = Otra vivienda/empresa/institución // No mejorado 11 = Otro // No mejorado</p>
-<p>(2.26) ¿A qué distancia… y cuánto tiempo tarda para traerlo a casa? Distancia (km) / Tiempo (horas) // Solo descriptiva, NO decide Mejorado/No mejorado</p>
-<p>(2.27) En su casa ¿Qué tratamiento le dan principalmente al agua para beber? (q2_27_tratamientoAgua) 1 = Ninguno // Mantiene el resultado de 2.25 (no degrada el pozo) 2 = La hierven // Degrada el pozo (4 o 5) a No mejorado 3 = La filtran // Degrada el pozo a No mejorado 4 = Le ponen lejía o cloro // Degrada el pozo a No mejorado 5 = Beben agua embotellada // Degrada el pozo a No mejorado 6 = Otro // Degrada el pozo a No mejorado</p>
-<p>(rural) Zona del hogar, ya construida en la limpieza (cod_CV_CP: 1=Urbano, 2=Rural) rural = 1 si es zona Rural, 0 si es Urbano // Solo afecta al Pozo público (2.25==4): en zona rural SIEMPRE es No mejorado, // sin importar el tratamiento del agua.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Fuente <span class="kw">de</span> agua en 14 categorías (2.25 -&gt; water14)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">recode</span> q2_25_aguaTomar (1=1) (2=2) (3=3) (4=4) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), <span class="kw">gen</span>(water14)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> water14 <span class="st">"Fuente de agua, 14 categorías (recodificado de 2.25)"</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">define</span> water14 1 <span class="st">"Agua entubada dentro de la vivienda"</span> <span class="co">///</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                        2 <span class="st">"Agua entubada al patio/parcela"</span> <span class="co">///</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                        3 <span class="st">"Grifo o pilón público"</span> <span class="co">///</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                        4 <span class="st">"Pozo entubado o perforado (público)"</span> <span class="co">///</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                        5 <span class="st">"Pozo protegido (privado)"</span> <span class="co">///</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                        6 <span class="st">"Manantial protegido"</span> <span class="co">///</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                        7 <span class="st">"Agua embotellada"</span> <span class="co">///</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                        8 <span class="st">"Agua de lluvia"</span> <span class="co">///</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                        9 <span class="st">"Manantial no protegido"</span> <span class="co">///</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                        10 <span class="st">"Pozo no protegido"</span> <span class="co">///</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                        11 <span class="st">"Carro con tanque/tambor pequeño"</span> <span class="co">///</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                        12 <span class="st">"Camión cisterna"</span> <span class="co">///</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                        13 <span class="st">"Agua superficial"</span> <span class="co">///</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                        14 <span class="st">"Otro"</span>, <span class="kw">replace</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> val water14 water14</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Excepción rural para pozo público (rural + water14==4 -&gt; degradar)</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">replace</span> water14 = 10 <span class="kw">if</span> water14==4 &amp; rural==1</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">// agua de pozo público se considera mejorada en zona urbana pero no mejorada en zona rural</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>** PASO 3 — Excepción por tratamiento del agua (pozo público o privado -&gt; degradar)</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">replace</span> water14 = 10 <span class="kw">if</span> <span class="fu">inlist</span>(q2_25_aguaTomar, 4,5) &amp; q2_27_tratamientoAgua!= <span class="st">"Ninguno"</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="co">// si el hogar SÍ trata el agua del pozo (la hierve, filtra, le pone cloro, etc.),</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="co">// se reclasifica como No mejorada, sin importar zona urbana o rural</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>** PASO 4 — Agua mejorada (water14 -&gt; imp_wat_rec)</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="kw">recode</span> water14 (1/6 8=1 <span class="st">"Access to improve water source"</span>) (nonmissing=0 <span class="st">"No access to improve water source"</span>), <span class="kw">gen</span>(imp_wat_rec)</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> imp_wat_rec <span class="st">"Hogar con acceso a fuente de agua mejorada. Recodificada desde water14 siguiendo GMD"</span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">clonevar</span> drinking_water = imp_wat_rec</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> drinking_water <span class="st">"Hogar con acceso a fuente de agua mejorada. Igual a imp_wat_rec"</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>** PASO 5 — Indicador <span class="kw">de</span> privación del MPM (imp_wat_rec -&gt; dep_infra_impw)</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_infra_impw = (imp_wat_rec==0) <span class="kw">if</span> imp_wat_rec~=.</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  la <span class="kw">var</span> dep_infra_impw <span class="st">"MPM: Privado si el hogar no tiene acceso a agua potable mejorada"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>El hogar está privado si carece del servicio mejorado correspondiente.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>* Electricidad: privado si no tiene acceso</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_elec = (electricity==0) <span class="kw">if</span> electricity~=.</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>* Saneamiento: privado si no tiene acceso a saneamiento mejorado (imp_san_rec, según GMD)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_imps = (imp_san_rec==0) <span class="kw">if</span> imp_san_rec~=.</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>* Agua: privado si no tiene acceso a agua potable mejorada (imp_wat_rec, según GMD)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_impw = (imp_wat_rec==0) <span class="kw">if</span> imp_wat_rec~=.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note no-icon callout-titled" title="<i class='bi bi-alt'></i> Pobreza monetaria">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -809,26 +637,21 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Compara el gasto per cápita en PPA contra la línea internacional de la variante MPM (3,00 USD PPA 2021).</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> ipc = 1.070633</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> ppp = 287.6907</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> welfare_ppp = pcexp/ipc/ppp/365</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> <span class="kw">double</span> welfare_ppp = pcexp_ppp</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_poor1 = welfare_ppp &lt; 3 <span class="kw">if</span> welfare_ppp~=.</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> dep_poor1 <span class="st">"Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  * `apoverty` también permite obtener indicadores <span class="kw">de</span> pobreza directamente</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  * a partir del agregado <span class="kw">de</span> bienestar (pcexp_ppp) <span class="fu">y</span> la línea <span class="kw">de</span> referencia (zref)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  apoverty pcexp_ppp [aw = weight_hh], varpl(zref) <span class="kw">gen</span>(monetary)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> welfare_ppp = pcexp_ppp</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_poor1 = welfare_ppp &lt; 3 <span class="kw">if</span> welfare_ppp~=.</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> dep_poor1 <span class="st">"Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>* `apoverty` también permite obtener indicadores <span class="kw">de</span> pobreza directamente</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>* a partir del agregado <span class="kw">de</span> bienestar (pcexp_ppp) <span class="fu">y</span> la línea <span class="kw">de</span> referencia (zref)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>apoverty pcexp_ppp [aw = weight_hh], varpl(zref) <span class="kw">gen</span>(monetary)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-warning no-icon callout-titled" title="<i class='bi bi-arrow-right-circle'></i> Buenas prácticas de medición">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -837,7 +660,7 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><strong>Cada elección debe ser justificable</strong> —normativa, empírica o políticamente.</li>
@@ -848,7 +671,7 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled" title="¿Por qué no se calculó el IPM Global de OPHI en Guinea Ecuatorial?">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -857,7 +680,7 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>El IPM Global de OPHI-PNUD requiere tres dimensiones —salud, educación y nivel de vida— con dos indicadores específicos de salud: nutrición, medida mediante datos antropométricos (talla y peso tomados directamente a los miembros del hogar), y mortalidad infantil, obtenida a partir de un módulo de historia de fecundidad.</p>
 <p>La Segunda Encuesta Nacional de Hogares (ENH2) de Guinea Ecuatorial no incluye ninguno de los dos: su Sección 4 de Salud registra enfermedades autorreportadas en los últimos 30 días (donde “desnutrición” es solo una opción dentro de una lista de padecimientos, no una medición antropométrica), y no existe un módulo de historia de fecundidad que permita calcular mortalidad infantil. Al no contar con las variables necesarias para construir la dimensión de salud tal como la define la metodología de OPHI, no fue posible calcular el IPM Global con esta encuesta. Por ese motivo, el curso trabaja con el MPM (Medida de Pobreza Multidimensional) de tres dimensiones —educación, infraestructura y pobreza monetaria—, que sí es viable con las variables disponibles en la ENH2.</p>
@@ -968,7 +791,7 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <h4 class="anchored" data-anchor-id="el-método-alkire-foster-paso-a-paso-despliegue-cada-paso">El método Alkire-Foster paso a paso (despliegue cada paso)</h4>
 <p>El método AF usa una <strong>doble identificación (dual cutoff)</strong>: un umbral <em>dentro</em> de cada indicador y otro <em>entre</em> indicadores.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Paso 1 · Matriz de privaciones">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -977,14 +800,14 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Para cada hogar <span class="math inline">\(i\)</span> e indicador <span class="math inline">\(j\)</span>, se define <span class="math inline">\(g_{ij}=1\)</span> si el hogar está privado y <span class="math inline">\(g_{ij}=0\)</span> en caso contrario.</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Paso 2 · Puntaje de privación ponderado">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -993,7 +816,7 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Se suma sobre indicadores usando los pesos <span class="math inline">\(w_j\)</span> (con <span class="math inline">\(\sum_j w_j = 1\)</span>):</p>
 <p><span class="math display">\[
@@ -1003,7 +826,7 @@ c_i \;=\; \sum_{j=1}^{d} w_j \, g_{ij}
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Paso 3 · Identificación (segundo umbral k)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1012,7 +835,7 @@ c_i \;=\; \sum_{j=1}^{d} w_j \, g_{ij}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Un hogar es <strong>pobre multidimensional</strong> si su puntaje alcanza el umbral <span class="math inline">\(k\)</span>. Aquí <span class="math inline">\(k = 1/3\)</span> (33 %):</p>
 <p><span class="math display">\[
@@ -1023,7 +846,7 @@ i \text{ es pobre} \iff c_i \geq k
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Paso 4 · Censura">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1032,14 +855,14 @@ i \text{ es pobre} \iff c_i \geq k
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><span class="math inline">\(c_i(k) = c_i\)</span> si <span class="math inline">\(c_i \geq k\)</span>, y <span class="math inline">\(c_i(k)=0\)</span> en caso contrario. Solo cuentan las privaciones de quienes son pobres.</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Paso 5 · Agregación ($H$, $A$, $M_0$)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1048,7 +871,7 @@ i \text{ es pobre} \iff c_i \geq k
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><span class="math display">\[
 H = \frac{q}{n}, \qquad A = \frac{\sum_{i=1}^{n} c_i(k)}{q}, \qquad M_0 = H \times A
@@ -1068,7 +891,7 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </figure>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Ejemplo numérico: cálculo de $H$, $A$ y $M_0$">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1077,7 +900,7 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Con la matriz anterior y <span class="math inline">\(k = 1/3\)</span>:</p>
 <table class="caption-top table">
@@ -1127,7 +950,7 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled" title="Propiedades que dan robustez al método">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1136,7 +959,7 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong>Monotonicidad dimensional:</strong> si una persona pobre pierde un logro adicional, <span class="math inline">\(M_0\)</span> no puede disminuir.</li>
@@ -1150,7 +973,7 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 <section id="de-los-indicadores-a-las-privaciones" class="level4">
 <h4 class="anchored" data-anchor-id="de-los-indicadores-a-las-privaciones">De los indicadores a las privaciones</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="Generar las variables de privación (01_privaciones_MPM.do)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1159,25 +982,25 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Recapitulando los 6 indicadores del MPM: educación (<code>dep_educ_com</code>, <code>dep_educ_enr</code>) se construyó paso a paso en la Sesión 1; aquí se completa con infraestructura y monetaria.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>* Educación (ver construcción completa en la Sesión 1)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>*   dep_educ_com -&gt; ningún adulto (15+) completó primaria</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>*   dep_educ_enr -&gt; al menos un niño (7-14) en edad escolar no matriculado</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>* Privación en electricidad</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_elec = (electricity==0) <span class="kw">if</span> electricity~=.</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>* Privación en saneamiento mejorado</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_imps = (imp_san_rec==0) <span class="kw">if</span> imp_san_rec~=.</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>* Privación en agua potable mejorada</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_impw = (imp_wat_rec==0) <span class="kw">if</span> imp_wat_rec~=.</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>* Privación monetaria (línea 3,00 USD PPA 2021 para la variante MPM base)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> welfare_ppp = pcexp_ppp</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_poor1 = welfare_ppp &lt; 3 <span class="kw">if</span> welfare_ppp~=.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>* Educación (ver construcción completa en la Sesión 1)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>*   dep_educ_com -&gt; ningún adulto (15+) completó primaria</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>*   dep_educ_enr -&gt; al menos un niño (7-14) en edad escolar no matriculado</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>* Privación en electricidad</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_elec = (electricity==0) <span class="kw">if</span> electricity~=.</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>* Privación en saneamiento mejorado</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_imps = (imp_san_rec==0) <span class="kw">if</span> imp_san_rec~=.</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>* Privación en agua potable mejorada</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_impw = (imp_wat_rec==0) <span class="kw">if</span> imp_wat_rec~=.</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>* Privación monetaria (línea 3,00 USD PPA 2021 para la variante MPM base)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> welfare_ppp = pcexp_ppp</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_poor1 = welfare_ppp &lt; 3 <span class="kw">if</span> welfare_ppp~=.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El resultado es una fila por hogar con una columna de privación por cada uno de los 6 indicadores: la <strong>matriz de privaciones</strong> <span class="math inline">\(g_{ij}\)</span>.</p>
 </div>
 </div>
@@ -1187,7 +1010,7 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 <h4 class="anchored" data-anchor-id="cálculo-del-ipm-con-mpitb-despliegue-cada-paso">Cálculo del IPM con <code>mpitb</code> (despliegue cada paso)</h4>
 <p>El paquete <code>mpitb</code> <span class="citation" data-cites="suppa2023mpitb">(<a href="#ref-suppa2023mpitb" role="doc-biblioref">Suppa, 2023</a>)</span>, desarrollado y mantenido por OPHI, implementa el método AF: <strong>definir</strong> la estructura (<code>mpitb set</code>), <strong>estimar</strong> (<code>mpitb est</code>) y <strong>leer</strong> los resultados. Requiere una base en formato <em>wide</em> (una fila por hogar, una columna 0/1 por indicador), un ponderador muestral y, si aplica, variables de estrato y conglomerado para <code>svyset</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="0 · Instalación">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1196,17 +1019,17 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ssc</span> install moremata, <span class="kw">replace</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ssc</span> install mpitb, <span class="kw">replace</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>which mpitb</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">help</span> mpitb</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ssc</span> install moremata, <span class="kw">replace</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ssc</span> install mpitb, <span class="kw">replace</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>which mpitb</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">help</span> mpitb</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="1 · Preparar los datos">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1215,20 +1038,20 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"${gdStata}/Data Clean $MPM/DataDeprivations${MPM}.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> dep_* *</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> infra_* i_*</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> educ_* e_*</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">duplicates</span> <span class="kw">drop</span> hhid, <span class="kw">force</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"${gdStata}/Data Clean $MPM/DataDeprivations${MPM}.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> dep_* *</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> infra_* i_*</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> educ_* e_*</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">duplicates</span> <span class="kw">drop</span> hhid, <span class="kw">force</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="2 · Definir la estructura del índice (mpitb set)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1237,12 +1060,12 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mpitb <span class="kw">set</span>, <span class="bn">name</span>(GNQ) <span class="co">///</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    d1(e_com e_enr, na(educ)) <span class="co">///</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    d2(i_elec i_imps i_impw, na(infra)) <span class="co">///</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    d3(poor1, na(mon))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mpitb <span class="kw">set</span>, <span class="bn">name</span>(GNQ) <span class="co">///</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    d1(e_com e_enr, na(educ)) <span class="co">///</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    d2(i_elec i_imps i_impw, na(infra)) <span class="co">///</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    d3(poor1, na(mon))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><strong>Dimensión 1 (educ):</strong> logro educativo (<code>e_com</code>) y matrícula (<code>e_enr</code>).</li>
 <li><strong>Dimensión 2 (infra):</strong> electricidad (<code>i_elec</code>), saneamiento (<code>i_imps</code>) y agua (<code>i_impw</code>).</li>
@@ -1252,7 +1075,7 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="3 · Declarar el diseño muestral">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1261,17 +1084,17 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> hhweight = weight_hh*hhsize</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">egen</span> <span class="kw">strata</span> = <span class="fu">group</span>(cod_provincia cod_CV_CP)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">svyset</span> hhid [iw = hhweight], <span class="kw">clear</span> <span class="kw">strata</span>(<span class="kw">strata</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> hhweight = weight_hh*hhsize</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">egen</span> <span class="kw">strata</span> = <span class="fu">group</span>(cod_provincia cod_CV_CP)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">svyset</span> hhid [iw = hhweight], <span class="kw">clear</span> <span class="kw">strata</span>(<span class="kw">strata</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Utilice el diseño complejo de la encuesta (ponderadores y estratos) para obtener errores estándar correctos.</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="4 · Estimar el IPM (mpitb est)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1280,15 +1103,15 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> (cod_CV_CP cod_provincia) (area prov)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>mpitb <span class="kw">est</span>, <span class="bn">name</span>(GNQ) klist(33) weights(equal) <span class="co">///</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    measures(<span class="ot">all</span>) indmeas(<span class="ot">all</span>) aux(hd) <span class="kw">svy</span> <span class="co">///</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="bn">over</span>(area prov cities) <span class="co">///</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    lsave(<span class="st">"${gdStata}/${MPM}_results.dta"</span>, <span class="kw">replace</span>) lfr(myresults, <span class="kw">replace</span>) <span class="co">///</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    dtasave(<span class="st">"${gdStata}/${MPM}_results_microdata.dta"</span>, <span class="kw">replace</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> (cod_CV_CP cod_provincia) (area prov)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mpitb <span class="kw">est</span>, <span class="bn">name</span>(GNQ) klist(33) weights(equal) <span class="co">///</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    measures(<span class="ot">all</span>) indmeas(<span class="ot">all</span>) aux(hd) <span class="kw">svy</span> <span class="co">///</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="bn">over</span>(area prov cities) <span class="co">///</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    lsave(<span class="st">"${gdStata}/${MPM}_results.dta"</span>, <span class="kw">replace</span>) lfr(myresults, <span class="kw">replace</span>) <span class="co">///</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    dtasave(<span class="st">"${gdStata}/${MPM}_results_microdata.dta"</span>, <span class="kw">replace</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><code>klist(33)</code> — umbral de pobreza <span class="math inline">\(k = 33\%\)</span> (<span class="math inline">\(1/3\)</span>). Utilice <code>klist(20 25 33 40)</code> para el análisis de sensibilidad.</li>
 <li><code>weights(equal)</code> — ponderaciones iguales entre dimensiones.</li>
@@ -1342,7 +1165,7 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 <section id="lectura-de-resultados-despliegue-cada-tabla" class="level4">
 <h4 class="anchored" data-anchor-id="lectura-de-resultados-despliegue-cada-tabla">Lectura de resultados (despliegue cada tabla)</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="Medidas nacionales: incidencia, intensidad e IPM">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1351,10 +1174,10 @@ Figura&nbsp;4: Flujo del método Alkire-Foster: de la matriz de privaciones a <s
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cwf myresults</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>li measure b se <span class="kw">if</span> <span class="fu">inlist</span>(measure,<span class="st">"M0"</span>,<span class="st">"H"</span>,<span class="st">"A"</span>) &amp; loa == <span class="st">"nat"</span> &amp; <span class="kw">k</span> == 33, noob</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>cwf myresults</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>li measure b se <span class="kw">if</span> <span class="fu">inlist</span>(measure,<span class="st">"M0"</span>,<span class="st">"H"</span>,<span class="st">"A"</span>) &amp; loa == <span class="st">"nat"</span> &amp; <span class="kw">k</span> == 33, noob</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <pre class="text"><code>  +---------------------------+
   | measure        b       se |
   |---------------------------|
@@ -1373,7 +1196,7 @@ otra especificación de dimensiones/umbrales). -->
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Descomposición por indicador">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1382,9 +1205,9 @@ otra especificación de dimensiones/umbrales). -->
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-29" class="callout-29-contents callout-collapse collapse">
+<div id="callout-27" class="callout-27-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tabdisp indicator measure <span class="kw">if</span> <span class="fu">inlist</span>(measure,<span class="st">"hd"</span>,<span class="st">"hdk"</span>) &amp; loa == <span class="st">"nat"</span> &amp; <span class="fu">inlist</span>(<span class="kw">k</span>,33,.), cell(b)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tabdisp indicator measure <span class="kw">if</span> <span class="fu">inlist</span>(measure,<span class="st">"hd"</span>,<span class="st">"hdk"</span>) &amp; loa == <span class="st">"nat"</span> &amp; <span class="fu">inlist</span>(<span class="kw">k</span>,33,.), cell(b)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <pre class="text"><code>--------------------------
           |    measure
 indicator |     hd     hdk
@@ -1403,7 +1226,7 @@ indicator |     hd     hdk
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Descomposición por grupo poblacional">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1412,11 +1235,11 @@ indicator |     hd     hdk
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"${gdStata}/${MPM}_results.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> measure loa subg</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ot">list</span> measure loa subg b se <span class="kw">if</span> measure==<span class="st">"M0"</span>, noob</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"${gdStata}/${MPM}_results.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">sort</span> measure loa subg</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ot">list</span> measure loa subg b se <span class="kw">if</span> measure==<span class="st">"M0"</span>, noob</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <pre class="text"><code>  loa       subg          M0
   ----------------------------------
   nat       (nacional)    0.0859
@@ -1441,7 +1264,7 @@ indicator |     hd     hdk
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Microdatos con identificación de pobreza">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1450,16 +1273,16 @@ indicator |     hd     hdk
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-31" class="callout-31-contents callout-collapse collapse">
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"${gdStata}/${MPM}_results_microdata.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> poor_multi = (c_equal &gt;= 1/3)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> poor_multi [aw = hhweight]</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="st">"${gdStata}/${MPM}_results_microdata.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> poor_multi = (c_equal &gt;= 1/3)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">tab</span> poor_multi [aw = hhweight]</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled" title="Errores comunes al usar mpitb">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-32-contents" aria-controls="callout-32" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1468,7 +1291,7 @@ indicator |     hd     hdk
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-32" class="callout-32-contents callout-collapse collapse">
+<div id="callout-30" class="callout-30-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>Incluir variables que <strong>no son estrictamente binarias</strong> (0/1) dentro de <code>d1()</code>/<code>d2()</code>/<code>d3()</code>.</li>
@@ -1481,7 +1304,7 @@ indicator |     hd     hdk
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled" title="Lista de comprobación antes de publicar un IPM">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-33-contents" aria-controls="callout-33" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1490,7 +1313,7 @@ indicator |     hd     hdk
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-33" class="callout-33-contents callout-collapse collapse">
+<div id="callout-31" class="callout-31-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong>Datos:</strong> ¿sin duplicados por hogar? ¿indicadores realmente binarios (0/1)?</li>
@@ -1524,7 +1347,7 @@ indicator |     hd     hdk
 <section id="taller-diseño-de-un-ipm-adaptado-a-guinea-ecuatorial" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="taller-diseño-de-un-ipm-adaptado-a-guinea-ecuatorial">Taller: diseño de un IPM adaptado a Guinea Ecuatorial</h3>
 <div class="callout callout-style-default callout-note callout-titled" title="Variante ampliada MPM+ (umbrales más exigentes)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-34-contents" aria-controls="callout-34" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-32-contents" aria-controls="callout-32" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1533,7 +1356,7 @@ indicator |     hd     hdk
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-34" class="callout-34-contents callout-collapse collapse">
+<div id="callout-32" class="callout-32-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Los do-files contemplan una versión <strong>MPM+</strong> con umbrales más exigentes: logro de secundaria (ESBA 4) en vez de primaria, matrícula que penaliza el retraso escolar, electricidad que penaliza cortes de suministro, y una línea monetaria más alta (8,30 en PPA 2021 en lugar de 3,00). El mismo marco AF admite umbrales distintos según la ambición de la política.</p>
 <div id="fig-estructura-mpmplus" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Infográfico con las tres dimensiones del MPM+ (educación, infraestructura y monetaria), sus indicadores, pesos y umbrales de privación.">
@@ -1665,7 +1488,7 @@ coinciden en 7.069 hogares con el desglose por provincia ahora mostrado. Si 7.25
 informe oficial de INEGE que yo no tengo en estas carpetas, avísame para restaurar esa cifra con la
 fuente correcta. -->
 <div class="callout callout-style-default callout-note callout-titled" title="Variables clave del diccionario ENH2">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-33-contents" aria-controls="callout-33" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1674,7 +1497,7 @@ fuente correcta. -->
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-35" class="callout-35-contents callout-collapse collapse">
+<div id="callout-33" class="callout-33-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong>Identificación:</strong> <code>interview__key</code> (hogar), <code>hhsize</code> (tamaño), <code>weight_hh</code> (ponderador).</li>
@@ -1738,7 +1561,7 @@ fuente correcta. -->
 </tbody>
 </table>
 <div class="callout callout-style-default callout-tip callout-titled" title="Instrucciones · Actividad 1 (20 min)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-36-contents" aria-controls="callout-36" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-34-contents" aria-controls="callout-34" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1747,7 +1570,7 @@ fuente correcta. -->
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-36" class="callout-36-contents callout-collapse collapse">
+<div id="callout-34" class="callout-34-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>En grupos, revisen la propuesta base de tres dimensiones (educación, vivienda/servicios, monetario).</li>
@@ -1762,7 +1585,7 @@ fuente correcta. -->
 <section id="actividad-2-umbrales-ponderaciones-y-k" class="level4">
 <h4 class="anchored" data-anchor-id="actividad-2-umbrales-ponderaciones-y-k">Actividad 2 · Umbrales, ponderaciones y k</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="Umbrales de privación propuestos (pipeline GNQ)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-37-contents" aria-controls="callout-37" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1771,7 +1594,7 @@ fuente correcta. -->
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-37" class="callout-37-contents callout-collapse collapse">
+<div id="callout-35" class="callout-35-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <table class="caption-top table">
 <caption>Umbrales adaptados de <code>01_privaciones_MPM.do</code></caption>
@@ -1817,7 +1640,7 @@ fuente correcta. -->
 </div>
 <p><strong>Propuesta de ponderación anidada (tres dimensiones):</strong> Educación <span class="math inline">\(1/3\)</span> (logro <span class="math inline">\(1/6\)</span> + asistencia <span class="math inline">\(1/6\)</span>); Vivienda y servicios <span class="math inline">\(1/3\)</span> (electricidad, agua, saneamiento, <span class="math inline">\(1/9\)</span> cada uno); Monetario <span class="math inline">\(1/3\)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Análisis de sensibilidad del umbral k">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-38-contents" aria-controls="callout-38" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-36-contents" aria-controls="callout-36" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1826,7 +1649,7 @@ fuente correcta. -->
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-38" class="callout-38-contents callout-collapse collapse">
+<div id="callout-36" class="callout-36-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong><span class="math inline">\(k = 20\%\)</span>:</strong> se acerca al enfoque de unión, identifica a más hogares como pobres.</li>
@@ -1838,7 +1661,7 @@ fuente correcta. -->
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Instrucciones · Actividad 2 (20 min)">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-39-contents" aria-controls="callout-39" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-37-contents" aria-controls="callout-37" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1847,7 +1670,7 @@ fuente correcta. -->
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-39" class="callout-39-contents callout-collapse collapse">
+<div id="callout-37" class="callout-37-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>Retomen la matriz dimensión-indicador de la Actividad 1.</li>
@@ -1869,7 +1692,7 @@ fuente correcta. -->
 <li><code>04_exportar_figuras.do</code> — exporta a Excel y genera los gráficos nativos de Stata (dispersión, boxplot, contribuciones al IPM, coeficientes de las regresiones).</li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled" title="Plantilla de código para adaptar en el taller">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-40-contents" aria-controls="callout-40" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-38-contents" aria-controls="callout-38" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1878,16 +1701,16 @@ fuente correcta. -->
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-40" class="callout-40-contents callout-collapse collapse">
+<div id="callout-38" class="callout-38-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>* Reemplace indicadores <span class="fu">y</span> dimensiones según su propuesta</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>mpitb <span class="kw">set</span>, <span class="bn">name</span>(EQUIPO) <span class="co">///</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    d1(&lt;indicadores dimensión 1&gt;, na(&lt;nombre1&gt;)) <span class="co">///</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    d2(&lt;indicadores dimensión 2&gt;, na(&lt;nombre2&gt;)) <span class="co">///</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    d3(&lt;indicadores dimensión 3&gt;, na(&lt;nombre3&gt;))</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>mpitb <span class="kw">est</span>, <span class="bn">name</span>(EQUIPO) klist(33) weights(equal) <span class="co">///</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    measures(<span class="ot">all</span>) indmeas(<span class="ot">all</span>) aux(hd) <span class="kw">svy</span> <span class="bn">over</span>(area prov)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>* Reemplace indicadores <span class="fu">y</span> dimensiones según su propuesta</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mpitb <span class="kw">set</span>, <span class="bn">name</span>(EQUIPO) <span class="co">///</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    d1(&lt;indicadores dimensión 1&gt;, na(&lt;nombre1&gt;)) <span class="co">///</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    d2(&lt;indicadores dimensión 2&gt;, na(&lt;nombre2&gt;)) <span class="co">///</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    d3(&lt;indicadores dimensión 3&gt;, na(&lt;nombre3&gt;))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>mpitb <span class="kw">est</span>, <span class="bn">name</span>(EQUIPO) klist(33) weights(equal) <span class="co">///</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    measures(<span class="ot">all</span>) indmeas(<span class="ot">all</span>) aux(hd) <span class="kw">svy</span> <span class="bn">over</span>(area prov)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1949,7 +1772,7 @@ fuente correcta. -->
 <li><strong>Un resumen ejecutivo</strong> con los hallazgos clave, dirigido a los responsables de la toma de decisiones y sin tecnicismos.</li>
 </ul>
 <div class="callout callout-style-default callout-important callout-titled" title="Lista de comprobación final del taller">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-41-contents" aria-controls="callout-41" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-39-contents" aria-controls="callout-39" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1958,7 +1781,7 @@ fuente correcta. -->
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-41" class="callout-41-contents callout-collapse collapse">
+<div id="callout-39" class="callout-39-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong>Diseño:</strong> dimensiones justificadas y acotadas; indicadores con variable ENH2 identificada.</li>
@@ -2016,8 +1839,8 @@ fuente correcta. -->
   // estando en el HTML de la página para quien lo busque.
   // ------------------------------------------------------------------
   var unlocks = {
-    "tabset-1-3": new Date("2026-09-04T23:00:00Z"), // Sesión 2 se desbloquea el 21 ago 2026 (00:00 WAT)
-    "tabset-1-4": new Date("2026-09-11T23:00:00Z")  // Sesión 3 se desbloquea el 28 ago 2026 (00:00 WAT)
+    "tabset-1-3": new Date("2026-08-20T23:00:00Z"), // Sesión 2 se desbloquea el 21 ago 2026 (00:00 WAT)
+    "tabset-1-4": new Date("2026-08-27T23:00:00Z")  // Sesión 3 se desbloquea el 28 ago 2026 (00:00 WAT)
   };
 
   var now = new Date(); // instante actual de quien visita la página
@@ -2165,7 +1988,7 @@ referencia oficial si existe (ver entrada `inege2023enh2` en referencias.bib). -
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/mpmguineaecuatorial\.com");
+        var filterRegex = new RegExp("https:\/\/estefahernandez\.github\.io\/MPM-Guineaequatorial\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

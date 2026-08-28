@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Estefanía Hernández Arroyave">
 
 <title>Curso: Medición de la Pobreza Multidimensional – Curso IPM · Guinea Ecuatorial</title>
 <style>
@@ -217,12 +216,6 @@ window.Quarto = {
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autor/a</div>
-    <div class="quarto-title-meta-contents">
-             <p>Estefanía Hernández Arroyave </p>
-          </div>
-  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
@@ -341,13 +334,13 @@ Figura&nbsp;1: Estructura de la Medida de Pobreza Multidimensional de Guinea Ecu
 </section>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<section id="dimensiones-variables-indicadores-umbrales-y-ponderaciones" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="dimensiones-variables-indicadores-umbrales-y-ponderaciones">Dimensiones, variables, indicadores, umbrales y ponderaciones</h3>
+<section id="dimensiones-variables-e-indicadores" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="dimensiones-variables-e-indicadores">Dimensiones, variables e indicadores</h3>
 <div class="course-materials">
 <p><strong>Materiales · Sesión 1</strong><br>
 <a href="files/presentacion_sesion1.pdf" class="btn btn-outline-primary btn-sm" role="button" download="presentacion_sesion1.pdf">Presentación (PDF)</a> <a href="files/scripts/00_maestro.do" class="btn btn-outline-secondary btn-sm" role="button" download="00_maestro.do">Do-file 0 · Maestro</a> <a href="files/scripts/01_privaciones_MPM.do" class="btn btn-outline-secondary btn-sm" role="button" download="01_privaciones_MPM.do">Do-file 1 · Privaciones (MPM)</a></p>
 </div>
-<p><strong>Objetivo:</strong> sentar las bases conceptuales del MPM: qué es una dimensión, cómo se traduce en indicadores medibles a partir de las variables de la encuesta, qué es un umbral de privación y cómo se asignan ponderaciones. Material complementario: presentación de esta sesión y ejecicio practico para Guinea Ecuatorial.</p>
+<p><strong>Objetivo:</strong> sentar las bases conceptuales del MPM: qué es una dimensión, cómo se traduce en indicadores medibles a partir de las variables de la encuesta. Material complementario: presentación y actividad de esta sesión.</p>
 <section id="de-la-pobreza-monetaria-a-la-multidimensional" class="level4">
 <h4 class="anchored" data-anchor-id="de-la-pobreza-monetaria-a-la-multidimensional">De la pobreza monetaria a la multidimensional</h4>
 <ul>
@@ -369,7 +362,12 @@ Figura&nbsp;1: Estructura de la Medida de Pobreza Multidimensional de Guinea Ecu
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Un aspecto del bienestar considerado intrínsecamente importante (educación, vivienda, ingreso). El MPM de Guinea Ecuatorial trabaja con <strong>tres dimensiones</strong>: 1. Educación 2. Acceso a infraestructura básica 3. Pobreza monetaria</p>
+<p>Un aspecto del bienestar considerado intrínsecamente importante (educación, vivienda, ingreso). El MPM de Guinea Ecuatorial trabaja con <strong>tres dimensiones</strong>:</p>
+<ol type="1">
+<li>Educación</li>
+<li>Acceso a infraestructura básica</li>
+<li>Pobreza monetaria</li>
+</ol>
 </div>
 </div>
 </div>
@@ -385,7 +383,7 @@ Figura&nbsp;1: Estructura de la Medida de Pobreza Multidimensional de Guinea Ecu
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>La medida concreta y observable dentro de una dimensión. Una dimensión puede tener uno o varios indicadores. Aquí, <strong>educación</strong> tiene dos (logro y matrícula) e <strong>infraestructura</strong> tiene tres (electricidad, saneamiento y agua).</p>
+<p>La medida concreta y observable dentro de una dimensión. Una dimensión puede tener uno o varios indicadores. Aquí, <strong>educación</strong> tiene dos (logro y matrícula) e <strong>infraestructura</strong> tiene tres (electricidad, saneamiento y agua); por lo tanto, entre las dos dimensión de educación e infraestructura se tienen 5 indicadores en total.</p>
 </div>
 </div>
 </div>
@@ -401,7 +399,7 @@ Figura&nbsp;1: Estructura de la Medida de Pobreza Multidimensional de Guinea Ecu
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>La columna de la encuesta a partir de la cual se construye el indicador (por ejemplo, <code>q3_05_grado</code> para el grado educativo, <code>q1_03_edad</code> para la edad).</p>
+<p>Las preguntas de la encuesta son las variables a partir de las cuales se construyen los indicadores (por ejemplo, <code>q3_05_grado</code> para el grado educativo, <code>q1_03_edad</code> para la edad).</p>
 </div>
 </div>
 </div>
@@ -555,52 +553,127 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Un hogar está privado si <strong>ningún adulto</strong> (en edad de haber alcanzado el grado 9) ha completado al menos la educación primaria.</p>
-<p>En Guinea Ecuatorial, comenzando desde los 7 años la primaria, implica que a los 15 años completo 9 grado 1. Adulto &gt;= $eduage años 2. Nivel educativo requerido = primaria completa, Grade 9 = ESBA 3 (educat7&gt;=3)</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre el logro educativo</p>
-<p>(3.04) ¿[Nombre] ha asistido alguna vez a la escuela? (q3_04_escuela) 1 = Sí // Pasa a mirar el grado alcanzado (3.05) 2 = No y tiene 20 años o menos de edad // Nunca estudió -&gt; educat7=1 “Ninguno” 3 = No y es mayor de 20 años // Nunca estudió -&gt; educat7=1 “Ninguno”</p>
-<p>(3.05) ¿Cuál es el grado educativo más alto que alcanzó? (q3_05_grado, 0-19) 0 Ninguno, 1 Preescolar -&gt; educat7=1 “Ninguno” 2 Grado1, 3 Grado2, 4 Grado3, 5 Grado4, 6 Grado5 -&gt; educat7=2 “Primaria incompleta” 7 Grado6 -&gt; educat7=3 “Primaria completa” 8 ESBA1, 9 ESBA2, 10 ESBA3, 11 ESBA4, 12 Bach1, 14 FormTecBásica -&gt; educat7=4 “Secundaria incompleta” 13 Bach2, 15 FormTecAvanzada -&gt; educat7=5 “Secundaria completa” 17 Diplomado No universitario -&gt; educat7=6 “Post-secundaria no universidad” 16 FormUniv(no egresado), 18 Graduado Universitario, 19 Postgrado -&gt; educat7=7 “Universidad (finalizada o no)”</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  * Umbral <span class="kw">de</span> edad para <span class="st">"adulto"</span> a efectos <span class="kw">de</span> logro educativo</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">global</span> lbage 7       <span class="co">// Edad de inicio de primaria</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">global</span> eduage 15     <span class="co">// Edad mínima para considerar "adulto" en educación</span></span>
+<p>En Guinea Ecuatorial la primaria comienza a los 7 años, por lo que a los 15 años debería estar completo el 9º grado:</p>
+<ol type="1">
+<li><strong>Adulto</strong>: persona con edad ≥ <code>$eduage</code> años.</li>
+<li><strong>Nivel educativo requerido</strong>: primaria completa (Grado 9 = ESBA 3, es decir <code>educat7 &gt;= 3</code>).</li>
+</ol>
+<p><strong>El cuestionario:</strong> pregunta, respuestas y efecto sobre el logro educativo.</p>
+<p><strong>(3.04)</strong> ¿[Nombre] ha asistido alguna vez a la escuela? (<code>q3_04_escuela</code>)</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Respuesta</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = Sí</td>
+<td>Pasa a mirar el grado alcanzado (3.05)</td>
+</tr>
+<tr class="even">
+<td>2 = No, tiene 20 años o menos</td>
+<td>Nunca estudió → <code>educat7 = 1</code> “Ninguno”</td>
+</tr>
+<tr class="odd">
+<td>3 = No, es mayor de 20 años</td>
+<td>Nunca estudió → <code>educat7 = 1</code> “Ninguno”</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(3.05)</strong> ¿Cuál es el grado educativo más alto que alcanzó? (<code>q3_05_grado</code>, 0–19)</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Grado alcanzado</th>
+<th><code>educat7</code> resultante</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 Ninguno, 1 Preescolar</td>
+<td>1 — Ninguno</td>
+</tr>
+<tr class="even">
+<td>2 Grado1, 3 Grado2, 4 Grado3, 5 Grado4, 6 Grado5</td>
+<td>2 — Primaria incompleta</td>
+</tr>
+<tr class="odd">
+<td>7 Grado6</td>
+<td>3 — Primaria completa</td>
+</tr>
+<tr class="even">
+<td>8 ESBA1, 9 ESBA2, 10 ESBA3, 11 ESBA4, 12 Bach1, 14 FormTecBásica</td>
+<td>4 — Secundaria incompleta</td>
+</tr>
+<tr class="odd">
+<td>13 Bach2, 15 FormTecAvanzada</td>
+<td>5 — Secundaria completa</td>
+</tr>
+<tr class="even">
+<td>17 Diplomado No universitario</td>
+<td>6 — Post-secundaria no universitaria</td>
+</tr>
+<tr class="odd">
+<td>16 FormUniv (no egresado), 18 Graduado Universitario, 19 Postgrado</td>
+<td>7 — Universidad (finalizada o no)</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>* Umbral <span class="kw">de</span> edad para <span class="st">"adulto"</span> a efectos <span class="kw">de</span> logro educativo</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> lbage  7    <span class="co">// Edad de inicio de primaria</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> eduage 15   <span class="co">// Edad mínima para considerar "adulto" en educación</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  ** PASO 1 — Nivel educativo alcanzado, 7 categorías (3.04 + 3.05 -&gt; educat7)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  * Nivel Educativo alcanzado 7 categorias</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">gen</span> educat7=.</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      * Casos que nunca han estudiado</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 1 <span class="kw">if</span> (<span class="fu">inlist</span>(q3_04_escuela,<span class="st">"No y tiene 20 años o menos de edad"</span>,<span class="st">"No y es mayor de 20 años"</span>) | q3_04_escuela==<span class="st">""</span>) </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      * Casos según último grado cursado</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 1 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,0,1)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 2 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,2,3,4,5,6)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 3 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,7)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 4 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,8,9,10,11,12,14)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 5 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,13,15)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 6 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,17)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> educat7 = 7 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado,16,18,19)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">define</span> educat7  1 <span class="st">"Ninguno"</span> </span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                          2 <span class="st">"Primaria incompleta"</span> </span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                          3 <span class="st">"Primaria completa"</span> </span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                          4 <span class="st">"Secundaria incompleta"</span> </span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                          5 <span class="st">"Secundaria completa"</span> </span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                          6 <span class="st">"Post-secundaria pero no universidad"</span> </span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                          7 <span class="st">"Universidad (finalizada o no)"</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> val educat7 educat7 </span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> educat7 <span class="st">"Mayor nivel educación alcanzado (7 categorias)"</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  ** PASO 2 — Indicador <span class="kw">de</span> privación, variante MPM (educat7 -&gt; dep_educ_com)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  * Individuo con nivel básico <span class="kw">de</span> educación (primaria completa o más)</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> temp2 = 1 <span class="kw">if</span> q1_03_edad&gt;=<span class="ot">$eduage</span> &amp; q1_03_edad~=. &amp; educat7&gt;=3 &amp; educat7~=.</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  * Cantidad <span class="kw">de</span> adultos con nivel apropiado por hogar</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    * Comentario: no hay missings en temp3: todo hogar tiene al menos 1 persona &gt;= <span class="ot">$eduage</span>.</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                  Es decir, temp3==0 significa que nadie completó primaria, NO que falten adultos en <span class="fu">el</span> hogar.</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="kw">bys</span> hhid: <span class="kw">egen</span> temp3 = <span class="kw">sum</span>(temp2)</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  * El hogar está privado si NINGÚN adulto alcanza <span class="fu">el</span> nivel</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_educ_com = 0</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="kw">replace</span> dep_educ_com = 1 <span class="kw">if</span> temp3==0</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  la <span class="kw">var</span> dep_educ_com <span class="st">"MPM: Privado si el hogar NO tiene adultos $eduage+ con primaria completa"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Nivel educativo alcanzado, 7 categorías (3.04 + 3.05 -&gt; educat7)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>* Nivel educativo alcanzado, 7 categorías</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> educat7 = .</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>* Casos que nunca han estudiado</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> educat7 = 1 <span class="kw">if</span> (<span class="fu">inlist</span>(q3_04_escuela, <span class="st">"No y tiene 20 años o menos de edad"</span>, <span class="st">"No y es mayor de 20 años"</span>) | q3_04_escuela == <span class="st">""</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>* Casos según último grado cursado</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> educat7 = 1 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado, 0, 1)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> educat7 = 2 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado, 2, 3, 4, 5, 6)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> educat7 = 3 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado, 7)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> educat7 = 4 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado, 8, 9, 10, 11, 12, 14)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> educat7 = 5 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado, 13, 15)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> educat7 = 6 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado, 17)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> educat7 = 7 <span class="kw">if</span> <span class="fu">inlist</span>(q3_05_grado, 16, 18, 19)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> educat7                          <span class="co">///</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    1 <span class="st">"Ninguno"</span>                                <span class="co">///</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    2 <span class="st">"Primaria incompleta"</span>                    <span class="co">///</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    3 <span class="st">"Primaria completa"</span>                      <span class="co">///</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    4 <span class="st">"Secundaria incompleta"</span>                  <span class="co">///</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    5 <span class="st">"Secundaria completa"</span>                    <span class="co">///</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    6 <span class="st">"Post-secundaria pero no universidad"</span>    <span class="co">///</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    7 <span class="st">"Universidad (finalizada o no)"</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> val educat7 educat7</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> educat7 <span class="st">"Mayor nivel educación alcanzado (7 categorias)"</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Indicador <span class="kw">de</span> privación, variante MPM (educat7 -&gt; dep_educ_com)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>* Individuo con nivel básico <span class="kw">de</span> educación (primaria completa o más)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> temp2 = 1 <span class="kw">if</span> q1_03_edad &gt;= <span class="ot">$eduage</span> &amp; q1_03_edad ~= . &amp; educat7 &gt;= 3 &amp; educat7 ~= .</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>* Cantidad <span class="kw">de</span> adultos con nivel apropiado por hogar</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>* Nota: no hay missings en temp3: todo hogar tiene al menos 1 persona &gt;= <span class="ot">$eduage</span>.</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>*       Es decir, temp3==0 significa que nadie completó primaria, NO que falten adultos en <span class="fu">el</span> hogar.</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> hhid: <span class="kw">egen</span> temp3 = <span class="kw">sum</span>(temp2)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>* El hogar está privado si NINGÚN adulto alcanza <span class="fu">el</span> nivel</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_educ_com = 0</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> dep_educ_com = 1 <span class="kw">if</span> temp3 == 0</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>la <span class="kw">var</span> dep_educ_com <span class="st">"MPM: Privado si el hogar NO tiene adultos $eduage+ con primaria completa"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -617,41 +690,62 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Un hogar está privado si tiene <strong>al menos un niño en edad escolar (7 a 14 años) que no asiste</strong> a la escuela.</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre la matrícula escolar</p>
-<p>(3.08) ¿Asiste o asistió [Nombre] a una escuela o institución educativa durante el año escolar 2021-2022? (q3_08_asistio) Sí -&gt; matriculado No -&gt; no matriculado</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  * Edades <span class="kw">de</span> corte usadas en los indicadores <span class="kw">de</span> educación</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> lbage 7       <span class="co">// Edad de inicio de primaria</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> ubage 14      <span class="co">// Se considera hasta 8vo grado (ESBA 2) como edad escolar</span></span>
+<p><strong>El cuestionario:</strong> pregunta, respuestas y efecto sobre la matrícula escolar.</p>
+<p><strong>(3.08)</strong> ¿Asiste o asistió [Nombre] a una escuela o institución educativa durante el año escolar 2021-2022? (<code>q3_08_asistio</code>)</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Respuesta</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sí</td>
+<td>Matriculado</td>
+</tr>
+<tr class="even">
+<td>No</td>
+<td>No matriculado</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>* Edades <span class="kw">de</span> corte usadas en los indicadores <span class="kw">de</span> educación</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> lbage 7    <span class="co">// Edad de inicio de primaria</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> ubage 14   <span class="co">// Se considera hasta 8vo grado (ESBA 2) como edad escolar</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Asistencia escolar 2021/2022 (3.08 -&gt; asistencia_escolar)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> asistencia_escolar = (q3_08_asistio==<span class="st">"Sí"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> asistencia_escolar <span class="st">"Asistió a institución educativa 2021/2022"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> asistencia_escolar = (q3_08_asistio == <span class="st">"Sí"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> asistencia_escolar <span class="st">"Asistió a institución educativa 2021/2022"</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Indicador <span class="kw">de</span> privación (asistencia_escolar -&gt; dep_educ_enr)</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  * Definiendo <span class="fu">el</span> universo primero, niños en <span class="st">"edad escolar"</span> (entre <span class="ot">$lbage</span> <span class="fu">y</span> <span class="ot">$ubage</span> años)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> edad_escolar = (q1_03_edad&gt;=<span class="ot">$lbage</span> &amp; q1_03_edad&lt;=<span class="ot">$ubage</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">bys</span> hhid: <span class="kw">egen</span> cant_edadescolar = <span class="kw">sum</span>(edad_escolar)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>* Definiendo <span class="fu">el</span> universo primero: niños en <span class="st">"edad escolar"</span> (entre <span class="ot">$lbage</span> <span class="fu">y</span> <span class="ot">$ubage</span> años)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> edad_escolar = (q1_03_edad &gt;= <span class="ot">$lbage</span> &amp; q1_03_edad &lt;= <span class="ot">$ubage</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> hhid: <span class="kw">egen</span> cant_edadescolar = <span class="kw">sum</span>(edad_escolar)</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  * No matriculado: está en edad escolar pero no asiste</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  * Comentario: Nos aseguramos que si no esta en edad escolar no se le considere privado ni no privado, sino <span class="fu">missing</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> no_matriculado = (q1_03_edad&gt;=<span class="ot">$lbage</span> &amp; q1_03_edad&lt;=<span class="ot">$ubage</span> &amp; asistencia_escolar!=1)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">replace</span> no_matriculado=. <span class="kw">if</span> q1_03_edad&lt;<span class="ot">$lbage</span> | q1_03_edad&gt;<span class="ot">$ubage</span> </span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  * Cantidad <span class="kw">de</span> niños no matriculados por hogar</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">bys</span> hhid: <span class="kw">egen</span> cant_no_matriculados = <span class="kw">sum</span>(no_matriculado)</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  * El hogar está privado si tiene AL MENOS un niño/adolescente en edad escolar que no está matriculado </span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  * (por esto se calcula la suma, para detectar al menos uno).</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_educ_enr = 0</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    * cant_no_matriculados~=. nunca es <span class="fu">missing</span> por como se crea en <span class="fu">el</span> <span class="kw">bysort</span> </span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> dep_educ_enr = 1 <span class="kw">if</span> cant_no_matriculados&gt;0 </span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    * hogares <span class="fu">sin</span> niños en edad escolar (universo <span class="kw">de</span> la privacion no estan en todos los hogares) </span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    * no estan privados </span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">replace</span> dep_educ_enr = 0 <span class="kw">if</span> cant_edadescolar==0</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">drop</span> edad_escolar no_matriculado cant_no_matriculados cant_edadescolar</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  la <span class="kw">var</span> dep_educ_enr <span class="st">"MPM: Privado si el hogar tiene al menos un niño/a en edad escolar no matriculado"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>* No matriculado: está en edad escolar pero no asiste</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>* Nota: nos aseguramos <span class="kw">de</span> que si no está en edad escolar no se le considere</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>*       privado ni no privado, sino <span class="fu">missing</span>.</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> no_matriculado = (q1_03_edad &gt;= <span class="ot">$lbage</span> &amp; q1_03_edad &lt;= <span class="ot">$ubage</span> &amp; asistencia_escolar != 1)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> no_matriculado = . <span class="kw">if</span> q1_03_edad &lt; <span class="ot">$lbage</span> | q1_03_edad &gt; <span class="ot">$ubage</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>* Cantidad <span class="kw">de</span> niños no matriculados por hogar</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="kw">bys</span> hhid: <span class="kw">egen</span> cant_no_matriculados = <span class="kw">sum</span>(no_matriculado)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>* El hogar está privado si tiene AL MENOS un niño/adolescente en edad escolar</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>* que no está matriculado (por esto se calcula la suma, para detectar al menos uno).</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_educ_enr = 0</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>* cant_no_matriculados ~= . nunca es <span class="fu">missing</span> por cómo se crea en <span class="fu">el</span> <span class="kw">bysort</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> dep_educ_enr = 1 <span class="kw">if</span> cant_no_matriculados &gt; 0</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>* Hogares <span class="fu">sin</span> niños en edad escolar (universo <span class="kw">de</span> la privación no está en todos</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>* los hogares) no están privados</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> dep_educ_enr = 0 <span class="kw">if</span> cant_edadescolar == 0</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="kw">drop</span> edad_escolar no_matriculado cant_no_matriculados cant_edadescolar</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>la <span class="kw">var</span> dep_educ_enr <span class="st">"MPM: Privado si el hogar tiene al menos un niño/a en edad escolar no matriculado"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -667,17 +761,66 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>El hogar está privado si carece del acceso a electricidad</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre “el acceso a electricidad”</p>
-<p>(2.31) ¿Cuál es la principal fuente de energía que se utiliza en este hogar para el alumbrado? (q2_31_energiaLuz) 1 = Electricidad de la red pública // Mejorado 2 = Placa solar // Mejorado 3 = Generador (GASOLINA) // Mejorado 4 = Generador (GASOIL) // Mejorado 5 = Petróleo/Keroseno // No mejorado 6 = Gas (lámpara) // No mejorado 7 = Batería/Pila // No mejorado 8 = Vela // No mejorado 9 = Leña // No mejorado 10 = Otro // No mejorado</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Acceso a electricidad mejorado (2.31 -&gt; electricity)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">recode</span> q2_31_energiaLuz (1/4=1 <span class="st">"Improved electricity"</span>) (nonmissing=0 <span class="st">"Not improved electricity"</span>), <span class="kw">gen</span>(electricity)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> electricity <span class="st">"Hogar con acceso a electricidad (mejorado). Recodificado de 2.31 (q2_31_energiaLuz)"</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Indicador <span class="kw">de</span> privación, variante MPM (electricity -&gt; dep_infra_elec)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_infra_elec = (electricity==0) <span class="kw">if</span> electricity~=.</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  la <span class="kw">var</span> dep_infra_elec <span class="st">"MPM: Privado si el hogar no tiene acceso a electricidad"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>El hogar está privado si carece del acceso a electricidad.</p>
+<p><strong>El cuestionario:</strong> pregunta, respuestas y efecto sobre el acceso a electricidad.</p>
+<p><strong>(2.31)</strong> ¿Cuál es la principal fuente de energía que se utiliza en este hogar para el alumbrado? (<code>q2_31_energiaLuz</code>)</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Fuente de energía</th>
+<th>Clasificación</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = Electricidad de la red pública</td>
+<td>Mejorado</td>
+</tr>
+<tr class="even">
+<td>2 = Placa solar</td>
+<td>Mejorado</td>
+</tr>
+<tr class="odd">
+<td>3 = Generador (gasolina)</td>
+<td>Mejorado</td>
+</tr>
+<tr class="even">
+<td>4 = Generador (gasoil)</td>
+<td>Mejorado</td>
+</tr>
+<tr class="odd">
+<td>5 = Petróleo/Keroseno</td>
+<td>No mejorado</td>
+</tr>
+<tr class="even">
+<td>6 = Gas (lámpara)</td>
+<td>No mejorado</td>
+</tr>
+<tr class="odd">
+<td>7 = Batería/Pila</td>
+<td>No mejorado</td>
+</tr>
+<tr class="even">
+<td>8 = Vela</td>
+<td>No mejorado</td>
+</tr>
+<tr class="odd">
+<td>9 = Leña</td>
+<td>No mejorado</td>
+</tr>
+<tr class="even">
+<td>10 = Otro</td>
+<td>No mejorado</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Acceso a electricidad mejorado (2.31 -&gt; electricity)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">recode</span> q2_31_energiaLuz (1/4=1 <span class="st">"Improved electricity"</span>) (nonmissing=0 <span class="st">"Not improved electricity"</span>), <span class="kw">gen</span>(electricity)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> electricity <span class="st">"Hogar con acceso a electricidad (mejorado). Recodificado de 2.31 (q2_31_energiaLuz)"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Indicador <span class="kw">de</span> privación, variante MPM (electricity -&gt; dep_infra_elec)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_elec = (electricity == 0) <span class="kw">if</span> electricity ~= .</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>la <span class="kw">var</span> dep_infra_elec <span class="st">"MPM: Privado si el hogar no tiene acceso a electricidad"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -695,47 +838,166 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <div class="callout-body-container callout-body">
 <p>El hogar está privado si carece de acceso a saneamiento mejorado. A diferencia de electricidad, aquí la ENH2 encadena varias preguntas —sobre el tipo de instalación, su conexión y si es de uso exclusivo— que hay que combinar siguiendo la definición estándar internacional (JMP/OMS-UNICEF, la misma que usa el GMD del Banco Mundial): el hogar accede a saneamiento mejorado si su instalación separa higiénicamente las excretas Y es de uso exclusivo del hogar; basta con fallar una de las dos condiciones para quedar clasificado como “no mejorado”.</p>
 <p>Las preguntas que permiten reconstruir esa definición:</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre el saneamiento mejorado:</p>
-<p>(2.28) ¿Qué tipo de aseo/baño utiliza principalmente este hogar? (q2_28_aseo) 1 = W.C. / inodoro // Candidato a Mejorado -&gt; depende de 2.28B/2.28C 2 = Letrina // SIEMPRE Mejorado, no depende de 2.28D/2.28E 3 = Hoyo áspero / agujero abierto // No mejorado 4 = Baño público // No mejorado 5 = Sin baño (en la naturaleza) // No mejorado 6 = Otro // No mejorado</p>
-<p>(2.28A) ¿El WC/inodoro está dentro o fuera de la vivienda? (q2_28A_intext) 1 = Interior | 2 = Exterior // Solo descriptiva, NO decide Mejorado/No mejorado (se pregunta solo a quienes respondieron 1=W.C. en 2.28)</p>
-<p>(2.28B) El WC/inodoro ¿está conectado a fuente de agua para descarga? (q2_28B_fuente) 1 = Sí // Junto con q2_28_aseo==1 -&gt; Mejorado 2 = No // Pasa a mirar 2.28C</p>
-<p>(2.28C) El WC/inodoro ¿está conectado a…? (q2_28C_conectado) [solo si 2.28B=No] 1 = Sistema de alcantarillado // -&gt; Mejorado 2 = Conectado a tubería que va al río/mar // -&gt; Mejorado 3 = Conectado a pozo ciego // -&gt; Mejorado (sin responder / fuera de estos códigos -&gt; queda Missing)</p>
-<p>(2.28D) La Letrina ¿está conectada a fuente de agua para descarga? (q2_28D_fuente) (2.28E) La Letrina ¿está conectada a…? (q2_28E_conectado) Existen en el cuestionario pero NO se usan para clasificar la Letrina como mejorada o no (ver PASO 2 más abajo: toda Letrina entra igual).</p>
-<p>(2.29) ¿El baño es de uso exclusivo del hogar o compartido? (q2_29_aseoExclusivo) 1 = Exclusivo del hogar // Mantiene el resultado de 2.28 2 = Compartido con otro hogar // Fuerza a No mejorado, sin importar 2.28 3 = Compartido con varios hogares // Fuerza a No mejorado 4 = Otro // Fuerza a No mejorado</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  ** PASO 1 — Exclusividad del baño (2.29 -&gt; toiletshared)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">recode</span> q2_29_aseoExclusivo (2/4 = 1) (nonmissing = 0), <span class="kw">gen</span>(toiletshared)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">define</span> toilet_exclusivo 1 <span class="st">"Toilet shared"</span> 0 <span class="st">"Toilet exclusive"</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> val toiletshared toilet_exclusivo</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> toiletshared <span class="st">"Baño compartido (1) vs exclusivo (0), recodificado de 2.29"</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  ** PASO 2 — Tipo <span class="kw">de</span> baño en 14 categorías (2.28 + 2.28B/2.28C -&gt; toilet14)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> toilet14 = .</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 1  <span class="kw">if</span> q2_28_aseo==1 &amp; q2_28B_fuente==1                               <span class="co">// WC conectado a agua</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 2  <span class="kw">if</span> q2_28_aseo==1 &amp; q2_28B_fuente==2 &amp; <span class="fu">inlist</span>(q2_28C_conectado,1,2) <span class="co">// WC sin agua -&gt; alcantarillado o río/mar</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 3  <span class="kw">if</span> q2_28_aseo==1 &amp; q2_28B_fuente==2 &amp; q2_28C_conectado==3          <span class="co">// WC sin agua -&gt; pozo ciego</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 5  <span class="kw">if</span> q2_28_aseo==2   <span class="co">// Letrina (cualquiera, no se mira 2.28D/2.28E)</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 10 <span class="kw">if</span> q2_28_aseo==3   <span class="co">// Hoyo áspero</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 8  <span class="kw">if</span> q2_28_aseo==4   <span class="co">// Baño público</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 13 <span class="kw">if</span> q2_28_aseo==5   <span class="co">// Sin baño</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet14 = 14 <span class="kw">if</span> q2_28_aseo==6   <span class="co">// Otro</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> toilet14 <span class="st">"Tipo de baño, 14 categorías (recodificado de 2.28/2.28B/2.28C)"</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  ** PASO 3 — Colapso a 6 categorías (toilet14 -&gt; toilet6)</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">recode</span> toilet14 (1/3=1) (5=2) (7=3) (6=4) (13=5) (<span class="kw">else</span>=9), <span class="kw">gen</span>(toilet6)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> toilet6=. <span class="kw">if</span> toilet14==.</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> toilet6 <span class="st">"Tipo de baño, 6 categorías (recodificado de toilet14, siguiendo GMD)"</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  ** PASO 4 — Saneamiento mejorado (toilet6 + toiletshared -&gt; imp_san_rec)</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">recode</span> toilet6 (1/4=1 <span class="st">"Improved sanitation"</span>) (nonmissing=0 <span class="st">"Not improved sanitation"</span>), <span class="kw">gen</span>(imp_san_rec)</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">replace</span> imp_san_rec = 0 <span class="kw">if</span> toiletshared==1   <span class="co">// aunque la tecnología sea buena, si se comparte -&gt; No mejorado</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">label</span> <span class="kw">var</span> imp_san_rec <span class="st">"Hogar con acceso a saneamiento mejorado (tecnología adecuada Y uso exclusivo)"</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  ** PASO 5 — Indicador <span class="kw">de</span> privación del MPM (imp_san_rec -&gt; dep_infra_imps)</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  * Saneamiento: privado si no tiene acceso a saneamiento mejorado (imp_san_rec, según GMD)</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">gen</span> dep_infra_imps = (imp_san_rec==0) <span class="kw">if</span> imp_san_rec~=.</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    la <span class="kw">var</span> dep_infra_imps <span class="st">"MPM: Privado si el hogar no tiene acceso a saneamiento mejorado"</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>El cuestionario:</strong> pregunta, respuestas y efecto sobre el saneamiento mejorado.</p>
+<p><strong>(2.28)</strong> ¿Qué tipo de aseo/baño utiliza principalmente este hogar? (<code>q2_28_aseo</code>)</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Respuesta</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = W.C. / inodoro</td>
+<td>Candidato a mejorado → depende de 2.28B/2.28C</td>
+</tr>
+<tr class="even">
+<td>2 = Letrina</td>
+<td>Siempre mejorado, no depende de 2.28D/2.28E</td>
+</tr>
+<tr class="odd">
+<td>3 = Hoyo áspero / agujero abierto</td>
+<td>No mejorado</td>
+</tr>
+<tr class="even">
+<td>4 = Baño público</td>
+<td>No mejorado</td>
+</tr>
+<tr class="odd">
+<td>5 = Sin baño (en la naturaleza)</td>
+<td>No mejorado</td>
+</tr>
+<tr class="even">
+<td>6 = Otro</td>
+<td>No mejorado</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(2.28A)</strong> ¿El WC/inodoro está dentro o fuera de la vivienda? (<code>q2_28A_intext</code>) — solo descriptiva, no decide mejorado/no mejorado. Se pregunta solo a quienes respondieron 1 = W.C. en 2.28.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Respuesta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = Interior</td>
+</tr>
+<tr class="even">
+<td>2 = Exterior</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(2.28B)</strong> El WC/inodoro ¿está conectado a fuente de agua para descarga? (<code>q2_28B_fuente</code>)</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Respuesta</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = Sí</td>
+<td>Junto con <code>q2_28_aseo == 1</code> → Mejorado</td>
+</tr>
+<tr class="even">
+<td>2 = No</td>
+<td>Pasa a mirar 2.28C</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(2.28C)</strong> El WC/inodoro ¿está conectado a…? (<code>q2_28C_conectado</code>) — solo si 2.28B = No</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Respuesta</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = Sistema de alcantarillado</td>
+<td>Mejorado</td>
+</tr>
+<tr class="even">
+<td>2 = Conectado a tubería que va al río/mar</td>
+<td>Mejorado</td>
+</tr>
+<tr class="odd">
+<td>3 = Conectado a pozo ciego</td>
+<td>Mejorado</td>
+</tr>
+</tbody>
+</table>
+<p>Sin responder o fuera de estos códigos, queda missing.</p>
+<p><strong>(2.28D)</strong> La Letrina ¿está conectada a fuente de agua para descarga? (<code>q2_28D_fuente</code>) <strong>(2.28E)</strong> La Letrina ¿está conectada a…? (<code>q2_28E_conectado</code>)</p>
+<p>Existen en el cuestionario pero <strong>no</strong> se usan para clasificar la Letrina como mejorada o no (ver PASO 2 más abajo: toda Letrina entra igual).</p>
+<p><strong>(2.29)</strong> ¿El baño es de uso exclusivo del hogar o compartido? (<code>q2_29_aseoExclusivo</code>)</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Respuesta</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = Exclusivo del hogar</td>
+<td>Mantiene el resultado de 2.28</td>
+</tr>
+<tr class="even">
+<td>2 = Compartido con otro hogar</td>
+<td>Fuerza a no mejorado, sin importar 2.28</td>
+</tr>
+<tr class="odd">
+<td>3 = Compartido con varios hogares</td>
+<td>Fuerza a no mejorado</td>
+</tr>
+<tr class="even">
+<td>4 = Otro</td>
+<td>Fuerza a no mejorado</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Exclusividad del baño (2.29 -&gt; toiletshared)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">recode</span> q2_29_aseoExclusivo (2/4 = 1) (nonmissing = 0), <span class="kw">gen</span>(toiletshared)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> toilet_exclusivo 1 <span class="st">"Toilet shared"</span> 0 <span class="st">"Toilet exclusive"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> val toiletshared toilet_exclusivo</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> toiletshared <span class="st">"Baño compartido (1) vs exclusivo (0), recodificado de 2.29"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Tipo <span class="kw">de</span> baño en 14 categorías (2.28 + 2.28B/2.28C -&gt; toilet14)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> toilet14 = .</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet14 = 1  <span class="kw">if</span> q2_28_aseo == 1 &amp; q2_28B_fuente == 1                                 <span class="co">// WC conectado a agua</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet14 = 2  <span class="kw">if</span> q2_28_aseo == 1 &amp; q2_28B_fuente == 2 &amp; <span class="fu">inlist</span>(q2_28C_conectado, 1, 2) <span class="co">// WC sin agua -&gt; alcantarillado o río/mar</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet14 = 3  <span class="kw">if</span> q2_28_aseo == 1 &amp; q2_28B_fuente == 2 &amp; q2_28C_conectado == 3          <span class="co">// WC sin agua -&gt; pozo ciego</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet14 = 5  <span class="kw">if</span> q2_28_aseo == 2   <span class="co">// Letrina (cualquiera, no se mira 2.28D/2.28E)</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet14 = 10 <span class="kw">if</span> q2_28_aseo == 3   <span class="co">// Hoyo áspero</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet14 = 8  <span class="kw">if</span> q2_28_aseo == 4   <span class="co">// Baño público</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet14 = 13 <span class="kw">if</span> q2_28_aseo == 5   <span class="co">// Sin baño</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet14 = 14 <span class="kw">if</span> q2_28_aseo == 6   <span class="co">// Otro</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> toilet14 <span class="st">"Tipo de baño, 14 categorías (recodificado de 2.28/2.28B/2.28C)"</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>** PASO 3 — Colapso a 6 categorías (toilet14 -&gt; toilet6)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="kw">recode</span> toilet14 (1/3=1) (5=2) (7=3) (6=4) (13=5) (<span class="kw">else</span>=9), <span class="kw">gen</span>(toilet6)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> toilet6 = . <span class="kw">if</span> toilet14 == .</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> toilet6 <span class="st">"Tipo de baño, 6 categorías (recodificado de toilet14, siguiendo GMD)"</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>** PASO 4 — Saneamiento mejorado (toilet6 + toiletshared -&gt; imp_san_rec)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="kw">recode</span> toilet6 (1/4=1 <span class="st">"Improved sanitation"</span>) (nonmissing=0 <span class="st">"Not improved sanitation"</span>), <span class="kw">gen</span>(imp_san_rec)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> imp_san_rec = 0 <span class="kw">if</span> toiletshared == 1   <span class="co">// aunque la tecnología sea buena, si se comparte -&gt; No mejorado</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> imp_san_rec <span class="st">"Hogar con acceso a saneamiento mejorado (tecnología adecuada Y uso exclusivo)"</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>** PASO 5 — Indicador <span class="kw">de</span> privación del MPM (imp_san_rec -&gt; dep_infra_imps)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>* Saneamiento: privado si no tiene acceso a saneamiento mejorado (imp_san_rec, según GMD)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_imps = (imp_san_rec == 0) <span class="kw">if</span> imp_san_rec ~= .</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>la <span class="kw">var</span> dep_infra_imps <span class="st">"MPM: Privado si el hogar no tiene acceso a saneamiento mejorado"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -752,50 +1014,141 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>El hogar está privado si carece del acceso a agua mejorada.</p>
-<p>EL CUESTIONARIO: pregunta, respuestas y efecto sobre “mejorado”</p>
-<p>(2.25) ¿De dónde obtienen principalmente el agua para todo uso, las personas de este hogar? (q2_25_aguaTomar) 1 = Grifo dentro de la vivienda // Mejorado 2 = Grifo fuera de la vivienda // Mejorado 3 = Grifo público // Mejorado 4 = Pozo público // Mejorado, PERO ver PASO 2 y 3 (puede bajar a No mejorado) 5 = Pozo privado // Mejorado, PERO ver PASO 3 (puede bajar a No mejorado) 6 = Río o lago // No mejorado (agua superficial) 7 = Manantial // No mejorado (el cuestionario no distingue protegido/no protegido) 8 = Camión cisterna o tonel // No mejorado 9 = Agua embotellada // No mejorado 10 = Otra vivienda/empresa/institución // No mejorado 11 = Otro // No mejorado</p>
-<p>(2.26) ¿A qué distancia… y cuánto tiempo tarda para traerlo a casa? Distancia (km) / Tiempo (horas) // Solo descriptiva, NO decide Mejorado/No mejorado</p>
-<p>(2.27) En su casa ¿Qué tratamiento le dan principalmente al agua para beber? (q2_27_tratamientoAgua) 1 = Ninguno // Mantiene el resultado de 2.25 (no degrada el pozo) 2 = La hierven // Degrada el pozo (4 o 5) a No mejorado 3 = La filtran // Degrada el pozo a No mejorado 4 = Le ponen lejía o cloro // Degrada el pozo a No mejorado 5 = Beben agua embotellada // Degrada el pozo a No mejorado 6 = Otro // Degrada el pozo a No mejorado</p>
-<p>(rural) Zona del hogar, ya construida en la limpieza (cod_CV_CP: 1=Urbano, 2=Rural) rural = 1 si es zona Rural, 0 si es Urbano // Solo afecta al Pozo público (2.25==4): en zona rural SIEMPRE es No mejorado, // sin importar el tratamiento del agua.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Fuente <span class="kw">de</span> agua en 14 categorías (2.25 -&gt; water14)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">recode</span> q2_25_aguaTomar (1=1) (2=2) (3=3) (4=4) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), <span class="kw">gen</span>(water14)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> water14 <span class="st">"Fuente de agua, 14 categorías (recodificado de 2.25)"</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">define</span> water14 1 <span class="st">"Agua entubada dentro de la vivienda"</span> <span class="co">///</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                        2 <span class="st">"Agua entubada al patio/parcela"</span> <span class="co">///</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                        3 <span class="st">"Grifo o pilón público"</span> <span class="co">///</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                        4 <span class="st">"Pozo entubado o perforado (público)"</span> <span class="co">///</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                        5 <span class="st">"Pozo protegido (privado)"</span> <span class="co">///</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                        6 <span class="st">"Manantial protegido"</span> <span class="co">///</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                        7 <span class="st">"Agua embotellada"</span> <span class="co">///</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                        8 <span class="st">"Agua de lluvia"</span> <span class="co">///</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                        9 <span class="st">"Manantial no protegido"</span> <span class="co">///</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                        10 <span class="st">"Pozo no protegido"</span> <span class="co">///</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                        11 <span class="st">"Carro con tanque/tambor pequeño"</span> <span class="co">///</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                        12 <span class="st">"Camión cisterna"</span> <span class="co">///</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                        13 <span class="st">"Agua superficial"</span> <span class="co">///</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                        14 <span class="st">"Otro"</span>, <span class="kw">replace</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> val water14 water14</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Excepción rural para pozo público (rural + water14==4 -&gt; degradar)</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">replace</span> water14 = 10 <span class="kw">if</span> water14==4 &amp; rural==1</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">// agua de pozo público se considera mejorada en zona urbana pero no mejorada en zona rural</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>** PASO 3 — Excepción por tratamiento del agua (pozo público o privado -&gt; degradar)</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">replace</span> water14 = 10 <span class="kw">if</span> <span class="fu">inlist</span>(q2_25_aguaTomar, 4,5) &amp; q2_27_tratamientoAgua!= <span class="st">"Ninguno"</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="co">// si el hogar SÍ trata el agua del pozo (la hierve, filtra, le pone cloro, etc.),</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="co">// se reclasifica como No mejorada, sin importar zona urbana o rural</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>** PASO 4 — Agua mejorada (water14 -&gt; imp_wat_rec)</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="kw">recode</span> water14 (1/6 8=1 <span class="st">"Access to improve water source"</span>) (nonmissing=0 <span class="st">"No access to improve water source"</span>), <span class="kw">gen</span>(imp_wat_rec)</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> imp_wat_rec <span class="st">"Hogar con acceso a fuente de agua mejorada. Recodificada desde water14 siguiendo GMD"</span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">clonevar</span> drinking_water = imp_wat_rec</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> drinking_water <span class="st">"Hogar con acceso a fuente de agua mejorada. Igual a imp_wat_rec"</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>** PASO 5 — Indicador <span class="kw">de</span> privación del MPM (imp_wat_rec -&gt; dep_infra_impw)</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_infra_impw = (imp_wat_rec==0) <span class="kw">if</span> imp_wat_rec~=.</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  la <span class="kw">var</span> dep_infra_impw <span class="st">"MPM: Privado si el hogar no tiene acceso a agua potable mejorada"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>El cuestionario:</strong> pregunta, respuestas y efecto sobre “mejorado”.</p>
+<p><strong>(2.25)</strong> ¿De dónde obtienen principalmente el agua para todo uso, las personas de este hogar? (<code>q2_25_aguaTomar</code>)</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fuente de agua</th>
+<th>Clasificación</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = Grifo dentro de la vivienda</td>
+<td>Mejorado</td>
+</tr>
+<tr class="even">
+<td>2 = Grifo fuera de la vivienda</td>
+<td>Mejorado</td>
+</tr>
+<tr class="odd">
+<td>3 = Grifo público</td>
+<td>Mejorado</td>
+</tr>
+<tr class="even">
+<td>4 = Pozo público</td>
+<td>Mejorado, pero ver PASO 2 y 3 (puede bajar a no mejorado)</td>
+</tr>
+<tr class="odd">
+<td>5 = Pozo privado</td>
+<td>Mejorado, pero ver PASO 3 (puede bajar a no mejorado)</td>
+</tr>
+<tr class="even">
+<td>6 = Río o lago</td>
+<td>No mejorado (agua superficial)</td>
+</tr>
+<tr class="odd">
+<td>7 = Manantial</td>
+<td>No mejorado (el cuestionario no distingue protegido/no protegido)</td>
+</tr>
+<tr class="even">
+<td>8 = Camión cisterna o tonel</td>
+<td>No mejorado</td>
+</tr>
+<tr class="odd">
+<td>9 = Agua embotellada</td>
+<td>No mejorado</td>
+</tr>
+<tr class="even">
+<td>10 = Otra vivienda/empresa/institución</td>
+<td>No mejorado</td>
+</tr>
+<tr class="odd">
+<td>11 = Otro</td>
+<td>No mejorado</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(2.26)</strong> ¿A qué distancia… y cuánto tiempo tarda para traerlo a casa? Distancia (km) / Tiempo (horas) — solo descriptiva, no decide mejorado/no mejorado.</p>
+<p><strong>(2.27)</strong> En su casa ¿qué tratamiento le dan principalmente al agua para beber? (<code>q2_27_tratamientoAgua</code>)</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Respuesta</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 = Ninguno</td>
+<td>Mantiene el resultado de 2.25 (no degrada el pozo)</td>
+</tr>
+<tr class="even">
+<td>2 = La hierven</td>
+<td>Degrada el pozo (4 o 5) a no mejorado</td>
+</tr>
+<tr class="odd">
+<td>3 = La filtran</td>
+<td>Degrada el pozo a no mejorado</td>
+</tr>
+<tr class="even">
+<td>4 = Le ponen lejía o cloro</td>
+<td>Degrada el pozo a no mejorado</td>
+</tr>
+<tr class="odd">
+<td>5 = Beben agua embotellada</td>
+<td>Degrada el pozo a no mejorado</td>
+</tr>
+<tr class="even">
+<td>6 = Otro</td>
+<td>Degrada el pozo a no mejorado</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(rural)</strong> Zona del hogar, ya construida en la limpieza (<code>cod_CV_CP</code>: 1 = Urbano, 2 = Rural). <code>rural = 1</code> si es zona rural, <code>0</code> si es urbano. Solo afecta al pozo público (<code>2.25 == 4</code>): en zona rural <strong>siempre</strong> es no mejorado, sin importar el tratamiento del agua.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>** PASO 1 — Fuente <span class="kw">de</span> agua en 14 categorías (2.25 -&gt; water14)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">recode</span> q2_25_aguaTomar (1=1) (2=2) (3=3) (4=4) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), <span class="kw">gen</span>(water14)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> water14 <span class="st">"Fuente de agua, 14 categorías (recodificado de 2.25)"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> water14 1 <span class="st">"Agua entubada dentro de la vivienda"</span>  <span class="co">///</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                      2 <span class="st">"Agua entubada al patio/parcela"</span>      <span class="co">///</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                      3 <span class="st">"Grifo o pilón público"</span>                <span class="co">///</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                      4 <span class="st">"Pozo entubado o perforado (público)"</span>  <span class="co">///</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                      5 <span class="st">"Pozo protegido (privado)"</span>              <span class="co">///</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                      6 <span class="st">"Manantial protegido"</span>                   <span class="co">///</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                      7 <span class="st">"Agua embotellada"</span>                      <span class="co">///</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                      8 <span class="st">"Agua de lluvia"</span>                        <span class="co">///</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                      9 <span class="st">"Manantial no protegido"</span>                <span class="co">///</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                      10 <span class="st">"Pozo no protegido"</span>                    <span class="co">///</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                      11 <span class="st">"Carro con tanque/tambor pequeño"</span>      <span class="co">///</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                      12 <span class="st">"Camión cisterna"</span>                      <span class="co">///</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                      13 <span class="st">"Agua superficial"</span>                     <span class="co">///</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                      14 <span class="st">"Otro"</span>, <span class="kw">replace</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> val water14 water14</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>** PASO 2 — Excepción rural para pozo público (rural + water14==4 -&gt; degradar)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>* Agua <span class="kw">de</span> pozo público se considera mejorada en zona urbana pero no mejorada en zona rural</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> water14 = 10 <span class="kw">if</span> water14 == 4 &amp; rural == 1</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>** PASO 3 — Excepción por tratamiento del agua (pozo público o privado -&gt; degradar)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>* Si <span class="fu">el</span> hogar SÍ trata <span class="fu">el</span> agua del pozo (la hierve, filtra, le pone cloro, etc.),</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>* se reclasifica como no mejorada, <span class="fu">sin</span> importar zona urbana o rural</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="kw">replace</span> water14 = 10 <span class="kw">if</span> <span class="fu">inlist</span>(q2_25_aguaTomar, 4, 5) &amp; q2_27_tratamientoAgua != <span class="st">"Ninguno"</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>** PASO 4 — Agua mejorada (water14 -&gt; imp_wat_rec)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="kw">recode</span> water14 (1/6 8=1 <span class="st">"Access to improve water source"</span>) (nonmissing=0 <span class="st">"No access to improve water source"</span>), <span class="kw">gen</span>(imp_wat_rec)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> imp_wat_rec <span class="st">"Hogar con acceso a fuente de agua mejorada. Recodificada desde water14 siguiendo GMD"</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="kw">clonevar</span> drinking_water = imp_wat_rec</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> drinking_water <span class="st">"Hogar con acceso a fuente de agua mejorada. Igual a imp_wat_rec"</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>** PASO 5 — Indicador <span class="kw">de</span> privación del MPM (imp_wat_rec -&gt; dep_infra_impw)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_infra_impw = (imp_wat_rec == 0) <span class="kw">if</span> imp_wat_rec ~= .</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>la <span class="kw">var</span> dep_infra_impw <span class="st">"MPM: Privado si el hogar no tiene acceso a agua potable mejorada"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -812,18 +1165,17 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Compara el gasto per cápita en PPA contra la línea internacional de la variante MPM (3,00 USD PPA 2021).</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> ipc = 1.070633</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> ppp = 287.6907</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> welfare_ppp = pcexp/ipc/ppp/365</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> <span class="kw">double</span> welfare_ppp = pcexp_ppp</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">gen</span> dep_poor1 = welfare_ppp &lt; 3 <span class="kw">if</span> welfare_ppp~=.</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">label</span> <span class="kw">var</span> dep_poor1 <span class="st">"Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  * `apoverty` también permite obtener indicadores <span class="kw">de</span> pobreza directamente</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  * a partir del agregado <span class="kw">de</span> bienestar (pcexp_ppp) <span class="fu">y</span> la línea <span class="kw">de</span> referencia (zref)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  apoverty pcexp_ppp [aw = weight_hh], varpl(zref) <span class="kw">gen</span>(monetary)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ipc = 1.070633</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> ppp = 287.6907</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> welfare_ppp = pcexp / ipc / ppp / 365</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> welfare_ppp = pcexp_ppp</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">gen</span> dep_poor1 = welfare_ppp &lt; 3 <span class="kw">if</span> welfare_ppp ~= .</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> dep_poor1 <span class="st">"Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>* `apoverty` también permite obtener indicadores <span class="kw">de</span> pobreza directamente</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>* a partir del agregado <span class="kw">de</span> bienestar (pcexp_ppp) <span class="fu">y</span> la línea <span class="kw">de</span> referencia (zref)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>apoverty pcexp_ppp [aw = weight_hh], varpl(zref) <span class="kw">gen</span>(monetary)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -878,6 +1230,8 @@ Figura&nbsp;3: Estructura del MPM de Guinea Ecuatorial: dimensiones, indicadores
 <h4 class="anchored" data-anchor-id="ejercicios-de-la-sesión-1">Ejercicios de la Sesión 1</h4>
 <ol type="1">
 <li>¿Por qué la privación se define a nivel de hogar y no de individuo?</li>
+<li>¿Cuántas dimensiones tiene el MPM de Guinea Ecuatorial y cuáles son?</li>
+<li>¿Qué diferencia hay entre un indicador y una variable?</li>
 </ol>
 </section>
 </section>

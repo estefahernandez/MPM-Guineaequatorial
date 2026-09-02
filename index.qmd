@@ -725,10 +725,114 @@ El resultado es una fila por hogar con una columna de privación por cada uno de
 la **matriz de privaciones** $g_{ij}$.
 :::
 
+#### Cálculo manual paso a paso (sin `mpitb`)
+
+Antes de usar el paquete conviene calcular el IPM **a mano**, con comandos base de Stata. Así se ve
+exactamente *qué hace `mpitb` por dentro*. El do-file `03_calculo_mpm.do` implementa este cálculo
+manual y **comprueba que da el mismo $H$ y $M_0$ que `mpitb`** (diferencia < $10^{-6}$).
+
+Se parte de la base ya preparada: **una fila por hogar**, con los 6 indicadores de privación (0/1) y el
+diseño muestral declarado con `svyset` (ponderador `hhweight` y estratos).
+
+::: {.callout-tip collapse="true" title="Manual · Paso 1 — Fijar los pesos"}
+Ponderación anidada equitativa: cada dimensión pesa $1/3$ y ese peso se reparte por igual entre sus
+indicadores.
+
+| Indicador(es) | Cálculo | Peso $w_j$ |
+|---|---|---|
+| `e_com`, `e_enr` — educación | $\tfrac12\cdot\tfrac13$ | $1/6$ cada uno |
+| `i_elec`, `i_imps`, `i_impw` — infraestructura | $\tfrac13\cdot\tfrac13$ | $1/9$ cada uno |
+| `poor1` — monetario | $1\cdot\tfrac13$ | $1/3$ |
+
+$$
+\tfrac16+\tfrac16+\tfrac19+\tfrac19+\tfrac19+\tfrac13 = 1 \;\;\checkmark
+$$
+:::
+
+::: {.callout-tip collapse="true" title="Manual · Paso 2 — Puntaje de privación ponderado (c_equal)"}
+Para cada hogar se suma el peso de los indicadores en los que está privado
+($c_h=\sum_j w_j\,d_{hj}$):
+
+```stata
+gen c_equal = (1/6)*e_com + (1/6)*e_enr +                ///
+              (1/9)*i_elec + (1/9)*i_imps + (1/9)*i_impw + ///
+              (1/3)*poor1
+label var c_equal "Puntaje de privación (pesos iguales)"
+```
+`c_equal` va de 0 (ninguna privación) a 1 (privado en todo).
+:::
+
+::: {.callout-tip collapse="true" title="Manual · Paso 3 — Identificar a los pobres (k = 33 %)"}
+Un hogar es pobre multidimensional si su puntaje alcanza el umbral $k = 1/3$:
+
+```stata
+gen poor_multi = (c_equal >= 1/3)
+label var poor_multi "Pobre multidimensional (k=33)"
+```
+:::
+
+::: {.callout-tip collapse="true" title="Manual · Paso 4 — Censurar el puntaje"}
+Solo cuentan las privaciones de los pobres; a los no pobres se les pone 0:
+
+```stata
+gen c_censored = c_equal * poor_multi
+label var c_censored "Puntaje de privación censurado"
+```
+:::
+
+::: {.callout-tip collapse="true" title="Manual · Paso 5 — Agregar (H, A y M0) con diseño muestral"}
+La clave del método: $H$ y $M_0$ son simplemente **medias ponderadas**.
+
+```stata
+svy: mean poor_multi c_censored
+```
+
+- media de `poor_multi` $\rightarrow$ **$H$** (incidencia, % de población pobre).
+- media de `c_censored` $\rightarrow$ **$M_0$** (IPM ajustado).
+- la intensidad se recupera como $A = M_0 / H$.
+
+Se usa `svy: mean` (y no `summarize`) para que $H$ y $M_0$ apliquen el ponderador y los estratos, y
+lleven el **error estándar correcto**. Para desagregar por subgrupo se usa `subpop()`, **no** `if`, y
+así la varianza del diseño complejo se calcula bien:
+
+```stata
+* Ejemplo: solo el área rural
+svy, subpop(if area == "Rural"): mean poor_multi c_censored
+```
+El script recorre con un bucle todos los subgrupos de `area` y `prov` de esta forma.
+:::
+
+::: {.callout-important collapse="true" title="El puente: el cálculo manual da lo mismo que mpitb"}
+Con la matriz del ejemplo inicial ($k=1/3$) el cálculo a mano daba $H=0{,}60$, $A=0{,}60$ y
+$M_0=0{,}36$. Con los datos reales de la ENH2, este **mismo procedimiento manual** produce
+exactamente los mismos $H=0{,}1991$ y $M_0=0{,}0859$ que `mpitb`: el do-file `03_calculo_mpm.do` lo
+verifica de forma automática (diferencia < $10^{-6}$).
+
+Cada paso manual tiene su equivalente exacto en `mpitb`:
+
+| A mano (Stata base) | Con `mpitb` |
+|---|---|
+| `gen c_equal = (1/6)*e_com + …` (pesos) | `mpitb set … ` + `weights(equal)` |
+| `gen poor_multi = c_equal >= 1/3` | `klist(33)` |
+| `gen c_censored = c_equal*poor_multi` | censura interna |
+| `svy: mean poor_multi c_censored` | `mpitb est … measures(all) svy` |
+| bucle con `subpop()` por grupo | `over(area prov cities)` |
+| calcular a mano `hd`/`hdk`/contribuciones | `indmeas(all) aux(hd)` |
+
+: Del cálculo manual al comando `mpitb` {.striped .hover}
+
+**¿Entonces para qué `mpitb`?** Porque hacerlo a mano se vuelve tedioso y propenso a errores cuando
+además se necesitan **errores estándar e intervalos** de cada medida, las **descomposiciones por
+indicador** (`hd`, `hdk`, `actb`, `pctb`) y **todos los subgrupos** a la vez. Eso es justo lo que
+`mpitb` automatiza en dos líneas.
+:::
+
 #### Cálculo del IPM con `mpitb` (despliegue cada paso)
 
-El paquete `mpitb` [@suppa2023mpitb], desarrollado y mantenido por OPHI, implementa el método AF:
-**definir** la estructura (`mpitb set`), **estimar** (`mpitb est`) y **leer** los resultados.
+Es el **mismo cálculo** que acabamos de hacer a mano, pero automatizado y con errores estándar,
+intervalos y descomposiciones incluidos. El paquete `mpitb` [@suppa2023mpitb], desarrollado y
+mantenido por OPHI, implementa el método AF: **definir** la estructura (`mpitb set`), **estimar**
+(`mpitb est`) y **leer** los resultados.
 Requiere una base en formato *wide* (una fila por hogar, una columna 0/1 por indicador), un
 ponderador muestral y, si aplica, variables de estrato y conglomerado para `svyset`.
 
@@ -795,15 +899,65 @@ mpitb est, name(GNQ) klist(33) weights(equal) ///
 - `svy` — usa el diseño muestral declarado con `svyset`.
 :::
 
+::: {.callout-note collapse="true" title="5 · Referencia completa de opciones de `mpitb est`"}
+`mpitb est` acepta más opciones de las usadas arriba. Esta es la referencia de las principales,
+agrupadas por función.
+
+**Especificación y umbral (obligatorias)**
+
+| Opción | Qué hace |
+|---|---|
+| `name(GNQ)` | Nombre del índice definido con `mpitb set`. |
+| `klist(33)` | Uno o varios umbrales de pobreza $k$ (1–100). Ej.: `klist(20 33 50)` para sensibilidad. |
+| `weights(equal)` | Esquema de ponderación: `equal` (anidado igual), `dimw` (pesos por dimensión) o `indw` (pesos por indicador). |
+
+**Qué medidas calcular**
+
+| Opción | Valores | Significado |
+|---|---|---|
+| `measures()` | `M0` `H` `A` · `all` | Medidas **agregadas** del método AF. |
+| `indmeas()` | `hdk` `actb` `pctb` · `all` | Medidas **por indicador**: headcount censurado y contribuciones. |
+| `aux()` | `hd` `mv` `N` · `all` | Auxiliares: `hd` (headcount no censurado), `mv` (valores perdidos), `N` (tamaño muestral). |
+
+**Desagregación y diseño muestral**
+
+| Opción | Qué hace |
+|---|---|
+| `over(area prov cities)` | Desagrega por subgrupos → descomposición **por población**. |
+| `svy` | Usa el diseño declarado con `svyset` (errores estándar correctos). |
+
+**Guardar resultados y utilidades**
+
+| Opción | Qué hace |
+|---|---|
+| `lsave("…".dta, replace)` | Guarda las estimaciones "largas" en un `.dta`. |
+| `lfr(myresults, replace)` | Deja los resultados en un *frame* en memoria (equivale a `lframe`). |
+| `dtasave("…".dta, replace)` | Guarda el microdato con el puntaje de privación `c_equal`. |
+| `cotyear()` · `cotframe()` | Cambios en el tiempo entre rondas (si hay panel/varias encuestas). |
+
+: Opciones de `mpitb est` {.striped .hover}
+
+La llamada del curso combina `measures(all) indmeas(all) aux(hd)` para obtener, en una sola corrida,
+las medidas agregadas, las de cada indicador y el headcount no censurado.
+:::
+
 #### Interpretación de la salida de `mpitb est`
+
+Cada fila del frame de resultados es una combinación **medida × nivel × subgrupo × indicador × $k$**.
+Sus columnas:
 
 | Campo | Significado |
 |---|---|
-| `measure` | Medida reportada: `M0`, `H`, `A`, `hd`, `hdk`, etc. |
-| `loa` | Nivel de agregación (`nat` = nacional, o el subgrupo del `over()`) |
-| `k` | Valor del umbral de pobreza $k$ evaluado |
-| `b` | Estimación puntual de la medida |
-| `se` | Error estándar (ajustado por el diseño si se usó `svy`) |
+| `measure` | Medida reportada. Agregadas: `M0`, `H`, `A`. Por indicador: `hdk`, `actb`, `pctb`. Auxiliar: `hd`. |
+| `loa` | Nivel de agregación: `nat` (nacional) o el nombre del `over()` (`area`, `prov`, `cities`). |
+| `subg` | Código del subgrupo dentro de `loa` (p. ej. Urbano/Rural en `area`). |
+| `indicator` | Indicador de la fila (solo en las medidas por indicador). |
+| `k` | Umbral de pobreza $k$ evaluado. |
+| `wgts` | Esquema de ponderación usado (`equal`). |
+| `b` | Estimación puntual de la medida. |
+| `se` | Error estándar (ajustado por el diseño si se usó `svy`). |
+| `ll` / `ul` | Límites inferior y superior del intervalo de confianza. |
+| `pval` / `tval` | Valor-p y estadístico $t$ de la estimación. |
 
 : Campos de la base de resultados de `mpitb` {.striped .hover}
 
@@ -866,6 +1020,45 @@ son **saneamiento** (`i_imps`, 15,5 %) y **agua** (`i_impw`, 14,2 %), seguidos d
 privación entre los hogares pobres.
 :::
 
+::: {.callout-note collapse="true" title="Descomposición por indicador: contribución al IPM (actb, pctb)"}
+La descomposición más comunicable responde *¿qué privaciones pesan más en el IPM?*. Con `indmeas(all)`,
+`mpitb` reporta la **contribución absoluta** (`actb`) y **porcentual** (`pctb`) de cada indicador. La
+clave es que las contribuciones **suman exactamente el IPM** (y el 100 %):
+
+$$
+\text{actb}_j = w_j \times \text{hdk}_j, \qquad
+\text{pctb}_j = \frac{\text{actb}_j}{M_0}\times 100, \qquad
+\sum_j \text{actb}_j = M_0 .
+$$
+
+```stata
+tabdisp indicator measure if inlist(measure,"actb","pctb") & loa=="nat" & k==33, cell(b)
+```
+
+| Indicador | Peso $w_j$ | `hdk` | `actb` | `pctb` (%) |
+|---|---|---|---|---|
+| Logro educativo (`e_com`) | 1/6 | 0,0442 | 0,0074 | 8,6 |
+| Matrícula (`e_enr`) | 1/6 | 0,0141 | 0,0024 | 2,7 |
+| Electricidad (`i_elec`) | 1/9 | 0,1241 | 0,0138 | 16,1 |
+| Saneamiento (`i_imps`) | 1/9 | 0,1553 | 0,0173 | 20,1 |
+| Agua (`i_impw`) | 1/9 | 0,1424 | 0,0158 | 18,4 |
+| Pobreza monetaria (`poor1`) | 1/3 | 0,0879 | 0,0293 | 34,1 |
+| **Total** | **1** | — | **0,0859** $= M_0$ | **100** |
+
+: Contribución de cada indicador al IPM nacional ($k = 33\%$) {.striped .hover}
+
+Agrupando por dimensión, **infraestructura** aporta el **54,6 %** del IPM (saneamiento 20,1 % + agua
+18,4 % + electricidad 16,1 %), la **pobreza monetaria** el **34,1 %** y **educación** el **11,3 %**.
+La lectura de política es directa: reducir el IPM de Guinea Ecuatorial pasa, sobre todo, por cerrar
+brechas de **servicios básicos** e **ingreso**.
+
+<!-- REVISAR: actb y pctb se calcularon a partir de la salida real de hdk (callout anterior) y los
+pesos del diseño (educación 1/6 c/u; infraestructura 1/9 c/u; monetario 1/3), con actb_j = w_j*hdk_j y
+pctb_j = actb_j/M0. Se cumple la identidad Sum(actb) = M0 = 0.0859. Deberían coincidir con la salida
+directa de `mpitb est ... indmeas(all)` (measures actb/pctb); confírmalo contra tu corrida antes de
+publicar. -->
+:::
+
 ::: {.callout-note collapse="true" title="Descomposición por grupo poblacional"}
 ```stata
 use "${gdStata}/${MPM}_results.dta", clear
@@ -906,6 +1099,85 @@ la **urbana** ($M_0 = 0{,}0402$), y dentro de lo urbano, **Malabo** tiene el IPM
 use "${gdStata}/${MPM}_results_microdata.dta", clear
 gen poor_multi = (c_equal >= 1/3)
 tab poor_multi [aw = hhweight]
+```
+:::
+
+#### Utilidades más importantes de `mpitb`
+
+Más allá de `set` y `est`, estas son las utilidades que más se usan en la práctica.
+
+::: {.callout-tip collapse="true" title="Trabajar con los resultados en memoria (frames)"}
+`mpitb est` deja los resultados en un *frame* (`lfr`) **sin tocar** tu base original. Se navega así:
+
+```stata
+cwf myresults      // cambia al frame de resultados
+cwf default        // vuelve a la base original
+frames dir         // lista los frames en memoria
+```
+Los *frames* (Stata 16+) permiten tener la base y los resultados abiertos a la vez.
+:::
+
+::: {.callout-tip collapse="true" title="Guardar y reutilizar (lsave, dtasave)"}
+- `lsave(archivo.dta, replace)` — guarda la tabla de resultados para graficar o exportar después (es
+  lo que consume `04_exportar_figuras.do`).
+- `dtasave(micro.dta, replace)` — guarda el microdato con el puntaje `c_equal`, con el que se
+  reconstruye la identificación de pobreza:
+
+```stata
+use "micro.dta", clear
+gen poor_multi = (c_equal >= 1/3)   // mismo k = 33 %
+tab poor_multi [aw = hhweight]
+```
+:::
+
+::: {.callout-tip collapse="true" title="Análisis de sensibilidad al umbral k"}
+Pasar varios valores en `klist()` calcula todo el barrido en una sola corrida:
+
+```stata
+mpitb est, name(GNQ) klist(20 33 50) weights(equal) measures(all) svy over(area)
+```
+Compare cómo cambian $H$, $A$ y $M_0$: a mayor $k$, **menor** $H$ (menos hogares cruzan el umbral) y
+**mayor** $A$ (los que quedan están más privados).
+:::
+
+::: {.callout-tip collapse="true" title="Cambios en el tiempo (si hay más de una ronda)"}
+Con dos o más rondas comparables, `mpitb` estima el cambio y prueba su significancia:
+
+```stata
+mpitb est, name(GNQ) klist(33) weights(equal) measures(all) svy ///
+    cotyear(anio) cotframe(cambios, replace)
+```
+La ENH2 es una sola ronda, por lo que aquí no aplica; se incluye como referencia para el monitoreo
+futuro del IPM de Guinea Ecuatorial.
+:::
+
+::: {.callout-note collapse="true" title="Hoja de comandos de la Sesión 2"}
+Toda la sesión en una pantalla, lista para adaptar:
+
+```stata
+* 0 · Instalar
+ssc install moremata, replace
+ssc install mpitb, replace
+
+* 1 · Definir la estructura
+mpitb set, name(GNQ) d1(e_com e_enr, na(educ)) ///
+    d2(i_elec i_imps i_impw, na(infra)) d3(poor1, na(mon))
+
+* 2 · Diseño muestral
+gen hhweight = weight_hh*hhsize
+egen strata = group(cod_provincia cod_CV_CP)
+svyset hhid [iw = hhweight], clear strata(strata)
+
+* 3 · Estimar (agregadas + por indicador + auxiliares, con descomposiciones)
+mpitb est, name(GNQ) klist(33) weights(equal) ///
+    measures(all) indmeas(all) aux(hd) svy over(area prov cities) ///
+    lsave("resultados.dta", replace) lfr(myresults, replace) ///
+    dtasave("microdatos.dta", replace)
+
+* 4 · Leer
+cwf myresults
+li measure b se if inlist(measure,"M0","H","A") & loa=="nat" & k==33, noob
+tabdisp indicator measure if inlist(measure,"hdk","pctb") & loa=="nat" & k==33, cell(b)
 ```
 :::
 
@@ -1180,8 +1452,10 @@ rigor técnico y legitimidad participativa, a la realidad del país.
   // estando en el HTML de la página para quien lo busque.
   // ------------------------------------------------------------------
   var unlocks = {
-    "tabset-1-3": new Date("2026-09-04T23:00:00Z"), // Sesión 2 se desbloquea el 21 ago 2026 (00:00 WAT)
-    "tabset-1-4": new Date("2026-09-11T23:00:00Z")  // Sesión 3 se desbloquea el 28 ago 2026 (00:00 WAT)
+    // Sesión 2 (tabset-1-3): ACTIVADA — sin candado (desbloqueada manualmente el 2026-09-01).
+    // Para volver a bloquearla, reañade su línea con la fecha deseada, p. ej.:
+    //   "tabset-1-3": new Date("2026-09-04T23:00:00Z"),
+    "tabset-1-4": new Date("2026-09-11T23:00:00Z")  // Sesión 3 se desbloquea el 12 sep 2026 (00:00 WAT)
   };
 
   var now = new Date(); // instante actual de quien visita la página

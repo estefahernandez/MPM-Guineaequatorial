@@ -39,60 +39,50 @@ foreach c of local commands_edited {
 }
 
 /*------------------------------------------------------------------
- 1) ÚNICA RUTA A EDITAR: carpeta de trabajo del proyecto
-    Es la carpeta que contiene los do-files del pipeline y la base
-    de datos de la encuesta, y donde se guardarán los resultados.
-    Ver la sección 2 para el detalle, y el README.md para el
-    diagrama completo.
-
-    Si la dejas vacía (""), se usará la carpeta de trabajo actual de
-    Stata: para eso, abre este do-file haciendo doble clic sobre él
-    (o usa File > Change working directory... y selecciónala).
+ 1) ÚNICA RUTA A EDITAR: carpeta raíz del proyecto
+    Debe ser la carpeta que contiene (o va a contener) las subcarpetas
+    de datos, resultados y, opcionalmente, la carpeta de productos
+    editoriales. Ver la sección 2 para el detalle de la estructura
+    esperada, y el README.md para el diagrama completo.
 ------------------------------------------------------------------*/
-* -- EDITA AQUÍ (y solo aquí): ruta de la carpeta de tu proyecto --
+* -- EDITA AQUÍ (y solo aquí): ruta raíz de tu proyecto --
 
-     global gdRaiz "EDITA AQUÍ"
+    //  global gdRaiz "EDITA AQUÍ"
+     global gdRaiz "/Users/estefania/Library/CloudStorage/OneDrive-Personal/Estefania/04-Other/Curso_MPM"
 
 if ("$gdRaiz" == "") {
-    global gdRaiz "`c(pwd)'"
-    di as txt "Se usará la carpeta de trabajo actual: $gdRaiz"
-    di as txt "Si no es la carpeta correcta, configura el global gdRaiz arriba."
-}
-
-capture cd "$gdRaiz"
-if _rc!=0 {
-    di as error "La ruta del global gdRaiz no existe: $gdRaiz"
-    di as error "Corrígela en 00_maestro.do (línea con -- EDITA AQUÍ --) antes de correr este script."
-    error 601
+    di as error "Configura el global gdRaiz en 00_maestro.do (línea con -- EDITA AQUÍ --) antes de correr este script."
+    error 1
 }
 
 /*------------------------------------------------------------------
  2) RUTAS DERIVADAS DE $gdRaiz (no deberías necesitar tocar esto)
-    Todo el proyecto vive en una sola carpeta: los do-files del
-    pipeline, los microdatos de la encuesta y los productos que se
-    generan (.dta, Excel, figuras) están y se escriben en $gdRaiz.
-    Por eso las rutas de trabajo apuntan todas al mismo directorio:
+    Estructura de subcarpetas esperada debajo de $gdRaiz:
+        
+        Do-files/                         -> $gdDo   (esta misma carpeta,
+                                              los 5 do-files del pipeline)
+        1-Data/                           -> $gdData (microdatos de la
+                                              encuesta y bases de
+                                              comparación internacional)
+        2-Resultados/                     -> $gdOutput (todo lo que el
+                                              pipeline genera: .dta,
+                                              Excel, figuras)
 
-        $gdDo      -> do-files del pipeline
-        $gdData    -> microdatos de la encuesta
-        $gdOutput  -> todo lo que el pipeline genera
-        $gdExcel / $gdFig / $gdStata -> Excel, figuras y .dta
-
-    Si tu proyecto separa estos productos en subcarpetas, ajusta las
-    líneas de abajo (y solo estas).
+    Si tu proyecto ya usa otros nombres de subcarpeta, ajusta las 3
+    líneas de abajo (y solo estas 3).
 ------------------------------------------------------------------*/
-global gdDo        "$gdRaiz"
-global gdData      "$gdRaiz"
-global gdOutput    "$gdRaiz"
-    global gdExcel    "$gdOutput"
-    global gdFig      "$gdOutput"
-    global gdStata    "$gdOutput"
+global gdDo        "$gdRaiz/Web_site/`c(username)'/files/scripts" //  ("$gdRaiz/Do-files")
+global gdData      "$gdRaiz/1-Data"
+global gdOutput    "$gdRaiz/2-Resultados"
+    global gdExcel    "${gdOutput}/Excel"
+    global gdFig      "${gdOutput}/Figures"
+    global gdStata    "${gdOutput}/Stata"
 
 /*------------------------------------------------------------------
  3) Parametros para la ejecucion 
 ------------------------------------------------------------------*/
 global language "SPA"                           // Idioma de las etiquetas/salidas: "SPA" o "ENG"
-global database "Individuals_data.dta"          //  Base training: Individuals_data.dta 
+global database "CleanDB_Individual_POV.dta"    //  Base training: Individuals_data.dta - Base PEA completa: CleanDB_Individual_POV.dta
 global MPM "MPM"                                // MPM o MPMplus
 global methodology "manual"                     // mpitb syntax vs manual
 
@@ -101,12 +91,15 @@ graph set window fontface "Arial Narrow"
 
 /*------------------------------------------------------------------
  4) Crear carpetas de salida si no existen
-    (las que el pipeline usa por variante de MPM e idioma)
+    (Data, Data/temp, Excel, Figures, y sus subcarpetas por variante
+    de MPM e idioma)
 ------------------------------------------------------------------*/
 *If needed, create directories, and sub-directories used in the process 
-foreach d in "${gdStata}/Data Clean $MPM" "${gdExcel}/$MPM" ///
+foreach d in "${gdExcel}" "${gdFig}" ///
+             "${gdStata}/Data Clean $MPM" "${gdExcel}/$MPM" ///
              "${gdExcel}/$MPM/$language"   {
-	capture mkdir "`d'"
+	confirmdir "`d'" 
+	if _rc!=0 mkdir "`d'" 
 }
 
 /*==================================================================
@@ -151,5 +144,6 @@ if ("$methodology" == "mpitb") { // Construido para el conjunto amplio de indica
 ------------------------------------------------------------------*/
 display "Datos (.dta) exportados en: ${gdStata}/Data Clean ${MPM}"
 display "Excel exportado en:         ${gdExcel}/${MPM}/${language}"
-display "Figuras exportadas en:       ${gdFig}"
+display "Figuras exportadas en:       ${gdFig}/${MPM}/${language}"
 include "$gdDo/05_tabla_PEA_curso.do"
+

@@ -302,6 +302,21 @@ tempfile results_manual
 postfile `memhold' str10 measure str10 loa str50 subg int k       ///
     double b double se using `results_manual', replace
 
+/*
+    svy [, opciones] : comando_de_estimación
+     ↑              ↑
+     opciones      el comando que realmente calcula algo
+     de svy        (aquí: mean)
+
+
+    quietly svy, subpop(if `cond'): mean poor_multi c_censored
+        ↑     ↑        ↑                 ↑
+        │     │        │                 el cálculo: la media de dos variables
+        │     │        restringe a un subgrupo
+        │     "hazlo respetando el diseño muestral declarado con svyset"
+        no imprimas nada en pantalla
+*/
+
 *---- Nacional ----
 * H y M0 salen de la MISMA llamada: ambas son medias sobre toda la población.
 quietly svy: mean poor_multi c_censored

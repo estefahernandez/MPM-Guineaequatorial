@@ -95,7 +95,7 @@ Al finalizar el curso, las personas participantes podrán:
 |---|---|---|
 | **1** | Dimensiones, variables, indicadores, umbrales y ponderaciones | Conceptual y Técnico (Stata) |
 | **2** | Cálculo del IPM y sus descomposiciones con `mpitb` | Técnico (Stata) |
-| **3** | Presentación de indicadores de Guinea Ecuatorial | Presentación e ilustración |
+| **3** | El MPM+ (umbrales más exigentes) paso a paso y taller de diseño | Presentación y taller |
 
 : Progresión temática de las tres sesiones {.striped}
 
@@ -150,8 +150,9 @@ MPM de Guinea Ecuatorial trabaja con **tres dimensiones**:
 
 ::: {.callout-tip collapse="true" title="Indicador"}
 La medida concreta y observable dentro de una dimensión. Una dimensión puede tener uno o varios
-indicadores. Aquí, **educación** tiene dos (logro y matrícula) e **infraestructura** tiene tres (electricidad,
-saneamiento y agua); por lo tanto, entre las dos dimensión de educación e infraestructura se tienen 5 indicadores en total.
+indicadores. Aquí, **educación** tiene dos (logro y matrícula), **infraestructura** tiene tres
+(electricidad, saneamiento y agua) y la dimensión **monetaria** tiene uno (gasto per cápita): seis
+indicadores en total.
 :::
 
 ::: {.callout-tip collapse="true" title="Variable"}
@@ -162,7 +163,8 @@ Las preguntas de la encuesta son las variables a partir de las cuales se constru
 
 
 #### Dada la Segunda Encuesta Nacional de Hogares (ENH2)
-El insumo es la ENH2 del Instituto Nacional de Estadística de Guinea Ecuatorial (INEGE). Sus módulos alimentan directamente cada dimension y sus indicadores.
+El insumo es la ENH2 del Instituto Nacional de Estadística de Guinea Ecuatorial (INEGE)
+[@inege2023enh2]. Sus módulos alimentan directamente cada dimensión y sus indicadores.
 
 ::: {.callout-note collapse="true" icon=false title="<i class='bi bi-bookmarks'></i> El IPM Global (OPHI-PNUD)"}
 El IPM Global 2025 cubre 109 países [@alkire2025globalmpi]. Usa tres dimensiones con peso $1/3$ cada
@@ -544,7 +546,10 @@ la var dep_infra_impw "MPM: Privado si el hogar no tiene acceso a agua potable m
 :::
 
 ::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Pobreza monetaria"}
-Compara el gasto per cápita en PPA contra la línea internacional de la variante MPM (3,00 USD PPA 2021).
+Compara el gasto per cápita en PPA contra la línea internacional de la variante MPM: **3,00 USD por
+persona y día en PPA 2021**, la línea de pobreza del Banco Mundial para países de ingreso bajo,
+actualizada en junio de 2025 [@worldbank2025povertylines]. La Sesión 3 usa una línea más alta (8,30 USD,
+ingreso medio-alto) para la variante MPM+.
 
 ```stata
 gen ipc = 1.070633
@@ -1214,28 +1219,232 @@ tabdisp indicator measure if inlist(measure,"hdk","pctb") & loa=="nat" & k==33, 
 
 ## Sesión 3
 
-### Taller: diseño de un IPM adaptado a Guinea Ecuatorial {.unnumbered}
-
-::: {.callout-note collapse="true" title="Variante ampliada MPM+ (umbrales más exigentes)"}
-Los do-files contemplan una versión **MPM+** con umbrales más exigentes: logro de secundaria (ESBA 4)
-en vez de primaria, matrícula que penaliza el retraso escolar, electricidad que penaliza cortes de
-suministro, y una línea monetaria más alta (8,30 en PPA 2021 en lugar de 3,00). El mismo marco AF
-admite umbrales distintos según la ambición de la política.
-
-![Estructura del MPM+ de Guinea Ecuatorial: dimensiones, indicadores, pesos y umbrales de privación.](files/estructura_ipm_mpmplus.svg){#fig-estructura-mpmplus fig-align="center" width="95%" fig-alt="Infográfico con las tres dimensiones del MPM+ (educación, infraestructura y monetaria), sus indicadores, pesos y umbrales de privación."}
-
-:::
+### El MPM+ de Guinea Ecuatorial y taller de diseño {.unnumbered}
 
 ::: {.course-materials}
-**Materiales · Sesión 3**  
+**Materiales · Sesión 3**
 [Presentación (PDF)](files/presentacion_sesion3.pdf){.btn .btn-outline-primary .btn-sm role="button" download="presentacion_sesion3.pdf"}
+[Do-file 0 · Maestro](files/scripts/00_maestro.do){.btn .btn-outline-secondary .btn-sm role="button" download="00_maestro.do"}
+[Do-file 1+ · Privaciones (MPM+)](files/scripts/01_privaciones_MPMplus.do){.btn .btn-outline-secondary .btn-sm role="button" download="01_privaciones_MPMplus.do"}
 [Do-file 3 · mpitb](files/scripts/03_calculo_mpm_mpitb.do){.btn .btn-outline-secondary .btn-sm role="button" download="03_calculo_mpm_mpitb.do"}
 [Do-file 4 · Figuras](files/scripts/04_exportar_figuras.do){.btn .btn-outline-secondary .btn-sm role="button" download="04_exportar_figuras.do"}
 :::
 
-**Objetivo.** Sesión práctica y participativa para **diseñar de forma colaborativa** un IPM ajustado al
-contexto de Guinea Ecuatorial, apoyada en los materiales de OPHI sobre los pasos para diseñar un IPM
-nacional. El énfasis está en la deliberación: las decisiones deben justificarse.
+**Objetivo.** Presentar el **MPM+**, la variante más exigente del MPM, explicando **paso a paso** cómo
+cambia cada indicador respecto a la Sesión 1, y cerrar con un **taller** para diseñar de forma
+colaborativa un IPM ajustado a Guinea Ecuatorial. El hilo conductor es que el mismo marco
+Alkire-Foster admite umbrales distintos según la ambición de la política [@alkire2011counting], y que
+cada elección debe justificarse.
+
+#### ¿Qué es el MPM+ y por qué?
+
+El **MPM+** mide las mismas tres dimensiones y usa los mismos seis indicadores y ponderaciones del MPM
+(educación $1/3$, infraestructura $1/3$, monetaria $1/3$), pero **sube el listón** de casi todos los
+umbrales de privación. La razón es de política: Guinea Ecuatorial es, por ingreso, una economía de
+**ingreso medio-alto**, de modo que una medida coherente con ese nivel exige estándares más altos que
+los mínimos de subsistencia [@worldbank2025pea]. El MPM+ traduce esa ambición a umbrales concretos.
+
+Los umbrales de ambas variantes provienen de la **Evaluación de Pobreza y Equidad (PEA)** del Banco
+Mundial para Guinea Ecuatorial, calculada sobre la ENH2 [@worldbank2025pea; @inege2023enh2]. En el
+código, el MPM+ vive en un do-file propio, `01_privaciones_MPMplus.do`, paralelo al
+`01_privaciones_MPM.do` de la Sesión 1.
+
+![Estructura del MPM+ de Guinea Ecuatorial: dimensiones, indicadores, pesos y umbrales de privación más exigentes.](files/estructura_ipm_mpmplus.svg){#fig-estructura-mpmplus fig-align="center" width="95%" fig-alt="Infográfico con las tres dimensiones del MPM+ (educación, infraestructura y monetaria), sus indicadores, pesos y umbrales de privación."}
+
+#### El MPM+ frente al MPM: qué cambia
+
+Solo cambian los **umbrales** (la raya que separa "privado" de "no privado"); la estructura de
+dimensiones, indicadores y pesos es idéntica. Cinco de los seis indicadores se endurecen; el
+saneamiento se mantiene igual.
+
+| Indicador | Umbral en el MPM (Sesión 1) | Umbral más exigente en el MPM+ |
+|---|---|---|
+| Logro educativo | Ningún adulto **15+** completó **primaria** (`educat7>=3`) | Ningún adulto **20+** completó **secundaria básica** (ESBA 4, `q3_05_grado>=11`) |
+| Matrícula escolar | Algún niño (7–14) **no matriculado** | Algún niño (7–14) **no matriculado o con rezago** de más de un año |
+| Electricidad | El hogar **no tiene** electricidad | No tiene electricidad **o sufrió cortes** (>30 min) algún día del último mes |
+| Agua | Fuente no mejorada (el **pozo público urbano sí** cuenta como mejorado) | Fuente no mejorada y, además, el **pozo público nunca** cuenta como mejorado |
+| Saneamiento | Sin saneamiento mejorado | **Igual** que en el MPM (no cambia) |
+| Pobreza monetaria | Gasto per cápita < **3,00 USD** (PPA 2021, línea de ingreso bajo) | Gasto per cápita < **8,30 USD** (PPA 2021, línea de ingreso medio-alto) |
+
+: MPM frente a MPM+, umbral por umbral (`01_privaciones_MPM.do` vs. `01_privaciones_MPMplus.do`) {.striped .hover}
+
+Las dos líneas monetarias (3,00 y 8,30 USD por persona y día, en PPA 2021) son las líneas
+internacionales de pobreza del Banco Mundial actualizadas en junio de 2025: 3,00 USD corresponde a
+países de **ingreso bajo** y 8,30 USD a países de **ingreso medio-alto** [@worldbank2025povertylines].
+
+::: {.callout-note collapse="true" title="Activar la variante MPM+ en el pipeline (00_maestro.do)"}
+No hace falta reescribir nada: el do-file maestro elige la variante con un solo *global*. Al ponerlo
+en `MPMplus`, el maestro llama a `01_privaciones_MPMplus.do` en lugar de `01_privaciones_MPM.do`, y el
+resto del pipeline (cálculo con `mpitb` y figuras) sigue igual.
+
+```stata
+* En 00_maestro.do, línea de parámetros:
+global MPM "MPMplus"        // "MPM" (Sesión 1) o "MPMplus" (esta sesión)
+
+* El maestro decide qué do-file de privaciones incluir:
+if ("$MPM" == "MPM") {
+    include "$gdDo/01_privaciones_MPM.do"
+}
+else if ("$MPM" == "MPMplus") {
+    include "$gdDo/01_privaciones_MPMplus.do"
+}
+```
+
+Todos los productos se guardan con el sufijo de la variante (`DataDeprivationsMPMplus.dta`,
+`MPMplus_results.dta`), de modo que MPM y MPM+ **no se pisan** y pueden compararse.
+:::
+
+#### El MPM+ paso a paso (despliegue cada indicador)
+
+Extractos reales de `01_privaciones_MPMplus.do`. Para cada indicador se muestra **qué cambia** frente a
+la Sesión 1 y el código que lo implementa.
+
+::: {.callout-tip collapse="true" title="Parámetros de edad de la variante MPM+"}
+El MPM+ sube la edad de "adulto" de 15 a **20 años** (edad a la que, empezando primaria a los 7, se
+debería haber completado la secundaria básica). Las edades de niñez escolar (7–14) no cambian.
+
+```stata
+global lbage  7    // Edad de inicio de primaria (igual que el MPM)
+global ubage  14   // Hasta 8º grado (ESBA 2) como edad escolar (igual que el MPM)
+global eduage 20   // ESBA / secundaria básica (en el MPM era 15)
+```
+:::
+
+::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Logro educativo — de primaria a secundaria básica"}
+**Qué cambia.** En el MPM basta con que un adulto haya completado **primaria**. En el MPM+ el hogar
+está privado si **ningún adulto de 20+ años completó la secundaria básica** (ESBA 4, `q3_05_grado>=11`).
+
+**La excepción "menores ya educados".** Un hogar joven puede no tener a nadie de 20+ años pero sí a
+alguien de 18–19 que ya terminó ESBA 4. Para no castigarlo, si el hogar **no tiene ningún adulto de
+20+** pero **sí exactamente una persona de 18–19 con ESBA 4 o más**, se considera **no privado**.
+
+```stata
+* temp2 = 1 si la persona es adulta (20+) y alcanzó ESBA 4 / secundaria básica
+gen temp2 = 1 if q1_03_edad>=$eduage & q1_03_edad~=. & q3_05_grado>=11 & q3_05_grado~=.
+bys hhid: egen temp3 = sum(temp2)   // nº de esos adultos por hogar
+
+* Excepción: hogar sin adultos 20+ pero con una persona 18-19 ya con ESBA 4+
+gen menores_ESBA = (q1_03_edad>=18 & q3_05_grado>=11 & q3_05_grado~=.)
+bys hhid: egen menores_ESBA_count = sum(menores_ESBA)
+gen check_adults = (q1_03_edad>=$eduage)
+bys hhid: egen adults_count = sum(check_adults)
+replace temp3 = 1 if menores_ESBA_count==1 & adults_count==0
+
+gen dep_educ_com = 0
+replace dep_educ_com = 1 if temp3==0   // privado si ningún adulto llegó a ESBA 4
+la var dep_educ_com "MPM+: Privado si el hogar NO tiene adultos 20+ con secundaria completa"
+```
+:::
+
+::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Matrícula escolar — se suma el rezago"}
+**Qué cambia.** En el MPM un niño solo cuenta como privado si **no está matriculado**. En el MPM+
+también cuenta si **está matriculado pero con un rezago de más de un año** (2 años o más de atraso
+respecto al grado esperado para su edad). El rezago se calcula comparando el grado que cursa
+(`q3_11_gradoAsistido`) con el grado que le correspondería por edad.
+
+```stata
+* Años de atraso = edad - 1 menos la edad teórica de inicio de cada grado
+gen edad_n = q1_03_edad - 1
+gen rezago = (edad_n - 6)  if q3_11_gradoAsistido == "Pre-escolar"
+replace rezago = (edad_n - 7)  if q3_11_gradoAsistido == "Grado 1 (primaria ciclo 1)"
+* ... (un peldaño por grado, hasta Bachillerato) ...
+replace rezago = 0 if rezago < 0
+gen rezago_escolar = (rezago>1)          // atraso de más de un año
+
+* Privado si NO está matriculado, O si está matriculado con rezago
+gen temp2 = 1 if q1_03_edad>=$lbage & q1_03_edad<=$ubage & asistencia_escolar==0
+replace temp2 = 1 if q1_03_edad>=$lbage & q1_03_edad<=$ubage & asistencia_escolar==1 & rezago_escolar==1
+bys hhid: egen temp3 = sum(temp2)
+
+gen dep_educ_enr = 0
+replace dep_educ_enr = 1 if temp3>0 & temp3~=.
+replace dep_educ_enr = 0 if educ_enr_size==0   // hogar sin niños en edad escolar: no privado
+la var dep_educ_enr "MPM+: Privado si hay un niño en edad escolar no matriculado o con rezago"
+```
+:::
+
+::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Electricidad — se penalizan los cortes"}
+**Qué cambia.** En el MPM basta con **tener acceso** a electricidad. En el MPM+, aunque el hogar tenga
+electricidad, si reportó **algún corte de más de 30 minutos** en el último mes (pregunta 2.33,
+`q2_33_SinElect`) se reclasifica como **privado**: ya no basta con estar conectado, el servicio debe
+ser confiable.
+
+```stata
+* Acceso mejorado (igual que el MPM): red pública, solar o generador -> electricity=1
+gen dep_infra_elec = (electricity==0) if electricity~=.
+
+* SOLO MPM+: si tiene electricidad pero reportó días sin luz (>30 min) el último mes -> privado
+replace dep_infra_elec = 1 if electricity==1 & q2_33_SinElect!=.
+la var dep_infra_elec "MPM+: Privado si no tiene electricidad o tuvo cortes el último mes"
+```
+:::
+
+::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Agua mejorada — se excluye el pozo público"}
+**Qué cambia.** En el MPM el **pozo público** cuenta como fuente mejorada en zona urbana. En el MPM+ el
+**pozo público nunca** cuenta como mejorado (sin importar la zona), y el **pozo privado** deja de
+contar como mejorado si el hogar **trata el agua** (la hierve, filtra o clora), señal de que no confía
+en su calidad.
+
+```stata
+* Recodificación de la fuente (2.25): en MPM+ el pozo público (4) pasa a "no mejorado" (10)
+recode q2_25_aguaTomar (1=1) (2=2) (3=3) (4=10) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), gen(water14)
+
+* Pozo privado (5) baja a "no mejorado" (10) si el hogar trata el agua
+replace water14 = 10 if inlist(q2_25_aguaTomar, 5) & q2_27_tratamientoAgua != "Ninguno"
+
+recode water14 (1/6 8=1 "Agua mejorada") (nonmissing=0 "No mejorada"), gen(imp_wat_rec)
+gen dep_infra_impw = (imp_wat_rec==0) if imp_wat_rec~=.
+la var dep_infra_impw "MPM+: Privado si no tiene agua mejorada (excluye pozo público)"
+```
+:::
+
+::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Saneamiento — sin cambios"}
+**Qué cambia.** Nada. El saneamiento mejorado se define **igual** que en el MPM (tecnología adecuada
+—W.C. o letrina— **y** uso exclusivo del hogar; ver la construcción completa en la Sesión 1). Se
+incluye aquí solo para dejar constancia de que este indicador **no** se endurece en el MPM+.
+
+```stata
+gen dep_infra_imps = (imp_san_rec==0) if imp_san_rec~=.
+la var dep_infra_imps "MPM+: Privado si el hogar no tiene acceso a saneamiento mejorado"
+```
+:::
+
+::: {.callout-note collapse="true" icon=false title="<i class='bi bi-alt'></i> Pobreza monetaria — de 3,00 a 8,30 USD"}
+**Qué cambia.** La línea monetaria sube de **3,00 USD** (ingreso bajo) a **8,30 USD** por persona y día
+en PPA 2021 (ingreso medio-alto), coherente con la clasificación de Guinea Ecuatorial como economía de
+ingreso medio-alto [@worldbank2025povertylines; @worldbank2025pea].
+
+```stata
+gen double welfare_ppp = pcexp_ppp
+gen dep_poor1 = welfare_ppp < 8.30 if welfare_ppp~=.
+label var dep_poor1 "Pobreza monetaria internacional. Línea: 8.30 USD - PPA 2021"
+```
+:::
+
+::: {.callout-important collapse="true" title="Del MPM+ al cálculo: el mismo mpitb"}
+Una vez `01_privaciones_MPMplus.do` deja construidas las seis privaciones (0/1), el cálculo del IPM es
+**idéntico** al de la Sesión 2: la misma receta de `mpitb set` y la misma estimación con `mpitb est`
+[@suppa2023mpitb]. Lo único que cambia es la base de entrada (`DataDeprivationsMPMplus.dta`). Como los
+umbrales del MPM+ son más exigentes, cabe esperar una **incidencia $H$ más alta** que en el MPM: más
+hogares cruzan al menos un umbral de privación.
+
+```stata
+* Idéntico a la Sesión 2, solo cambia el archivo de privaciones de entrada
+mpitb set, name(GNQ) ///
+    d1(e_com e_enr,          na(educ))  ///
+    d2(i_elec i_imps i_impw, na(infra)) ///
+    d3(poor1,                na(mon))
+
+mpitb est, name(GNQ) klist(33) weights(equal) ///
+    measures(all) indmeas(all) aux(hd) svy over(area prov cities)
+```
+:::
+
+#### Taller: diseño de un IPM adaptado a Guinea Ecuatorial
+
+El MPM y el MPM+ son dos puntos de un abanico de decisiones posibles. En este taller cada equipo
+diseña **su propia** medida, apoyándose en el marco de OPHI para el diseño de un IPM nacional. El
+énfasis está en la deliberación: cada decisión debe justificarse.
 
 #### Pasos para diseñar un IPM nacional (marco OPHI)
 
@@ -1453,9 +1662,10 @@ rigor técnico y legitimidad participativa, a la realidad del país.
   // ------------------------------------------------------------------
   var unlocks = {
     // Sesión 2 (tabset-1-3): ACTIVADA — sin candado (desbloqueada manualmente el 2026-09-01).
-    // Para volver a bloquearla, reañade su línea con la fecha deseada, p. ej.:
+    // Sesión 3 (tabset-1-4): ACTIVADA — sin candado (desbloqueada manualmente el 2026-09-10).
+    // Para volver a bloquear cualquiera de ellas, reañade su línea con la fecha deseada, p. ej.:
     //   "tabset-1-3": new Date("2026-09-04T23:00:00Z"),
-    "tabset-1-4": new Date("2026-09-11T23:00:00Z")  // Sesión 3 se desbloquea el 12 sep 2026 (00:00 WAT)
+    //   "tabset-1-4": new Date("2026-09-11T23:00:00Z")  // Sesión 3, 12 sep 2026 (00:00 WAT)
   };
 
   var now = new Date(); // instante actual de quien visita la página

@@ -231,19 +231,22 @@ completo el 9º grado:
 | 17 Diplomado No universitario | 6 — Post-secundaria no universitaria |
 | 16 FormUniv (no egresado), 18 Graduado Universitario, 19 Postgrado | 7 — Universidad (finalizada o no) |
 
+**Cómo se desarrolla — paso a paso:**
+
+1. **Fija los umbrales.** Edad de "adulto" (`$eduage = 15`) y nivel mínimo exigido (primaria completa).
+2. **Construye `educat7`.** Resume el mayor nivel alcanzado en 7 categorías a partir de las preguntas 3.04 y 3.05.
+3. **Marca a cada adulto que cumple.** `temp2 = 1` en cada persona de 15+ años con al menos primaria completa (`educat7 >= 3`).
+4. **Resume de personas a hogar.** Suma esas marcas por hogar (`bys hhid: egen ... = sum()`): número de adultos que alcanzan el nivel.
+5. **Decide la privación.** El hogar es privado (`dep_educ_com = 1`) solo si ese conteo es 0, es decir, si ningún adulto llegó a primaria completa.
+
+*Código (tal como está en `01_privaciones_MPM.do`):*
+
 ```stata
-* Umbral de edad para "adulto" a efectos de logro educativo
-global lbage  7    // Edad de inicio de primaria
-global eduage 15   // Edad mínima para considerar "adulto" en educación
+global lbage  7
+global eduage 15
 
-** PASO 1 — Nivel educativo alcanzado, 7 categorías (3.04 + 3.05 -> educat7)
-* Nivel educativo alcanzado, 7 categorías
 gen educat7 = .
-
-* Casos que nunca han estudiado
 replace educat7 = 1 if (inlist(q3_04_escuela, "No y tiene 20 años o menos de edad", "No y es mayor de 20 años") | q3_04_escuela == "")
-
-* Casos según último grado cursado
 replace educat7 = 1 if inlist(q3_05_grado, 0, 1)
 replace educat7 = 2 if inlist(q3_05_grado, 2, 3, 4, 5, 6)
 replace educat7 = 3 if inlist(q3_05_grado, 7)
@@ -251,7 +254,6 @@ replace educat7 = 4 if inlist(q3_05_grado, 8, 9, 10, 11, 12, 14)
 replace educat7 = 5 if inlist(q3_05_grado, 13, 15)
 replace educat7 = 6 if inlist(q3_05_grado, 17)
 replace educat7 = 7 if inlist(q3_05_grado, 16, 18, 19)
-
 label define educat7                          ///
     1 "Ninguno"                                ///
     2 "Primaria incompleta"                    ///
@@ -263,19 +265,10 @@ label define educat7                          ///
 label val educat7 educat7
 label var educat7 "Mayor nivel educación alcanzado (7 categorias)"
 
-** PASO 2 — Indicador de privación, variante MPM (educat7 -> dep_educ_com)
-* Individuo con nivel básico de educación (primaria completa o más)
 gen temp2 = 1 if q1_03_edad >= $eduage & q1_03_edad ~= . & educat7 >= 3 & educat7 ~= .
-
-* Cantidad de adultos con nivel apropiado por hogar
-* Nota: no hay missings en temp3: todo hogar tiene al menos 1 persona >= $eduage.
-*       Es decir, temp3==0 significa que nadie completó primaria, NO que falten adultos en el hogar.
 bys hhid: egen temp3 = sum(temp2)
-
-* El hogar está privado si NINGÚN adulto alcanza el nivel
 gen dep_educ_com = 0
 replace dep_educ_com = 1 if temp3 == 0
-
 la var dep_educ_com "MPM: Privado si el hogar NO tiene adultos $eduage+ con primaria completa"
 ```
 :::
@@ -294,39 +287,33 @@ escuela.
 | Sí | Matriculado |
 | No | No matriculado |
 
-```stata
-* Edades de corte usadas en los indicadores de educación
-global lbage 7    // Edad de inicio de primaria
-global ubage 14   // Se considera hasta 8vo grado (ESBA 2) como edad escolar
+**Cómo se desarrolla — paso a paso:**
 
-** PASO 1 — Asistencia escolar 2021/2022 (3.08 -> asistencia_escolar)
+1. **Fija el rango de edad escolar.** De `$lbage = 7` a `$ubage = 14` años.
+2. **Construye la asistencia.** `asistencia_escolar = 1` si el niño asistió en 2021/2022 (pregunta 3.08), 0 si no.
+3. **Delimita el universo y cuéntalo por hogar.** Marca a los niños de 7–14 y suma por hogar (`cant_edadescolar`), para distinguir el hogar *sin* niños del hogar *con* niños todos matriculados.
+4. **Marca a cada niño no matriculado.** En edad escolar y que no asiste; deja `missing` a quien está fuera del rango.
+5. **Resume por hogar.** Suma los no matriculados por hogar (`cant_no_matriculados`).
+6. **Decide la privación.** Privado si hay al menos uno (`cant_no_matriculados > 0`); y `0` si el hogar no tiene niños en edad escolar (el indicador no le aplica).
+
+*Código (tal como está en `01_privaciones_MPM.do`):*
+
+```stata
+global lbage 7
+global ubage 14
+
 gen asistencia_escolar = (q3_08_asistio == "Sí")
 label var asistencia_escolar "Asistió a institución educativa 2021/2022"
 
-** PASO 2 — Indicador de privación (asistencia_escolar -> dep_educ_enr)
-
-* Definiendo el universo primero: niños en "edad escolar" (entre $lbage y $ubage años)
 gen edad_escolar = (q1_03_edad >= $lbage & q1_03_edad <= $ubage)
 bys hhid: egen cant_edadescolar = sum(edad_escolar)
 
-* No matriculado: está en edad escolar pero no asiste
-* Nota: nos aseguramos de que si no está en edad escolar no se le considere
-*       privado ni no privado, sino missing.
 gen no_matriculado = (q1_03_edad >= $lbage & q1_03_edad <= $ubage & asistencia_escolar != 1)
 replace no_matriculado = . if q1_03_edad < $lbage | q1_03_edad > $ubage
-
-* Cantidad de niños no matriculados por hogar
 bys hhid: egen cant_no_matriculados = sum(no_matriculado)
 
-* El hogar está privado si tiene AL MENOS un niño/adolescente en edad escolar
-* que no está matriculado (por esto se calcula la suma, para detectar al menos uno).
 gen dep_educ_enr = 0
-
-* cant_no_matriculados ~= . nunca es missing por cómo se crea en el bysort
 replace dep_educ_enr = 1 if cant_no_matriculados > 0
-
-* Hogares sin niños en edad escolar (universo de la privación no está en todos
-* los hogares) no están privados
 replace dep_educ_enr = 0 if cant_edadescolar == 0
 
 drop edad_escolar no_matriculado cant_no_matriculados cant_edadescolar
@@ -355,12 +342,17 @@ El hogar está privado si carece del acceso a electricidad.
 | 9 = Leña | No mejorado |
 | 10 = Otro | No mejorado |
 
+**Cómo se desarrolla — paso a paso:**
+
+1. **Construye el acceso.** Recodifica la fuente de alumbrado (2.31): las opciones 1 a 4 (red pública, placa solar, generador) cuentan como electricidad (`electricity = 1`); el resto, no (`electricity = 0`).
+2. **Decide la privación.** El hogar es privado (`dep_infra_elec = 1`) si no tiene acceso a electricidad (`electricity == 0`). Como el alumbrado se pregunta una sola vez por vivienda, el dato ya está a nivel de hogar y no hace falta agregar.
+
+*Código (tal como está en `01_privaciones_MPM.do`):*
+
 ```stata
-** PASO 1 — Acceso a electricidad mejorado (2.31 -> electricity)
 recode q2_31_energiaLuz (1/4=1 "Improved electricity") (nonmissing=0 "Not improved electricity"), gen(electricity)
 label var electricity "Hogar con acceso a electricidad (mejorado). Recodificado de 2.31 (q2_31_energiaLuz)"
 
-** PASO 2 — Indicador de privación, variante MPM (electricity -> dep_infra_elec)
 gen dep_infra_elec = (electricity == 0) if electricity ~= .
 la var dep_infra_elec "MPM: Privado si el hogar no tiene acceso a electricidad"
 ```
@@ -426,37 +418,41 @@ Existen en el cuestionario pero **no** se usan para clasificar la Letrina como m
 | 3 = Compartido con varios hogares | Fuerza a no mejorado |
 | 4 = Otro | Fuerza a no mejorado |
 
+**Cómo se desarrolla — paso a paso:**
+
+1. **Examen de uso (2.29).** Construye `toiletshared`: 1 si el baño se comparte, 0 si es exclusivo del hogar.
+2. **Examen de tecnología (2.28 + 2.28B/2.28C).** Clasifica el tipo de baño en 14 categorías (`toilet14`): el W.C. según cómo descarga, la letrina siempre entra, y hoyo/público/sin baño/otro quedan aparte.
+3. **Colapsa a 6 categorías** (`toilet6`) siguiendo el estándar GMD.
+4. **Combina los dos exámenes en `imp_san_rec`.** Mejorado = tecnología adecuada (`toilet6` 1–4); pero si el baño se comparte (`toiletshared == 1`), se fuerza a **no mejorado** aunque la tecnología sea buena.
+5. **Decide la privación.** Privado (`dep_infra_imps = 1`) si `imp_san_rec == 0`.
+
+*Código (tal como está en `01_privaciones_MPM.do`):*
+
 ```stata
-** PASO 1 — Exclusividad del baño (2.29 -> toiletshared)
 recode q2_29_aseoExclusivo (2/4 = 1) (nonmissing = 0), gen(toiletshared)
 label define toilet_exclusivo 1 "Toilet shared" 0 "Toilet exclusive"
 label val toiletshared toilet_exclusivo
 label var toiletshared "Baño compartido (1) vs exclusivo (0), recodificado de 2.29"
 
-** PASO 2 — Tipo de baño en 14 categorías (2.28 + 2.28B/2.28C -> toilet14)
 gen toilet14 = .
-replace toilet14 = 1  if q2_28_aseo == 1 & q2_28B_fuente == 1                                 // WC conectado a agua
-replace toilet14 = 2  if q2_28_aseo == 1 & q2_28B_fuente == 2 & inlist(q2_28C_conectado, 1, 2) // WC sin agua -> alcantarillado o río/mar
-replace toilet14 = 3  if q2_28_aseo == 1 & q2_28B_fuente == 2 & q2_28C_conectado == 3          // WC sin agua -> pozo ciego
-replace toilet14 = 5  if q2_28_aseo == 2   // Letrina (cualquiera, no se mira 2.28D/2.28E)
-replace toilet14 = 10 if q2_28_aseo == 3   // Hoyo áspero
-replace toilet14 = 8  if q2_28_aseo == 4   // Baño público
-replace toilet14 = 13 if q2_28_aseo == 5   // Sin baño
-replace toilet14 = 14 if q2_28_aseo == 6   // Otro
+replace toilet14 = 1  if q2_28_aseo == 1 & q2_28B_fuente == 1
+replace toilet14 = 2  if q2_28_aseo == 1 & q2_28B_fuente == 2 & inlist(q2_28C_conectado, 1, 2)
+replace toilet14 = 3  if q2_28_aseo == 1 & q2_28B_fuente == 2 & q2_28C_conectado == 3
+replace toilet14 = 5  if q2_28_aseo == 2
+replace toilet14 = 10 if q2_28_aseo == 3
+replace toilet14 = 8  if q2_28_aseo == 4
+replace toilet14 = 13 if q2_28_aseo == 5
+replace toilet14 = 14 if q2_28_aseo == 6
 label var toilet14 "Tipo de baño, 14 categorías (recodificado de 2.28/2.28B/2.28C)"
 
-** PASO 3 — Colapso a 6 categorías (toilet14 -> toilet6)
 recode toilet14 (1/3=1) (5=2) (7=3) (6=4) (13=5) (else=9), gen(toilet6)
 replace toilet6 = . if toilet14 == .
 label var toilet6 "Tipo de baño, 6 categorías (recodificado de toilet14, siguiendo GMD)"
 
-** PASO 4 — Saneamiento mejorado (toilet6 + toiletshared -> imp_san_rec)
 recode toilet6 (1/4=1 "Improved sanitation") (nonmissing=0 "Not improved sanitation"), gen(imp_san_rec)
-replace imp_san_rec = 0 if toiletshared == 1   // aunque la tecnología sea buena, si se comparte -> No mejorado
+replace imp_san_rec = 0 if toiletshared == 1
 label var imp_san_rec "Hogar con acceso a saneamiento mejorado (tecnología adecuada Y uso exclusivo)"
 
-** PASO 5 — Indicador de privación del MPM (imp_san_rec -> dep_infra_imps)
-* Saneamiento: privado si no tiene acceso a saneamiento mejorado (imp_san_rec, según GMD)
 gen dep_infra_imps = (imp_san_rec == 0) if imp_san_rec ~= .
 la var dep_infra_imps "MPM: Privado si el hogar no tiene acceso a saneamiento mejorado"
 ```
@@ -503,8 +499,17 @@ El hogar está privado si carece del acceso a agua mejorada.
 `rural = 1` si es zona rural, `0` si es urbano. Solo afecta al pozo público (`2.25 == 4`): en zona
 rural **siempre** es no mejorado, sin importar el tratamiento del agua.
 
+**Cómo se desarrolla — paso a paso:**
+
+1. **Fuente en 14 categorías (2.25).** Recodifica la fuente principal a la escala estándar GMD (`water14`).
+2. **Excepción rural del pozo público.** En zona rural (`rural == 1`), el pozo público (`water14 == 4`) baja a "no protegido" (10).
+3. **Excepción por tratamiento.** Si el hogar trata el agua del pozo (público o privado, 2.27 distinto de "Ninguno"), la fuente baja a no mejorada — se lee como señal de que el hogar no la considera potable.
+4. **Agua mejorada (`imp_wat_rec`).** Categorías 1–6 y 8 cuentan como mejoradas; el resto, no.
+5. **Decide la privación.** Privado (`dep_infra_impw = 1`) si `imp_wat_rec == 0`.
+
+*Código (tal como está en `01_privaciones_MPM.do`):*
+
 ```stata
-** PASO 1 — Fuente de agua en 14 categorías (2.25 -> water14)
 recode q2_25_aguaTomar (1=1) (2=2) (3=3) (4=4) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), gen(water14)
 label var water14 "Fuente de agua, 14 categorías (recodificado de 2.25)"
 label define water14 1 "Agua entubada dentro de la vivienda"  ///
@@ -523,23 +528,15 @@ label define water14 1 "Agua entubada dentro de la vivienda"  ///
                       14 "Otro", replace
 label val water14 water14
 
-** PASO 2 — Excepción rural para pozo público (rural + water14==4 -> degradar)
-* Agua de pozo público se considera mejorada en zona urbana pero no mejorada en zona rural
 replace water14 = 10 if water14 == 4 & rural == 1
-
-** PASO 3 — Excepción por tratamiento del agua (pozo público o privado -> degradar)
-* Si el hogar SÍ trata el agua del pozo (la hierve, filtra, le pone cloro, etc.),
-* se reclasifica como no mejorada, sin importar zona urbana o rural
 replace water14 = 10 if inlist(q2_25_aguaTomar, 4, 5) & q2_27_tratamientoAgua != "Ninguno"
 
-** PASO 4 — Agua mejorada (water14 -> imp_wat_rec)
 recode water14 (1/6 8=1 "Access to improve water source") (nonmissing=0 "No access to improve water source"), gen(imp_wat_rec)
 label var imp_wat_rec "Hogar con acceso a fuente de agua mejorada. Recodificada desde water14 siguiendo GMD"
 
 clonevar drinking_water = imp_wat_rec
 label var drinking_water "Hogar con acceso a fuente de agua mejorada. Igual a imp_wat_rec"
 
-** PASO 5 — Indicador de privación del MPM (imp_wat_rec -> dep_infra_impw)
 gen dep_infra_impw = (imp_wat_rec == 0) if imp_wat_rec ~= .
 la var dep_infra_impw "MPM: Privado si el hogar no tiene acceso a agua potable mejorada"
 ```
@@ -551,6 +548,13 @@ persona y día en PPA 2021**, la línea de pobreza del Banco Mundial para paíse
 actualizada en junio de 2025 [@worldbank2025povertylines]. La Sesión 3 usa una línea más alta (8,30 USD,
 ingreso medio-alto) para la variante MPM+.
 
+**Cómo se desarrolla — paso a paso:**
+
+1. **Construye el bienestar per cápita diario en PPA 2021.** Divide el gasto (`pcexp`) por el IPC, por el factor PPA y por 365 días → `welfare_ppp`.
+2. **Decide la privación.** Privado (`dep_poor1 = 1`) si `welfare_ppp < 3` (línea de 3,00 USD del MPM). Es un solo indicador con peso 1/3, así que un hogar bajo la línea alcanza el corte $k$ solo con esta carencia.
+
+*Código (tal como está en `01_privaciones_MPM.do`):*
+
 ```stata
 gen ipc = 1.070633
 gen ppp = 287.6907
@@ -559,8 +563,6 @@ gen welfare_ppp = pcexp / ipc / ppp / 365
 gen dep_poor1 = welfare_ppp < 3 if welfare_ppp ~= .
 label var dep_poor1 "Pobreza monetaria internacional. Línea: 3.00 USD - PPA 2021"
 
-* `apoverty` también permite obtener indicadores de pobreza directamente
-* a partir del agregado de bienestar (pcexp_ppp) y la línea de referencia (zref)
 apoverty pcexp_ppp [aw = weight_hh], varpl(zref) gen(monetary)
 ```
 :::
@@ -705,29 +707,35 @@ $M_0 = H \times A = 0.36$.
 #### De los indicadores a las privaciones
 
 ::: {.callout-note collapse="true" title="Generar las variables de privación (01_privaciones_MPM.do)"}
-Recapitulando los 6 indicadores del MPM: educación (`dep_educ_com`, `dep_educ_enr`) se construyó
-paso a paso en la Sesión 1; aquí se completa con infraestructura y monetaria.
+El cálculo del IPM parte de las **seis privaciones binarias** (0 = no privado, 1 = privado), una por
+indicador. Educación (`dep_educ_com`, `dep_educ_enr`) se construyó paso a paso en la Sesión 1; aquí se
+completa infraestructura y monetaria y se reúnen las seis.
+
+**Cómo se desarrolla — paso a paso:**
+
+1. **Recupera las variables base** que la limpieza y la Sesión 1 dejaron listas: `electricity` (acceso a
+   luz, recodificada de 2.31), `imp_san_rec` (saneamiento mejorado) e `imp_wat_rec` (agua mejorada).
+2. **Genera la privación de cada indicador de infraestructura**: privado si la variable de acceso vale 0.
+3. **Construye la privación monetaria**: el bienestar per cápita diario (`welfare_ppp`) por debajo de la
+   línea de 3,00 USD (PPA 2021) de la variante MPM base.
+4. **Reúne las seis columnas** `dep_*`: una fila por hogar, una columna por indicador.
+
+*Código (tal como está en `01_privaciones_MPM.do`):*
 
 ```stata
-* Educación (ver construcción completa en la Sesión 1)
-*   dep_educ_com -> ningún adulto (15+) completó primaria
-*   dep_educ_enr -> al menos un niño (7-14) en edad escolar no matriculado
+recode q2_31_energiaLuz (1/4=1) (nonmissing=0), gen(electricity)
 
-* Privación en electricidad
 gen dep_infra_elec = (electricity==0) if electricity~=.
-
-* Privación en saneamiento mejorado
 gen dep_infra_imps = (imp_san_rec==0) if imp_san_rec~=.
-
-* Privación en agua potable mejorada
 gen dep_infra_impw = (imp_wat_rec==0) if imp_wat_rec~=.
 
-* Privación monetaria (línea 3,00 USD PPA 2021 para la variante MPM base)
 gen double welfare_ppp = pcexp_ppp
 gen dep_poor1 = welfare_ppp < 3 if welfare_ppp~=.
 ```
-El resultado es una fila por hogar con una columna de privación por cada uno de los 6 indicadores:
-la **matriz de privaciones** $g_{ij}$.
+
+(La construcción completa de `imp_san_rec` e `imp_wat_rec` —y de las dos privaciones de educación— está
+en la Sesión 1.) El resultado es la **matriz de privaciones** $g_{ij}$: una fila por hogar con una
+columna de privación por cada uno de los 6 indicadores.
 :::
 
 #### Cálculo manual paso a paso (sin `mpitb`)
@@ -798,10 +806,9 @@ svy: mean poor_multi c_censored
 
 Se usa `svy: mean` (y no `summarize`) para que $H$ y $M_0$ apliquen el ponderador y los estratos, y
 lleven el **error estándar correcto**. Para desagregar por subgrupo se usa `subpop()`, **no** `if`, y
-así la varianza del diseño complejo se calcula bien:
+así la varianza del diseño complejo se calcula bien. Por ejemplo, solo para el área rural:
 
 ```stata
-* Ejemplo: solo el área rural
 svy, subpop(if area == "Rural"): mean poor_multi c_censored
 ```
 El script recorre con un bucle todos los subgrupos de `area` y `prov` de esta forma.
@@ -1112,12 +1119,14 @@ tab poor_multi [aw = hhweight]
 Más allá de `set` y `est`, estas son las utilidades que más se usan en la práctica.
 
 ::: {.callout-tip collapse="true" title="Trabajar con los resultados en memoria (frames)"}
-`mpitb est` deja los resultados en un *frame* (`lfr`) **sin tocar** tu base original. Se navega así:
+`mpitb est` deja los resultados en un *frame* (`lfr`) **sin tocar** tu base original. Se navega con
+`cwf myresults` (cambia al frame de resultados), `cwf default` (vuelve a la base original) y
+`frames dir` (lista los frames en memoria):
 
 ```stata
-cwf myresults      // cambia al frame de resultados
-cwf default        // vuelve a la base original
-frames dir         // lista los frames en memoria
+cwf myresults
+cwf default
+frames dir
 ```
 Los *frames* (Stata 16+) permiten tener la base y los resultados abiertos a la vez.
 :::
@@ -1130,9 +1139,10 @@ Los *frames* (Stata 16+) permiten tener la base y los resultados abiertos a la v
 
 ```stata
 use "micro.dta", clear
-gen poor_multi = (c_equal >= 1/3)   // mismo k = 33 %
+gen poor_multi = (c_equal >= 1/3)
 tab poor_multi [aw = hhweight]
 ```
+(El corte `1/3` es el mismo $k = 33\,\%$ del índice.)
 :::
 
 ::: {.callout-tip collapse="true" title="Análisis de sensibilidad al umbral k"}
@@ -1157,29 +1167,30 @@ futuro del IPM de Guinea Ecuatorial.
 :::
 
 ::: {.callout-note collapse="true" title="Hoja de comandos de la Sesión 2"}
-Toda la sesión en una pantalla, lista para adaptar:
+Toda la sesión en una pantalla, lista para adaptar. Sigue cinco pasos:
+
+0. **Instalar** los paquetes (`moremata`, `mpitb`).
+1. **Definir la estructura** del índice con `mpitb set` (3 dimensiones, 6 indicadores).
+2. **Declarar el diseño muestral**: ponderador a nivel de personas y estrato, con `svyset`.
+3. **Estimar** con `mpitb est` (medidas agregadas, por indicador y por subgrupo) y guardar resultados y microdato.
+4. **Leer** los resultados desde el *frame* con `list` y `tabdisp`.
 
 ```stata
-* 0 · Instalar
 ssc install moremata, replace
 ssc install mpitb, replace
 
-* 1 · Definir la estructura
 mpitb set, name(GNQ) d1(e_com e_enr, na(educ)) ///
     d2(i_elec i_imps i_impw, na(infra)) d3(poor1, na(mon))
 
-* 2 · Diseño muestral
 gen hhweight = weight_hh*hhsize
 egen strata = group(cod_provincia cod_CV_CP)
 svyset hhid [iw = hhweight], clear strata(strata)
 
-* 3 · Estimar (agregadas + por indicador + auxiliares, con descomposiciones)
 mpitb est, name(GNQ) klist(33) weights(equal) ///
     measures(all) indmeas(all) aux(hd) svy over(area prov cities) ///
     lsave("resultados.dta", replace) lfr(myresults, replace) ///
     dtasave("microdatos.dta", replace)
 
-* 4 · Leer
 cwf myresults
 li measure b se if inlist(measure,"M0","H","A") & loa=="nat" & k==33, noob
 tabdisp indicator measure if inlist(measure,"hdk","pctb") & loa=="nat" & k==33, cell(b)
@@ -1277,11 +1288,12 @@ No hace falta reescribir nada: el do-file maestro elige la variante con un solo 
 en `MPMplus`, el maestro llama a `01_privaciones_MPMplus.do` en lugar de `01_privaciones_MPM.do`, y el
 resto del pipeline (cálculo con `mpitb` y figuras) sigue igual.
 
-```stata
-* En 00_maestro.do, línea de parámetros:
-global MPM "MPMplus"        // "MPM" (Sesión 1) o "MPMplus" (esta sesión)
+En la línea de parámetros de `00_maestro.do` se fija el *global* `MPM` (`"MPM"` para la Sesión 1 o
+`"MPMplus"` para esta), y según su valor el maestro incluye uno u otro do-file de privaciones:
 
-* El maestro decide qué do-file de privaciones incluir:
+```stata
+global MPM "MPMplus"
+
 if ("$MPM" == "MPM") {
     include "$gdDo/01_privaciones_MPM.do"
 }
@@ -1301,12 +1313,14 @@ la Sesión 1 y el código que lo implementa.
 
 ::: {.callout-tip collapse="true" title="Parámetros de edad de la variante MPM+"}
 El MPM+ sube la edad de "adulto" de 15 a **20 años** (edad a la que, empezando primaria a los 7, se
-debería haber completado la secundaria básica). Las edades de niñez escolar (7–14) no cambian.
+debería haber completado la secundaria básica). Las edades de niñez escolar —inicio de primaria
+`$lbage = 7` y fin de la edad escolar `$ubage = 14`— **no cambian** respecto al MPM; lo único que sube
+es `$eduage`, de 15 a 20.
 
 ```stata
-global lbage  7    // Edad de inicio de primaria (igual que el MPM)
-global ubage  14   // Hasta 8º grado (ESBA 2) como edad escolar (igual que el MPM)
-global eduage 20   // ESBA / secundaria básica (en el MPM era 15)
+global lbage  7
+global ubage  14
+global eduage 20
 ```
 :::
 
@@ -1318,12 +1332,19 @@ está privado si **ningún adulto de 20+ años completó la secundaria básica**
 alguien de 18–19 que ya terminó ESBA 4. Para no castigarlo, si el hogar **no tiene ningún adulto de
 20+** pero **sí exactamente una persona de 18–19 con ESBA 4 o más**, se considera **no privado**.
 
-```stata
-* temp2 = 1 si la persona es adulta (20+) y alcanzó ESBA 4 / secundaria básica
-gen temp2 = 1 if q1_03_edad>=$eduage & q1_03_edad~=. & q3_05_grado>=11 & q3_05_grado~=.
-bys hhid: egen temp3 = sum(temp2)   // nº de esos adultos por hogar
+**Cómo se desarrolla — paso a paso:**
 
-* Excepción: hogar sin adultos 20+ pero con una persona 18-19 ya con ESBA 4+
+1. **Marca a cada adulto que cumple.** `temp2 = 1` en cada persona de 20+ años (`$eduage`) con ESBA 4 o más (`q3_05_grado >= 11`).
+2. **Resume por hogar.** Suma esas marcas (`bys hhid`): número de adultos que alcanzan el nivel.
+3. **Aplica la excepción de hogares jóvenes.** Si el hogar no tiene nadie de 20+ (`adults_count == 0`) pero sí exactamente una persona de 18–19 con ESBA 4+ (`menores_ESBA_count == 1`), fuerza el conteo a 1.
+4. **Decide la privación.** Privado (`dep_educ_com = 1`) solo si el conteo es 0, es decir, si ningún adulto llegó a secundaria básica.
+
+*Código (tal como está en `01_privaciones_MPMplus.do`):*
+
+```stata
+gen temp2 = 1 if q1_03_edad>=$eduage & q1_03_edad~=. & q3_05_grado>=11 & q3_05_grado~=.
+bys hhid: egen temp3 = sum(temp2)
+
 gen menores_ESBA = (q1_03_edad>=18 & q3_05_grado>=11 & q3_05_grado~=.)
 bys hhid: egen menores_ESBA_count = sum(menores_ESBA)
 gen check_adults = (q1_03_edad>=$eduage)
@@ -1331,7 +1352,7 @@ bys hhid: egen adults_count = sum(check_adults)
 replace temp3 = 1 if menores_ESBA_count==1 & adults_count==0
 
 gen dep_educ_com = 0
-replace dep_educ_com = 1 if temp3==0   // privado si ningún adulto llegó a ESBA 4
+replace dep_educ_com = 1 if temp3==0
 la var dep_educ_com "MPM+: Privado si el hogar NO tiene adultos 20+ con secundaria completa"
 ```
 :::
@@ -1342,23 +1363,40 @@ también cuenta si **está matriculado pero con un rezago de más de un año** (
 respecto al grado esperado para su edad). El rezago se calcula comparando el grado que cursa
 (`q3_11_gradoAsistido`) con el grado que le correspondería por edad.
 
+**Cómo se desarrolla — paso a paso:**
+
+1. **Calcula el rezago.** Toma la edad al iniciar el año (`edad_n = edad − 1`) y réstale la edad teórica del grado que cursa (`q3_11_gradoAsistido`), un peldaño por grado. Los adelantados (rezago negativo) se llevan a 0.
+2. **Marca el rezago relevante.** `rezago_escolar = 1` si el atraso es de más de un año (2 años o más).
+3. **Define cuándo falla un niño.** No matriculado (`asistencia_escolar == 0`) **o** matriculado con rezago; suma por hogar.
+4. **Decide la privación.** Privado si hay al menos un niño que falla; `0` si el hogar no tiene niños en edad escolar (`educ_enr_size == 0`).
+
+*Código (tal como está en `01_privaciones_MPMplus.do`):*
+
 ```stata
-* Años de atraso = edad - 1 menos la edad teórica de inicio de cada grado
 gen edad_n = q1_03_edad - 1
 gen rezago = (edad_n - 6)  if q3_11_gradoAsistido == "Pre-escolar"
 replace rezago = (edad_n - 7)  if q3_11_gradoAsistido == "Grado 1 (primaria ciclo 1)"
-* ... (un peldaño por grado, hasta Bachillerato) ...
+replace rezago = (edad_n - 8)  if q3_11_gradoAsistido == "Grado 2 (primaria ciclo 1)"
+replace rezago = (edad_n - 9)  if q3_11_gradoAsistido == "Grado 3 (primaria ciclo 1)"
+replace rezago = (edad_n - 10) if q3_11_gradoAsistido == "Grado 4 (primaria ciclo 2)"
+replace rezago = (edad_n - 11) if q3_11_gradoAsistido == "Grado 5 (primaria ciclo 2)"
+replace rezago = (edad_n - 12) if q3_11_gradoAsistido == "Grado 6 (primaria ciclo 2)"
+replace rezago = (edad_n - 13) if q3_11_gradoAsistido == "ESBA 1 (Educacion Secundaria Basica)"
+replace rezago = (edad_n - 14) if q3_11_gradoAsistido == "ESBA 2 (Educacion Secundaria Basica)"
+replace rezago = (edad_n - 15) if q3_11_gradoAsistido == "ESBA 3 (Educacion Secundaria Basica)"
+replace rezago = (edad_n - 16) if q3_11_gradoAsistido == "ESBA 4 (Educacion Secundaria Basica)"
+replace rezago = (edad_n - 17) if q3_11_gradoAsistido == "Bach 1 (Bachillerato)"
+replace rezago = (edad_n - 18) if q3_11_gradoAsistido == "Bach 2 (Bachillerato)"
 replace rezago = 0 if rezago < 0
-gen rezago_escolar = (rezago>1)          // atraso de más de un año
+gen rezago_escolar = (rezago>1)
 
-* Privado si NO está matriculado, O si está matriculado con rezago
 gen temp2 = 1 if q1_03_edad>=$lbage & q1_03_edad<=$ubage & asistencia_escolar==0
 replace temp2 = 1 if q1_03_edad>=$lbage & q1_03_edad<=$ubage & asistencia_escolar==1 & rezago_escolar==1
 bys hhid: egen temp3 = sum(temp2)
 
 gen dep_educ_enr = 0
 replace dep_educ_enr = 1 if temp3>0 & temp3~=.
-replace dep_educ_enr = 0 if educ_enr_size==0   // hogar sin niños en edad escolar: no privado
+replace dep_educ_enr = 0 if educ_enr_size==0
 la var dep_educ_enr "MPM+: Privado si hay un niño en edad escolar no matriculado o con rezago"
 ```
 :::
@@ -1369,11 +1407,18 @@ electricidad, si reportó **algún corte de más de 30 minutos** en el último m
 `q2_33_SinElect`) se reclasifica como **privado**: ya no basta con estar conectado, el servicio debe
 ser confiable.
 
-```stata
-* Acceso mejorado (igual que el MPM): red pública, solar o generador -> electricity=1
-gen dep_infra_elec = (electricity==0) if electricity~=.
+**Cómo se desarrolla — paso a paso:**
 
-* SOLO MPM+: si tiene electricidad pero reportó días sin luz (>30 min) el último mes -> privado
+1. **Construye el acceso.** Recodifica la fuente de alumbrado (2.31): las opciones 1 a 4 (red pública, placa solar, generador) cuentan como electricidad (`electricity = 1`); el resto, no. *(Igual que el MPM.)*
+2. **Privación base.** El hogar es privado si no tiene acceso (`electricity == 0`).
+3. **Criterio de servicio del MPM+.** Aunque tenga electricidad, si reportó algún corte de más de 30 minutos en el último mes (`q2_33_SinElect` tiene valor) se reclasifica como **privado**. En esta ronda `q2_33_SinElect` solo se registra cuando hubo cortes, por eso basta con comprobar que no sea *missing*.
+
+*Código (tal como está en `01_privaciones_MPMplus.do`):*
+
+```stata
+recode q2_31_energiaLuz (1/4=1) (nonmissing=0), gen(electricity)
+
+gen dep_infra_elec = (electricity==0) if electricity~=.
 replace dep_infra_elec = 1 if electricity==1 & q2_33_SinElect!=.
 la var dep_infra_elec "MPM+: Privado si no tiene electricidad o tuvo cortes el último mes"
 ```
@@ -1385,11 +1430,17 @@ la var dep_infra_elec "MPM+: Privado si no tiene electricidad o tuvo cortes el �
 contar como mejorado si el hogar **trata el agua** (la hierve, filtra o clora), señal de que no confía
 en su calidad.
 
-```stata
-* Recodificación de la fuente (2.25): en MPM+ el pozo público (4) pasa a "no mejorado" (10)
-recode q2_25_aguaTomar (1=1) (2=2) (3=3) (4=10) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), gen(water14)
+**Cómo se desarrolla — paso a paso:**
 
-* Pozo privado (5) baja a "no mejorado" (10) si el hogar trata el agua
+1. **Fuente en 14 categorías, con la regla del MPM+.** En el `recode` de la fuente (2.25), el pozo público (código 4) se manda directamente a "no protegido" (10): **nunca** cuenta como mejorado, sin mirar la zona.
+2. **Excepción del pozo privado.** El pozo privado (5) baja a no mejorado (10) si el hogar trata el agua (2.27 distinto de "Ninguno").
+3. **Agua mejorada (`imp_wat_rec`).** Categorías 1–6 y 8 cuentan como mejoradas; el resto, no.
+4. **Decide la privación.** Privado (`dep_infra_impw = 1`) si `imp_wat_rec == 0`.
+
+*Código (tal como está en `01_privaciones_MPMplus.do`):*
+
+```stata
+recode q2_25_aguaTomar (1=1) (2=2) (3=3) (4=10) (5=5) (6=13) (7=9) (8=12) (9=7) (10=14) (11=14) (nonmissing=0), gen(water14)
 replace water14 = 10 if inlist(q2_25_aguaTomar, 5) & q2_27_tratamientoAgua != "Ninguno"
 
 recode water14 (1/6 8=1 "Agua mejorada") (nonmissing=0 "No mejorada"), gen(imp_wat_rec)
@@ -1403,6 +1454,13 @@ la var dep_infra_impw "MPM+: Privado si no tiene agua mejorada (excluye pozo pú
 —W.C. o letrina— **y** uso exclusivo del hogar; ver la construcción completa en la Sesión 1). Se
 incluye aquí solo para dejar constancia de que este indicador **no** se endurece en el MPM+.
 
+**Cómo se desarrolla — paso a paso:**
+
+1. **Reutiliza `imp_san_rec`** (saneamiento mejorado = tecnología adecuada Y uso exclusivo), construida igual que en la Sesión 1.
+2. **Decide la privación.** Privado (`dep_infra_imps = 1`) si `imp_san_rec == 0`.
+
+*Código (tal como está en `01_privaciones_MPMplus.do`):*
+
 ```stata
 gen dep_infra_imps = (imp_san_rec==0) if imp_san_rec~=.
 la var dep_infra_imps "MPM+: Privado si el hogar no tiene acceso a saneamiento mejorado"
@@ -1413,6 +1471,14 @@ la var dep_infra_imps "MPM+: Privado si el hogar no tiene acceso a saneamiento m
 **Qué cambia.** La línea monetaria sube de **3,00 USD** (ingreso bajo) a **8,30 USD** por persona y día
 en PPA 2021 (ingreso medio-alto), coherente con la clasificación de Guinea Ecuatorial como economía de
 ingreso medio-alto [@worldbank2025povertylines; @worldbank2025pea].
+
+**Cómo se desarrolla — paso a paso:**
+
+1. **Toma el bienestar per cápita diario** ya calculado en PPA 2021 (`welfare_ppp = pcexp_ppp`).
+2. **Sube la línea.** En el MPM+ el umbral es 8,30 USD (ingreso medio-alto) en vez de 3,00 USD.
+3. **Decide la privación.** Privado (`dep_poor1 = 1`) si `welfare_ppp < 8.30`. Sigue siendo un solo indicador con peso 1/3.
+
+*Código (tal como está en `01_privaciones_MPMplus.do`):*
 
 ```stata
 gen double welfare_ppp = pcexp_ppp
@@ -1428,8 +1494,9 @@ Una vez `01_privaciones_MPMplus.do` deja construidas las seis privaciones (0/1),
 umbrales del MPM+ son más exigentes, cabe esperar una **incidencia $H$ más alta** que en el MPM: más
 hogares cruzan al menos un umbral de privación.
 
+Es idéntico a la Sesión 2; lo único que cambia es el archivo de privaciones de entrada:
+
 ```stata
-* Idéntico a la Sesión 2, solo cambia el archivo de privaciones de entrada
 mpitb set, name(GNQ) ///
     d1(e_com e_enr,          na(educ))  ///
     d2(i_elec i_imps i_impw, na(infra)) ///
@@ -1571,8 +1638,9 @@ El pipeline de código refactorizado traduce la propuesta del taller en un IPM r
   boxplot, contribuciones al IPM, coeficientes de las regresiones).
 
 ::: {.callout-note collapse="true" title="Plantilla de código para adaptar en el taller"}
+Reemplace los indicadores y dimensiones (entre `<…>`) por los de su propuesta:
+
 ```stata
-* Reemplace indicadores y dimensiones según su propuesta
 mpitb set, name(EQUIPO) ///
     d1(<indicadores dimensión 1>, na(<nombre1>)) ///
     d2(<indicadores dimensión 2>, na(<nombre2>)) ///

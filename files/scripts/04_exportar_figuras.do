@@ -47,18 +47,33 @@
      Avísame si quieres conservar este gráfico y decidimos cómo.
 
  INPUTS ESPERADOS
-   - "${gdData}/${MPM}_results.dta" y "${MPM}_results_microdata.dta"
-     generados por 03_mpitb.do.
-   - "${gdData}/Data Clean $MPM/DataDeprivations${MPM}.dta" generado
-     por 02_privaciones.do.
-   - Globals definidos en 00_maestro.do: $MPM, $language, $gdData,
+   - "${gdStata}/${MPM}_results.dta" generado por
+     03_calculo_mpm_mpitb.do. Este archivo tiene que venir del camino
+     `mpitb`: las secciones 2 y 3 necesitan `subg` NUMÉRICO, la
+     columna `subg_name`, el nivel de análisis "cities" y las medidas
+     por indicador "hd". El camino manual (03_calculo_mpm.do) guarda
+     un archivo reducido que NO sirve aquí (se detiene con "type
+     mismatch", r(109), en la sección 2). Por eso 00_maestro.do solo
+     llama a este script cuando $methodology == "mpitb".
+   - "${gdStata}/Data Clean $MPM/DataDeprivations${MPM}.dta" generado
+     por 01_privaciones_${MPM}.do.
+   - Globals definidos en 00_maestro.do: $MPM, $language, $gdStata,
      $gdExcel.
 
  OUTPUTS GENERADOS
-   - "${gdExcel}/$MPM/${MPM}_QNG.xlsx" con las 4 hojas listadas arriba.
+   - "${gdExcel}/$MPM/$language/${MPM}_QNG.xlsx" con las 4 hojas
+     listadas arriba. La carpeta la crea 00_maestro.do (paso 4).
 ==================================================================*/
 
-clear all
+* OJO: aquí NO va `clear all`.
+*   00_maestro.do llama a este archivo con `include`, que comparte la
+*   misma sesión de Stata. Y `clear all` incluye un `macro drop _all`,
+*   es decir, borra TODOS los globals: $gdExcel, $gdStata, $MPM,
+*   $language... Sin ellos, $excel_export queda en "///_QNG.xlsx" y el
+*   primer `use` busca "/Data Clean /DataDeprivations.dta", que no
+*   existe: nada llega al Excel.
+*   Si en algún momento hace falta vaciar la memoria, usar `clear`
+*   (borra los datos pero conserva los globals), nunca `clear all`.
 
 
 /*==================================================================

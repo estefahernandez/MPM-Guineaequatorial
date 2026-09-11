@@ -29,6 +29,35 @@
    Preferimos el código más sencillo y explícito, aunque sea más
    largo, antes que el código corto y elegante que nadie entiende.
 
+ MAPA DEL ARCHIVO (para ubicarse sin leerlo entero)
+   PARTE 1 - Dejar la base como mpitb la necesita ....... PASOS  1-8
+       1 abrir la base          5 ponderador de personas
+       2 quedarse con lo justo  6 estrato
+       3 apodos de indicadores  7 svyset (diseño muestral)
+       4 una fila por hogar     8 apodos de desagregación
+   PARTE 2 - La receta y el cálculo ..................... PASOS  9-11
+       9 mpitb set (escribir la receta)
+      10 mpitb show (revisarla)
+      11 mpitb est  <- AQUÍ se calcula todo; es el paso lento
+   PARTE 3 - Leer los resultados ........................ PASO     12
+   PARTE 4 - Dejar los productos listos para el 04 ...... PASOS 13-16
+      13 diccionario de nombres de subgrupos
+      14 pegar esos nombres y guardar la tabla final
+      15 marcar poor_multi en el microdato
+      16 chequeo final: M0 = H x A
+   PASO EXTRA (opcional, apagado por defecto) ... 5 ejercicios del
+       artículo: varios k, otros pesos, quitar un indicador,
+       redundancia entre indicadores y cambios en el tiempo.
+
+ EL MISMO CÁLCULO, PERO A MANO
+   03_calculo_mpm.do hace exactamente esto mismo sin el paquete, con
+   `svy: mean` y aritmética explícita, y al final compara sus H y M0
+   contra los que deja este archivo. Sirve para ver por dentro lo que
+   `mpitb est` resuelve en una sola instrucción.
+   OJO: los dos escriben en el MISMO archivo ${MPM}_results.dta, así
+   que el último que se corra es el que queda. 00_maestro.do elige uno
+   u otro según el global $methodology.
+
  INSUMO (lo que este archivo necesita que ya exista)
    "${gdStata}/Data Clean $MPM/DataDeprivations${MPM}.dta"
    <- lo produce 01_privaciones_MPM.do
@@ -415,10 +444,20 @@ mpitb show, name(GNQ)
 *   indmeasures(all)  Calcula las medidas por indicador: hdk, actb, pctb.
 *   aux(hd)           Agrega el headcount NO censurado (hd): % privado
 *                     en cada indicador sin importar si es pobre.
+*                     Va aparte, en aux(), y no dentro de
+*                     indmeasures(), porque es la única medida por
+*                     indicador que NO depende del corte k: no mira
+*                     quién es pobre, solo quién está privado. Por eso
+*                     en la tabla de resultados sus filas salen con
+*                     k == . (ver PASO 12).
 *   svy               Usa el diseño declarado en el PASO 7 para los
 *                     errores estándar.
 *   over(area prov cities)  Repite todo el cálculo dentro de cada
 *                     pedazo del país, además del total nacional.
+*                     Las variables de over() deben ser numéricas; una
+*                     observación con valor perdido en alguna de ellas
+*                     queda fuera de esa desagregación (pero sigue
+*                     contando en el total nacional).
 *   lframe(myresults, replace)  Deja los resultados en un "frame"
 *                     (una segunda base abierta en memoria, al lado de
 *                     la nuestra, sin pisarla).
@@ -473,36 +512,60 @@ mpitb est, name(GNQ) ///
 *-------------------------------------------------------------------
 cwf myresults
 
-* Ver la lista completa de columnas de la tabla de resultados.
+* --- (a) ¿Qué columnas tiene esta tabla? ---------------------------
+* `describe` no muestra datos: muestra la lista de variables. Es el
+* primer sitio al que volver cuando uno no recuerda cómo se llamaba
+* una columna.
 describe
 
-* Contar cuántas estimaciones hay de cada medida en cada nivel.
+* --- (b) ¿Cuántas estimaciones hay, y de qué tipo? -----------------
+* Un conteo cruzado de medida x nivel. Sirve como control de que el
+* PASO 11 hizo todo lo que le pedimos: debe haber filas de M0, H y A
+* en los cuatro niveles (nat, area, prov, cities), y filas de hd, hdk,
+* actb y pctb para cada indicador.
+* Si alguna casilla sale vacía, es que faltó una opción en `mpitb est`.
 * (Es la misma tabla de control que muestra Suppa 2023, p. 645.)
 tabulate measure loa
 
-* --- Los tres números principales, a nivel nacional ---
+* --- (c) Los tres números principales, a nivel nacional ------------
 * Se lee: "muéstrame la medida, el valor y el error estándar, solo de
 *  las filas donde la medida sea M0, H o A, el nivel sea nacional y el
 *  corte sea 33". `noobs` = no muestres el número de fila.
+* Estos son los tres números que se citan en cualquier informe del
+* IPM, y los mismos que el PASO 16 vuelve a sacar para comprobar que
+* M0 = H x A.
 list measure b se if inlist(measure,"M0","H","A") & loa == "nat" & k == 33, noobs
 
-* --- Comparar, indicador por indicador, hd contra hdk ---
+* --- (d) Comparar, indicador por indicador, hd contra hdk ----------
 *   hd  = % de personas privadas en ese indicador (todas)
 *   hdk = % de personas privadas en ese indicador Y además pobres
 *   hdk siempre es menor o igual que hd: es la parte "censurada".
+* La distancia entre los dos dice cuánta de la privación en ese
+* indicador ocurre en hogares que NO son pobres multidimensionales y
+* que, por lo tanto, no entran en el índice. Un indicador con hd alto
+* y hdk bajo es una carencia muy extendida pero poco concentrada.
 * `tabdisp` arma una tablita: filas = indicador, columnas = medida.
-* En `k` pedimos 33 y también el missing (.) porque hd no depende de k.
+* En `k` pedimos 33 y también el missing (.) porque hd no depende de k
+* (ver la explicación de aux(hd) en el PASO 11).
 tabdisp indicator measure if inlist(measure,"hd","hdk") & loa == "nat" ///
     & inlist(k,33,.), cellvar(b)
 
-* --- Contribución de cada indicador al M0 ---
+* --- (e) Contribución de cada indicador al M0 ----------------------
 *   actb = aporte absoluto (peso x hdk); todos suman M0
 *   pctb = ese mismo aporte en % del M0; todos suman 100
+* Es la lectura más útil para política pública: responde "¿qué
+* carencia pesa más dentro del índice?". Ojo al interpretarla: el
+* aporte depende tanto de cuánta gente sufre la carencia como del peso
+* que le dimos en el PASO 9, así que un indicador puede aportar mucho
+* simplemente por pesar 1/3 (es el caso de poor1).
 * (Suppa 2023, p. 628: M0 = suma de w_d * h_d(k).)
 tabdisp indicator measure if inlist(measure,"actb","pctb") & loa == "nat" ///
     & k == 33, cellvar(b)
 
-* Volvemos a pararnos en la mesa principal.
+* --- (f) Volver a la base de hogares -------------------------------
+* Importante no olvidar este `cwf default`: si nos quedamos parados en
+* el frame de resultados, todo lo que venga después operaría sobre la
+* tabla equivocada.
 cwf default
 
 
@@ -538,6 +601,21 @@ cwf default
 *   Una hoja de papel borrador: Stata la usa mientras corre el
 *   do-file y la bota sola al terminar. Aquí usamos cuatro: una por
 *   cada corte del país y una para el diccionario completo.
+*
+* DE QUÉ DEPENDE QUE ESTO FUNCIONE
+*   De que area, prov y cities tengan etiquetas de valor en la base de
+*   privaciones. `decode` lee justamente esas etiquetas; si una
+*   variable no las tuviera, subg_name saldría vacío y en el PASO 14
+*   los resultados se quedarían sin nombres (sin dar ningún error).
+*   Si eso pasa, el sitio a revisar es la limpieza de la base, no
+*   este archivo.
+*
+* LAS TRES PARTES SON LA MISMA RECETA
+*   Los bloques (a), (b) y (c) hacen exactamente lo mismo sobre tres
+*   variables distintas: abrir, quedarse con una columna, dejar una
+*   fila por valor, traducir el código a nombre y etiquetar a qué
+*   nivel pertenece. Se escriben repetidos a propósito, para que se
+*   pueda leer uno solo y entender los tres.
 *-------------------------------------------------------------------
 tempfile dic_area dic_prov dic_cities diccionario
 
@@ -553,20 +631,27 @@ keep loa subg subg_name         // la libretita: 3 columnas
 save `dic_area'
 
 * --- (b) Diccionario del corte "prov" (las 7 provincias) -----------
+* Mismos cinco movimientos que en (a), ahora sobre la provincia.
 use "${gdStata}/Data Clean $MPM/DataDeprivations${MPM}.dta", clear
-rename cod_provincia prov
+rename cod_provincia prov       // el mismo apodo del PASO 8
 keep prov
-duplicates drop
-decode prov, gen(subg_name)
+duplicates drop                 // una fila por provincia OBSERVADA: si una
+                                // provincia no tiene hogares en la muestra
+                                // no genera fila (ni resultados). En la
+                                // muestra del curso salen 7, porque Djibloho
+                                // (código 5) no aparece.
+decode prov, gen(subg_name)     // 1 -> "Annobón", 2 -> "Bioko Norte", ...
 gen loa  = "prov"
 gen subg = prov
 keep loa subg subg_name
 save `dic_prov'
 
 * --- (c) Diccionario del corte "cities" (Malabo / urbano / rural) --
+* Esta variable no se renombra: en el PASO 2 ya entró llamándose
+* `cities`, que es el nombre con el que mpitb la escribió en `loa`.
 use "${gdStata}/Data Clean $MPM/DataDeprivations${MPM}.dta", clear
 keep cities
-duplicates drop
+duplicates drop                 // una fila por categoría: 3 filas
 decode cities, gen(subg_name)
 gen loa  = "cities"
 gen subg = cities
@@ -609,6 +694,23 @@ save `diccionario'
 *     loa subg = la llave: para saber de quién hablamos hay que mirar
 *              las dos columnas a la vez (ver PASO 13)
 *     nogenerate = no dejes la variable de control _merge
+*
+*   El orden importa: la base abierta es la de resultados (la de
+*   MUCHAS filas) y la libretita va en `using` (la de UNA fila por
+*   subgrupo). Por eso es m:1 y no 1:m.
+*
+* CÓMO COMPROBAR QUE PEGÓ BIEN
+*   `nogenerate` es cómodo, pero tiene un precio: borra la variable
+*   _merge, que es la que diría si alguna fila se quedó sin nombre.
+*   Si en el archivo 04 aparecen subgrupos sin etiqueta, este es el
+*   sitio donde mirar. La comprobación rápida, después del merge:
+*
+*       count if missing(subg_name)     // debería dar 0
+*       list loa subg in 1/5 if missing(subg_name)
+*
+*   El caso típico de fallo es el nivel nacional: mpitb tiene que
+*   escribir subg == 0 en esas filas para que casen con la fila
+*   "nat" que añadimos en el PASO 13(e).
 *-------------------------------------------------------------------
 use "${gdStata}/${MPM}_results.dta", clear
 
@@ -641,6 +743,19 @@ save "${gdStata}/${MPM}_results.dta", replace
 *   poor_multi = 1 si c_equal >= 1/3   (el mismo k = 33 del PASO 11)
 *   poor_multi = 0 en caso contrario
 *
+* POR QUÉ LO CALCULAMOS AQUÍ Y NO LO PEDIMOS
+*   mpitb guarda el puntaje (c_equal) pero no una marca de pobre con
+*   este nombre. La fabricamos nosotros por dos razones: para que el
+*   umbral quede escrito y visible en el do-file, y para que el
+*   archivo gemelo 03_calculo_mpm.do produzca una variable que se
+*   llame igual y signifique lo mismo. Así los archivos 04 y 05
+*   funcionan con cualquiera de los dos métodos.
+*
+* OJO CON EL 1/3
+*   Tiene que ser el mismo corte que se le pasó a klist() en el PASO
+*   11. Si allí se cambia a klist(50), esta línea hay que cambiarla a
+*   mano: no se actualiza sola.
+*
 * EL CÓDIGO
 *   `gen poor_multi = (c_equal >= 1/3)` -> el paréntesis es una
 *   pregunta de sí/no: Stata escribe 1 cuando es verdad y 0 cuando no.
@@ -649,6 +764,9 @@ use "${gdStata}/${MPM}_results_microdata.dta", clear
 
 * Nos quedamos con lo que necesitan 04_exportar_figuras.do y
 * 05_tabla_PEA_curso.do (incluidos c_equal, hhweight y strata).
+* Este `keep` es una lista fija: si en el PASO 2 se quita una variable
+* de la base, aquí dará error "variable not found". Es un error útil,
+* porque avisa antes de que el archivo 04 se quede sin insumo.
 keep hhid prov weight_hh hhsize electricity imp_wat_rec imp_san_rec area cities ///
      pcexp_ppp provincia quintile asistencia_escolar educat7 e_com ///
      e_enr i_elec i_imps i_impw poor1 hhweight strata c_equal //welfare_ppp
@@ -779,6 +897,11 @@ if $correr_extras == 1 {
         lsave("${gdStata}/${MPM}_extra2_pesos_mon50.dta", replace)
 
     use "${gdStata}/${MPM}_extra2_pesos_mon50.dta", clear
+    * La columna `wgts` dice con qué esquema de pesos se calculó cada
+    * fila; aquí dirá "mon50", el nombre que le pusimos arriba. Compara
+    * el M0 con el de la corrida oficial (pesos iguales): si sube,
+    * significa que la carencia monetaria está más extendida que el
+    * promedio de las otras, y darle más peso engorda el índice.
     list measure wgts b se if loa == "nat" & k == 33, noobs
 
     *---------------------------------------------------------------
@@ -805,6 +928,12 @@ if $correr_extras == 1 {
         lsave("${gdStata}/${MPM}_extra3_sin_elec.dta", replace)
 
     use "${gdStata}/${MPM}_extra3_sin_elec.dta", clear
+    * La columna `spec` guarda el nombre de la receta ("GNQ2"), que es
+    * lo que permite distinguir esta corrida de la oficial.
+    * Cuidado al interpretar la comparación: al quitar un indicador no
+    * solo desaparece su carencia, también se REPARTEN sus pesos entre
+    * los que quedan (infra pasa de 3 indicadores a 2, así que cada uno
+    * sube de 1/9 a 1/6). El cambio en M0 mezcla los dos efectos.
     list measure spec b se if loa == "nat" & k == 33, noobs
 
     *---------------------------------------------------------------
@@ -821,6 +950,11 @@ if $correr_extras == 1 {
     * Con depind() se listan los indicadores directamente, sin
     * necesidad de una receta guardada (Suppa 2023, sección 3.11).
     use "${gdStata}/${MPM}_results_microdata.dta", clear
+    * Cómo leer las dos matrices: valores altos entre dos indicadores
+    * avisan de que podrían estar midiendo lo mismo. No es un veredicto
+    * -dos carencias pueden ir juntas por razones reales, como agua y
+    * saneamiento-, pero sí una señal para justificar por qué se
+    * mantienen los dos en el índice.
     mpitb assoc, depind(e_com e_enr i_elec i_imps i_impw poor1)
 
     *---------------------------------------------------------------

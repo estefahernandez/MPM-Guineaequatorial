@@ -13,12 +13,23 @@
    todos los módulos pueden usar los globals definidos aquí.
 
  ORDEN DE EJECUCIÓN (ver README.md para detalle de cada paso)
-   01_limpieza.do            -> construye indicadores base
-   02_privaciones.do         -> construye variables binarias 0/1
-                                 de privación por indicador
-   03_mpitb.do                -> calcula el MPM con `mpitb`
-   04_exportar_figuras.do    -> TODAS las figuras/cuadros: Parte 1
-                                 (Excel) y Parte 2 (gráficos Stata)
+   01_privaciones_${MPM}.do  -> construye las 6 variables binarias 0/1
+                                 de privación (una por indicador) y
+                                 guarda DataDeprivations${MPM}.dta
+   03_calculo_mpm_mpitb.do   -> calcula el MPM con el comando `mpitb`
+   03_calculo_mpm.do         -> el MISMO cálculo hecho "a mano"
+                                 (didáctico); se corre en lugar del
+                                 anterior según $methodology
+   04_exportar_figuras.do    -> escribe las 4 hojas del Excel
+                                 ${MPM}_QNG.xlsx
+   05_tabla_PEA_curso.do     -> imprime la tabla H por provincia
+
+ CUÁL DE LOS DOS 03 SE EJECUTA -> lo decide el global $methodology
+   "mpitb"  = camino completo. Es el ÚNICO que deja el archivo de
+              resultados con la estructura que 04 necesita, así que
+              es el único que llega a escribir el Excel.
+   "manual" = solo H, A y M0 (didáctico). NO produce el Excel; ver
+              la nota en el Paso 3, más abajo.
 ==================================================================*/
 
 version 18
@@ -26,7 +37,7 @@ clear all
 set more off
 
 *Install packages used in the process
-local commands = "ineqdeco grstyle mpitb apoverty vselect missings" 
+local commands = "ineqdeco grstyle mpitb apoverty vselect missings confirmdir" 
 local commands_added = "elasticregress"
 local commands_edited = "`commands' `commands_added'"
 foreach c of local commands_edited {
@@ -82,9 +93,13 @@ global gdOutput    "$gdRaiz/2-Resultados"
  3) Parametros para la ejecucion 
 ------------------------------------------------------------------*/
 global language "SPA"                           // Idioma de las etiquetas/salidas: "SPA" o "ENG"
-global database "CleanDB_Individual_POV.dta"    //  Base training: Individuals_data.dta - Base PEA completa: CleanDB_Individual_POV.dta
-global MPM "MPM"                                // MPM o MPMplus
-global methodology "manual"                     // mpitb syntax vs manual
+global database "Individuals_data.dta"    //  Base training: Individuals_data.dta - Base PEA completa: CleanDB_Individual_POV.dta
+global MPM "MPMplus"                                // MPM o MPMplus
+global methodology "mpitb"                      // "mpitb" o "manual".
+                                                //   "mpitb"  -> pipeline completo: calcula, guarda
+                                                //               los .dta Y exporta el Excel.
+                                                //   "manual" -> versión didáctica (solo H, A y M0).
+                                                //               NO exporta a Excel: ver Paso 3.
 
 * Fuente de las figuras (consistencia visual entre gráficos)
 graph set window fontface "Arial Narrow"
@@ -95,7 +110,9 @@ graph set window fontface "Arial Narrow"
     de MPM e idioma)
 ------------------------------------------------------------------*/
 *If needed, create directories, and sub-directories used in the process 
-foreach d in "${gdExcel}" "${gdFig}" ///
+* OJO: el orden importa. `mkdir` crea UN solo nivel a la vez, así que
+* cada carpeta padre tiene que aparecer antes que sus hijas.
+foreach d in "${gdOutput}" "${gdExcel}" "${gdFig}" "${gdStata}" ///
              "${gdStata}/Data Clean $MPM" "${gdExcel}/$MPM" ///
              "${gdExcel}/$MPM/$language"   {
 	confirmdir "`d'" 
@@ -135,15 +152,34 @@ else if ("$methodology" == "manual") {
 * y de los 2 bloques opcionales (Venn, mapas) que quedan
 * deshabilitados por defecto.
 *---------------------------------------------------------
-if ("$methodology" == "mpitb") { // Construido para el conjunto amplio de indicadores 
+* POR QUÉ ESTE PASO ESTÁ CONDICIONADO
+*   04_exportar_figuras.do lee "${MPM}_results.dta" y espera la
+*   estructura que produce `mpitb`: subgrupo (subg) NUMÉRICO, columna
+*   subg_name, nivel de análisis "cities" y las medidas por indicador
+*   "hd"/"hdk". El camino manual (03_calculo_mpm.do) guarda un archivo
+*   más chico: solo H, A y M0, con subg como TEXTO. Si se le pasa ese
+*   archivo, 04 se detiene con "type mismatch" (r(109)) en la hoja
+*   "Headcount". Por eso solo se ejecuta en el camino "mpitb".
+if ("$methodology" == "mpitb") {
   include "$gdDo/04_exportar_figuras.do"
+}
+else {
+  di as error "AVISO: no se exportó nada a Excel."
+  di as error "       Con \$methodology = $methodology el archivo de resultados es"
+  di as error "       reducido (solo H, A y M0) e incompatible con 04_exportar_figuras.do."
+  di as error "       Para generar ${MPM}_QNG.xlsx, ponga \$methodology = mpitb arriba."
 }
 
 /*------------------------------------------------------------------
  4) Mensaje final con las rutas de salida (útil para ubicar productos)
 ------------------------------------------------------------------*/
 display "Datos (.dta) exportados en: ${gdStata}/Data Clean ${MPM}"
-display "Excel exportado en:         ${gdExcel}/${MPM}/${language}"
-display "Figuras exportadas en:       ${gdFig}/${MPM}/${language}"
+if ("$methodology" == "mpitb") {
+    display "Excel exportado en:         ${gdExcel}/${MPM}/${language}/${MPM}_QNG.xlsx"
+}
+* Nota: la Parte 2 (figuras nativas de Stata) ya no forma parte de
+* 04_exportar_figuras.do, así que este pipeline no escribe en $gdFig.
+* Las figuras del curso las genera 06_histograma_ingreso_percapita.do,
+* que se corre aparte.
 include "$gdDo/05_tabla_PEA_curso.do"
 

@@ -94,7 +94,11 @@ global gdOutput    "$gdRaiz"
 global language "SPA"                           // Idioma de las etiquetas/salidas: "SPA" o "ENG"
 global database "Individuals_data.dta"          //  Base training: Individuals_data.dta 
 global MPM "MPM"                                // MPM o MPMplus
-global methodology "manual"                     // mpitb syntax vs manual
+global methodology "mpitb"                      // "mpitb" o "manual".
+                                                //   "mpitb"  -> pipeline completo: calcula, guarda
+                                                //               los .dta Y exporta el Excel.
+                                                //   "manual" -> versión didáctica (solo H, A y M0).
+                                                //               NO exporta a Excel: ver Paso 3.
 
 * Fuente de las figuras (consistencia visual entre gráficos)
 graph set window fontface "Arial Narrow"
@@ -142,14 +146,31 @@ else if ("$methodology" == "manual") {
 * y de los 2 bloques opcionales (Venn, mapas) que quedan
 * deshabilitados por defecto.
 *---------------------------------------------------------
-if ("$methodology" == "mpitb") { // Construido para el conjunto amplio de indicadores 
+* POR QUÉ ESTE PASO ESTÁ CONDICIONADO
+*   04_exportar_figuras.do lee "${MPM}_results.dta" y espera la
+*   estructura que produce `mpitb`: subgrupo (subg) NUMÉRICO, columna
+*   subg_name, nivel de análisis "cities" y las medidas por indicador
+*   "hd"/"hdk". El camino manual (03_calculo_mpm.do) guarda un archivo
+*   más chico: solo H, A y M0, con subg como TEXTO. Si se le pasa ese
+*   archivo, 04 se detiene con "type mismatch" (r(109)) en la hoja
+*   "Headcount". Por eso solo se ejecuta en el camino "mpitb".
+if ("$methodology" == "mpitb") {
   include "$gdDo/04_exportar_figuras.do"
+}
+else {
+  di as error "AVISO: no se exportó nada a Excel."
+  di as error "       Con \$methodology = $methodology el archivo de resultados es"
+  di as error "       reducido (solo H, A y M0) e incompatible con 04_exportar_figuras.do."
+  di as error "       Para generar ${MPM}_QNG.xlsx, ponga \$methodology = mpitb arriba."
 }
 
 /*------------------------------------------------------------------
  4) Mensaje final con las rutas de salida (útil para ubicar productos)
 ------------------------------------------------------------------*/
 display "Datos (.dta) exportados en: ${gdStata}/Data Clean ${MPM}"
-display "Excel exportado en:         ${gdExcel}/${MPM}/${language}"
-display "Figuras exportadas en:       ${gdFig}"
+if ("$methodology" == "mpitb") {
+    display "Excel exportado en:         ${gdExcel}/${MPM}/${language}/${MPM}_QNG.xlsx"
+}
+* Nota: la Parte 2 (figuras nativas de Stata) ya no forma parte de
+* 04_exportar_figuras.do, así que este pipeline no escribe figuras.
 include "$gdDo/05_tabla_PEA_curso.do"

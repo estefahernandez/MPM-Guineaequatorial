@@ -20,46 +20,6 @@
      exportados con `graph export`. Esta sección TODAVÍA NO fue
      recortada (pendiente de definir qué figuras se conservan aquí).
 
- CAMBIOS FRENTE A LA VERSIÓN ANTERIOR
-   - Se removieron las secciones que generaban las pestañas "Area Prov
-     H", "Contributions", "Spider countries" y "Peers list
-     deprivations", la hoja de tendencias históricas
-     ("Trends_$language.xlsx") y el ajuste de los 3 modelos de
-     regresión + su tabla Excel ("Regresions_4M").
-   - En la sección "Monetary and deprivations" se corrigió la ruta de
-     entrada: apuntaba a "${gdData}/DataDeprivations${MPM}.dta" (sin
-     la subcarpeta "Data Clean $MPM/"), pero 02_privaciones.do guarda
-     ese archivo en "${gdData}/Data Clean $MPM/DataDeprivations${MPM}.dta".
-     Se restauró la ruta completa para que la sección corra.
-   - Esa misma sección usaba "${gdDatatemp_4M}/depmon_*.dta" (global ya
-     no definido en 00_maestro.do) para sus archivos intermedios; se
-     reemplazó por `tempfile` (mecanismo nativo de Stata), igual que
-     el resto del pipeline.
-   - En la Parte 2 se actualizaron las referencias sueltas a
-     "$gdData_4M"/"$gdFig_4M"/"$gdDatatemp_4M" (globals del esquema
-     anterior) a "$gdData"/"$gdFig", para que coincidan con
-     00_maestro.do. El resto de la Parte 2 (nombres de figura, si
-     llevan o no el sufijo "_$language", copias editoriales, etc.) se
-     dejó tal como estaba.
-   - La sección 2.5 (coefplot) se comentó: dependía de los 3 modelos
-     que se ajustaban en la sección de regresiones ahora removida de
-     la Parte 1, así que esas estimaciones ya no existen en memoria.
-     Avísame si quieres conservar este gráfico y decidimos cómo.
-
- INPUTS ESPERADOS
-   - "${gdStata}/${MPM}_results.dta" generado por
-     03_calculo_mpm_mpitb.do. Este archivo tiene que venir del camino
-     `mpitb`: las secciones 2 y 3 necesitan `subg` NUMÉRICO, la
-     columna `subg_name`, el nivel de análisis "cities" y las medidas
-     por indicador "hd". El camino manual (03_calculo_mpm.do) guarda
-     un archivo reducido que NO sirve aquí (se detiene con "type
-     mismatch", r(109), en la sección 2). Por eso 00_maestro.do solo
-     llama a este script cuando $methodology == "mpitb".
-   - "${gdStata}/Data Clean $MPM/DataDeprivations${MPM}.dta" generado
-     por 01_privaciones_${MPM}.do.
-   - Globals definidos en 00_maestro.do: $MPM, $language, $gdStata,
-     $gdExcel.
-
  OUTPUTS GENERADOS
    - "${gdExcel}/$MPM/$language/${MPM}_QNG.xlsx" con las 4 hojas
      listadas arriba. La carpeta la crea 00_maestro.do (paso 4).
